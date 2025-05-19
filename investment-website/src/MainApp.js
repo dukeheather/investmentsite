@@ -7,6 +7,7 @@ import Dashboard from './Dashboard';
 import AdminDashboard from './AdminDashboard';
 import ProtectedRoute from './ProtectedRoute';
 import BottomNav from './BottomNav';
+import HomePage from './HomePage';
 
 function Spinner() {
   return <div className="global-spinner">Loading...</div>;
@@ -144,38 +145,7 @@ export default function MainApp() {
           </div>
         </nav>
         <Routes>
-          <Route path="/" element={
-            <main className="hero-section">
-              <div className="hero-content">
-                <h1>
-                  Invest Smarter, <span className="green">Grow Faster</span>
-                </h1>
-                <p className="subtitle">
-                  Join thousands of investors who trust our platform for secure, profitable, and hassle-free investment opportunities.
-                </p>
-                <button className="get-started" onClick={() => navigate('/plans')}>Get Started</button>
-                <div className="stats">
-                  <div className="stat">
-                    <span className="stat-value">15%+</span>
-                    <span className="stat-label">Average Returns</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-value">100%</span>
-                    <span className="stat-label">Secure Platform</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-value">24/7</span>
-                    <span className="stat-label">Support</span>
-                  </div>
-                </div>
-              </div>
-              <div className="plans-card">
-                <h2>Explore Our Investment Plans</h2>
-                <p>Find the perfect plan for your goals and start investing with ease.</p>
-                <button className="view-plans" onClick={() => navigate('/plans')}>View Plans</button>
-              </div>
-            </main>
-          } />
+          <Route path="/" element={<HomePage />} />
           <Route path="/plans" element={<InvestmentPlans user={user} token={token} />} />
           <Route path="/dashboard" element={<Dashboard user={user} token={token} />} />
           <Route 
