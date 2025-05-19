@@ -72,6 +72,14 @@ app.use('/api/auth', authRouter);
 app.use('/api/dashboard', indexRouter);
 app.use('/api/upload', uploadRouter);
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'public', 'build')));
+
+// The "catchall" handler: for any request that doesn't match an API route, send back React's index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'build', 'index.html'));
+});
+
 // Error handler for multer
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {

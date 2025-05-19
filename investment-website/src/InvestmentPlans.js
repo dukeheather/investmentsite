@@ -97,7 +97,7 @@ export default function InvestmentPlans({ user, token }) {
       formData.append('notes', notes);
       formData.append('screenshot', selectedFile);
 
-      const purchaseRes = await fetch('https://investmentsite-q1sz.onrender.com/api/upload/purchase-with-screenshot', {
+      const purchaseRes = await fetch('/api/upload/purchase-with-screenshot', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-const API_URL = 'https://investmentsite-q1sz.onrender.com/api/dashboard';
+const API_URL = '/api/dashboard';
 
 const getStatusBadgeClass = (status) => {
   switch (status) {
