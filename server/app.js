@@ -53,7 +53,10 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: ['https://investment-website-psi.vercel.app', 'http://localhost:3000'],
+  origin: [
+    'https://investmentsite.vercel.app',
+    'http://localhost:3000'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
