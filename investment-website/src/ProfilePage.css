@@ -2,20 +2,22 @@
   max-width: 480px;
   margin: 0 auto;
   padding: 0.7rem 0.2rem 0 0.2rem;
-  background: #f5f6fa;
+  background: linear-gradient(135deg, #f5f6fa 60%, #e0f7ef 100%);
   min-height: 100vh;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .profile-header {
   position: relative;
-  background: linear-gradient(120deg, #6ee7b7 60%, #22c55e 100%);
-  border-radius: 18px;
+  background: rgba(110,231,183,0.85);
+  border-radius: 24px;
   padding: 1.2rem 0.5rem 1.7rem 0.5rem;
   margin-bottom: -2.5rem;
   text-align: center;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(34,197,94,0.08);
+  box-shadow: 0 8px 32px 0 rgba(34,197,94,0.13), 0 1.5px 8px rgba(0,0,0,0.04);
+  backdrop-filter: blur(6px);
+  border: 1.5px solid #e0f7ef;
 }
 .profile-bg {
   position: absolute;
@@ -35,7 +37,8 @@
   justify-content: center;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(34,197,94,0.10);
+  box-shadow: 0 4px 16px rgba(34,197,94,0.13);
+  border: 2.5px solid #6ee7b7;
 }
 .profile-id {
   z-index: 1;
@@ -70,9 +73,9 @@
 }
 
 .profile-stats-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(34,197,94,0.06);
+  background: rgba(255,255,255,0.85);
+  border-radius: 20px;
+  box-shadow: 0 6px 32px 0 rgba(34,197,94,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,6 +84,8 @@
   max-width: 98%;
   position: relative;
   z-index: 2;
+  border: 1.5px solid #e0f7ef;
+  backdrop-filter: blur(2px);
 }
 .profile-stat {
   flex: 1;
@@ -99,15 +104,17 @@
 }
 
 .profile-menu-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(34,197,94,0.06);
+  background: rgba(255,255,255,0.85);
+  border-radius: 20px;
+  box-shadow: 0 6px 32px 0 rgba(34,197,94,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
   margin: 0 auto 1.2rem auto;
   padding: 0.2rem 0;
   max-width: 98%;
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
+  border: 1.5px solid #e0f7ef;
+  backdrop-filter: blur(2px);
 }
 .profile-menu-item {
   display: flex;
@@ -121,8 +128,9 @@
   padding: 1.05rem 1.1rem 1.05rem 1.1rem;
   border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, box-shadow 0.12s, transform 0.12s;
   border-radius: 0;
+  box-shadow: 0 0px 0px rgba(34,197,94,0.00);
 }
 .profile-menu-item:last-child {
   border-bottom: none;
@@ -130,6 +138,8 @@
 .profile-menu-item:hover, .profile-menu-item:active {
   background: #e0f7ef;
   color: #22c55e;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.10);
+  transform: translateY(-1px) scale(1.02);
 }
 .menu-icon {
   font-size: 1.35em;
