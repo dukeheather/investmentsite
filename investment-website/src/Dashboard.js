@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-const API_URL = 'http://localhost:3000/api/dashboard';
+const API_URL = 'https://investmentsite-q1sz.onrender.com/api/dashboard';
 
 const getStatusBadgeClass = (status) => {
   switch (status) {
@@ -187,7 +187,7 @@ export default function Dashboard({ user, token }) {
           <div className="screenshot-modal" onClick={e => e.stopPropagation()}>
             <button className="close-modal-btn" onClick={closeScreenshotModal}>×</button>
             <img 
-              src={`http://localhost:3000${selectedScreenshot}`} 
+              src={`https://investmentsite-q1sz.onrender.com${selectedScreenshot}`} 
               alt="Payment Screenshot" 
               className="screenshot-image"
             />

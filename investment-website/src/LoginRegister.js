@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginRegister.css';
 
-const API_URL = 'http://localhost:3000/api/auth';
+const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 
 export default function LoginRegister({ user, setUser, setToken }) {
   const [mode, setMode] = useState('login');

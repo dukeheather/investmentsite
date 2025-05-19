@@ -11,7 +11,7 @@ function Spinner() {
   return <div className="global-spinner">Loading...</div>;
 }
 
-const API_URL = 'http://localhost:3000/api/auth';
+const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 
 export default function MainApp() {
   const plansSectionRef = useRef(null);
