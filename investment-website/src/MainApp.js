@@ -8,6 +8,7 @@ import AdminDashboard from './AdminDashboard';
 import ProtectedRoute from './ProtectedRoute';
 import BottomNav from './BottomNav';
 import HomePage from './HomePage';
+import ProfilePage from './ProfilePage';
 
 function Spinner() {
   return <div className="global-spinner">Loading...</div>;
@@ -128,6 +129,7 @@ export default function MainApp() {
               </ProtectedRoute>
             } 
           />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
       <BottomNav />
