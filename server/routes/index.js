@@ -45,11 +45,30 @@ router.get('/api/dashboard', async (req, res) => {
   }
 });
 
+// GET /api/wallet/balance
+router.get('/api/wallet/balance', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  res.json({ balance: user.walletBalance });
+});
+
+// GET /api/wallet/transactions
+router.get('/api/wallet/transactions', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  const txns = await prisma.walletTransaction.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+  });
+  res.json({ transactions: txns });
+});
+
 // POST /api/purchase
 router.post('/api/purchase', async (req, res) => {
   const userId = getUserIdFromToken(req);
   if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-  const { planName, amount, transactionId, notes, screenshotUrl } = req.body;
+  const { planName, amount, notes } = req.body;
 
   // Plan min/max enforcement
   const planLimits = {
@@ -64,26 +83,37 @@ router.post('/api/purchase', async (req, res) => {
     return res.status(400).json({ error: `Amount must be between $${limits.min} and $${limits.max}.` });
   }
 
-  // UTR ID validation: must be a string of up to 12 digits
-  if (!/^[0-9]{1,12}$/.test(transactionId)) {
-    return res.status(400).json({ error: 'UTR ID must be a number up to 12 digits.' });
-  }
-
-  // Screenshot required
-  if (!screenshotUrl) {
-    return res.status(400).json({ error: 'Payment screenshot is required.' });
+  // Check wallet balance
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (user.walletBalance < amountNum) {
+    return res.status(400).json({ error: 'Insufficient wallet balance.' });
   }
 
   try {
+    // Deduct from wallet
+    await prisma.user.update({
+      where: { id: userId },
+      data: { walletBalance: { decrement: amountNum } },
+    });
+    // Record wallet deduction
+    await prisma.walletTransaction.create({
+      data: {
+        userId,
+        amount: -amountNum,
+        type: 'deduct',
+        status: 'success',
+        gatewayTxnId: null,
+      },
+    });
+    // Create investment (status running)
     const investment = await prisma.investment.create({
       data: {
         userId,
         planName,
         amount: amountNum,
-        status: 'pending_verification',
-        transactionId,
+        status: 'running',
+        transactionId: '',
         notes,
-        screenshotUrl,
       },
     });
     res.json({ success: true, investment });
