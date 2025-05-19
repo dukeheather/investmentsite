@@ -6,6 +6,7 @@ import InvestmentPlans from './InvestmentPlans';
 import Dashboard from './Dashboard';
 import AdminDashboard from './AdminDashboard';
 import ProtectedRoute from './ProtectedRoute';
+import BottomNav from './BottomNav';
 
 function Spinner() {
   return <div className="global-spinner">Loading...</div>;
@@ -187,6 +188,7 @@ export default function MainApp() {
           />
         </Routes>
       </div>
+      <BottomNav />
     </>
   );
 } 
