@@ -5,7 +5,7 @@ const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 
 export default function LoginRegister({ user, setUser, setToken }) {
   const [mode, setMode] = useState('login');
-  const [form, setForm] = useState({ email: '', password: '', name: '' });
+  const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,11 +19,10 @@ export default function LoginRegister({ user, setUser, setToken }) {
     setLoading(true);
     try {
       const endpoint = mode === 'login' ? '/login' : '/register';
-      const body = mode === 'register' ? form : { email: form.email, password: form.password };
       const res = await fetch(API_URL + endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(form),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -34,7 +33,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
-      setForm({ email: '', password: '', name: '' });
+      setForm({ email: '', password: '' });
     } catch (err) {
       setError('Network error.');
     } finally {
@@ -44,7 +43,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
 
   const handleLogout = () => {
     setUser(null);
-    setForm({ email: '', password: '', name: '' });
+    setForm({ email: '', password: '' });
     localStorage.removeItem('token');
     setToken(null);
   };
@@ -52,7 +51,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
   if (user) {
     return (
       <div className="auth-box">
-        <div className="auth-welcome">Welcome, {user.name || user.email}!</div>
+        <div className="auth-welcome">Welcome, {user.email}!</div>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
     );
@@ -62,17 +61,6 @@ export default function LoginRegister({ user, setUser, setToken }) {
     <div className="auth-box">
       <h2>{mode === 'login' ? 'Login' : 'Register'}</h2>
       <form onSubmit={handleSubmit}>
-        {mode === 'register' && (
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={form.name}
-            onChange={handleChange}
-            autoComplete="off"
-            disabled={loading}
-          />
-        )}
         <input
           type="email"
           name="email"

@@ -51,7 +51,14 @@ const uploadRouter = require('./routes/upload');
 
 const app = express();
 
-app.use(cors());
+// Configure CORS
+app.use(cors({
+  origin: ['https://investment-website-psi.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
