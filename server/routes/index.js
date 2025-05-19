@@ -3,6 +3,8 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
+const PaytmChecksum = require('paytmchecksum');
+const axios = require('axios');
 
 function getUserIdFromToken(req) {
   const auth = req.headers.authorization;
@@ -162,6 +164,94 @@ router.post('/api/admin/update-investment-status', async (req, res) => {
     res.json({ success: true, investment });
   } catch (e) {
     res.status(500).json({ error: 'Failed to update investment status' });
+  }
+});
+
+// Initiate Paytm payment for wallet top-up
+router.post('/api/wallet/topup/initiate', async (req, res) => {
+  const { amount } = req.body;
+  const userId = req.user?.id;
+  if (!userId || !amount || isNaN(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'Invalid request' });
+  }
+  const orderId = 'ORDER_' + Date.now() + '_' + userId;
+  const paytmParams = {
+    MID: process.env.PAYTM_MID,
+    WEBSITE: process.env.PAYTM_WEBSITE,
+    INDUSTRY_TYPE_ID: process.env.PAYTM_INDUSTRY_TYPE,
+    CHANNEL_ID: 'WEB',
+    ORDER_ID: orderId,
+    CUST_ID: String(userId),
+    TXN_AMOUNT: String(amount),
+    CALLBACK_URL: process.env.PAYTM_CALLBACK_URL,
+    EMAIL: '',
+    MOBILE_NO: '',
+  };
+  try {
+    const checksum = await PaytmChecksum.generateSignature(paytmParams, process.env.PAYTM_MERCHANT_KEY);
+    paytmParams.CHECKSUMHASH = checksum;
+    // Save a pending WalletTransaction
+    await prisma.walletTransaction.create({
+      data: {
+        userId,
+        amount: parseFloat(amount),
+        type: 'topup',
+        status: 'pending',
+        gatewayTxnId: orderId,
+      },
+    });
+    res.json({ paytmParams });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to initiate payment' });
+  }
+});
+
+// Paytm callback endpoint
+router.post('/api/wallet/paytm-callback', async (req, res) => {
+  const received_data = req.body;
+  const paytmChecksum = received_data.CHECKSUMHASH;
+  delete received_data.CHECKSUMHASH;
+  const isVerifySignature = PaytmChecksum.verifySignature(received_data, process.env.PAYTM_MERCHANT_KEY, paytmChecksum);
+  if (!isVerifySignature) {
+    return res.status(400).json({ error: 'Checksum mismatch' });
+  }
+  // Check transaction status with Paytm
+  const paytmParams = {
+    MID: process.env.PAYTM_MID,
+    ORDERID: received_data.ORDERID,
+  };
+  try {
+    const checksum = await PaytmChecksum.generateSignature(paytmParams, process.env.PAYTM_MERCHANT_KEY);
+    const post_data = JSON.stringify({ ...paytmParams, CHECKSUMHASH: checksum });
+    const { data } = await axios.post(
+      'https://securegw.paytm.in/order/status',
+      post_data,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    if (data.STATUS === 'TXN_SUCCESS') {
+      // Credit wallet and update transaction
+      const txn = await prisma.walletTransaction.updateMany({
+        where: { gatewayTxnId: received_data.ORDERID, status: 'pending' },
+        data: { status: 'success' },
+      });
+      if (txn.count > 0) {
+        // Add to user wallet
+        const walletTxn = await prisma.walletTransaction.findFirst({ where: { gatewayTxnId: received_data.ORDERID } });
+        await prisma.user.update({
+          where: { id: walletTxn.userId },
+          data: { walletBalance: { increment: walletTxn.amount } },
+        });
+      }
+      return res.send('Wallet top-up successful');
+    } else {
+      await prisma.walletTransaction.updateMany({
+        where: { gatewayTxnId: received_data.ORDERID },
+        data: { status: 'failed' },
+      });
+      return res.send('Payment failed');
+    }
+  } catch (err) {
+    return res.status(500).json({ error: 'Callback error' });
   }
 });
 
