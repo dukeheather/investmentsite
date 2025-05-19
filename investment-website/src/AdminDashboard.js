@@ -16,7 +16,7 @@ export default function AdminDashboard({ token }) {
 
   const checkAdminStatus = async () => {
     try {
-      const res = await fetch('/api/admin/check', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/admin/check', {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -33,7 +33,7 @@ export default function AdminDashboard({ token }) {
 
   const fetchPendingInvestments = async () => {
     try {
-      const res = await fetch('/api/admin/pending-investments', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/admin/pending-investments', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to fetch pending investments');
@@ -48,7 +48,7 @@ export default function AdminDashboard({ token }) {
     if (!selectedInvestment) return;
     
     try {
-      const res = await fetch('/api/admin/update-investment-status', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/admin/update-investment-status', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
