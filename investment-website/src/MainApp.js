@@ -16,7 +16,7 @@ const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 export default function MainApp() {
   const plansSectionRef = useRef(null);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [loadingUser, setLoadingUser] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [globalError, setGlobalError] = useState('');
@@ -59,6 +59,14 @@ export default function MainApp() {
     document.documentElement.classList.toggle('dark', darkMode);
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+  }, [token]);
 
   const handleLogout = () => {
     setUser(null);
