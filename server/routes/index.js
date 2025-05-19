@@ -83,42 +83,51 @@ router.post('/api/purchase', async (req, res) => {
     return res.status(400).json({ error: `Amount must be between $${limits.min} and $${limits.max}.` });
   }
 
-  // Check wallet balance
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (user.walletBalance < amountNum) {
-    return res.status(400).json({ error: 'Insufficient wallet balance.' });
-  }
-
   try {
-    // Deduct from wallet
-    await prisma.user.update({
-      where: { id: userId },
-      data: { walletBalance: { decrement: amountNum } },
+    // Use a transaction to ensure atomicity
+    const result = await prisma.$transaction(async (tx) => {
+      // Check wallet balance
+      const user = await tx.user.findUnique({ where: { id: userId } });
+      if (user.walletBalance < amountNum) {
+        throw new Error('Insufficient wallet balance.');
+      }
+
+      // Deduct from wallet
+      await tx.user.update({
+        where: { id: userId },
+        data: { walletBalance: { decrement: amountNum } },
+      });
+
+      // Record wallet deduction
+      await tx.walletTransaction.create({
+        data: {
+          userId,
+          amount: -amountNum,
+          type: 'deduct',
+          status: 'success',
+          gatewayTxnId: null,
+        },
+      });
+
+      // Create investment (status running)
+      const investment = await tx.investment.create({
+        data: {
+          userId,
+          planName,
+          amount: amountNum,
+          status: 'running',
+          transactionId: `INV_${Date.now()}`,
+          notes,
+        },
+      });
+
+      return investment;
     });
-    // Record wallet deduction
-    await prisma.walletTransaction.create({
-      data: {
-        userId,
-        amount: -amountNum,
-        type: 'deduct',
-        status: 'success',
-        gatewayTxnId: null,
-      },
-    });
-    // Create investment (status running)
-    const investment = await prisma.investment.create({
-      data: {
-        userId,
-        planName,
-        amount: amountNum,
-        status: 'running',
-        transactionId: '',
-        notes,
-      },
-    });
-    res.json({ success: true, investment });
+
+    res.json({ success: true, investment: result });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to purchase plan.' });
+    console.error('Purchase error:', e);
+    res.status(500).json({ error: e.message || 'Failed to purchase plan.' });
   }
 });
 

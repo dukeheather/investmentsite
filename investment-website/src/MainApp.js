@@ -9,6 +9,17 @@ import ProtectedRoute from './ProtectedRoute';
 import BottomNav from './BottomNav';
 import HomePage from './HomePage';
 import ProfilePage from './ProfilePage';
+import MessagesPage from './MessagesPage';
+import PersonalInfoPage from './PersonalInfoPage';
+import IncomeDetailsPage from './IncomeDetailsPage';
+import WithdrawalDetailsPage from './WithdrawalDetailsPage';
+import AboutUsPage from './AboutUsPage';
+import LanguagePage from './LanguagePage';
+import ContactUsPage from './ContactUsPage';
+import WithdrawPage from './WithdrawPage';
+import ServicePage from './ServicePage';
+import ChannelPage from './ChannelPage';
+import RechargeWalletPage from './RechargeWalletPage';
 
 function Spinner() {
   return <div className="global-spinner">Loading...</div>;
@@ -121,15 +132,19 @@ export default function MainApp() {
           <Route path="/" element={<HomePage />} />
           <Route path="/plans" element={<InvestmentPlans user={user} token={token} />} />
           <Route path="/dashboard" element={<Dashboard user={user} token={token} />} />
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute user={user}>
-                <AdminDashboard token={token} />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<ProtectedRoute user={user}><AdminDashboard token={token} /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProfilePage setUser={setUser} setToken={token} />} />
+          <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/personal-info" element={<PersonalInfoPage />} />
+          <Route path="/income-details" element={<IncomeDetailsPage />} />
+          <Route path="/withdrawal-details" element={<WithdrawalDetailsPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/language" element={<LanguagePage />} />
+          <Route path="/contact-us" element={<ContactUsPage />} />
+          <Route path="/withdraw" element={<WithdrawPage />} />
+          <Route path="/service" element={<ServicePage />} />
+          <Route path="/channel" element={<ChannelPage />} />
+          <Route path="/recharge" element={<RechargeWalletPage token={token} />} />
         </Routes>
       </div>
       <BottomNav />

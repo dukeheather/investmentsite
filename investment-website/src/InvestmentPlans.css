@@ -1,69 +1,84 @@
 .plans-page {
-  padding: 3rem 8vw 4rem 8vw;
+  padding: 2rem 1rem 4rem 1rem;
   min-height: 100vh;
-  background: linear-gradient(120deg, #232526 0%, #414345 100%);
+  background: linear-gradient(135deg, #1a1f2c 0%, #2d3748 100%);
   color: #fff;
 }
 .plans-page h1 {
   text-align: center;
-  color: #6ee7b7;
-  margin-bottom: 2.5rem;
+  color: #4ade80;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .plans-list {
-  display: flex;
-  gap: 2.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 .plan-card {
-  background: #2d323b;
-  border-radius: 14px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-  padding: 2rem 1.5rem;
-  width: 320px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 2rem;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  border-color: rgba(74, 222, 128, 0.3);
 }
 .plan-card h2 {
-  color: #22c55e;
-  margin-bottom: 0.7rem;
+  color: #4ade80;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.plan-card > div {
+  margin-bottom: 0.8rem;
+  color: #e2e8f0;
+  font-size: 1rem;
 }
 .plan-card .plan-outcome {
-  color: #bdbdbd;
+  color: #94a3b8;
   margin: 1rem 0 1.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 .buy-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   color: #fff;
   border: none;
-  padding: 0.7rem 1.7rem;
-  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-right: 0.7rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.buy-btn:hover {
-  background: #1e40af;
+.buy-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
-.cancel-btn {
-  background: #ff6b6b;
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.7rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: 0.7rem;
-  transition: background 0.2s;
-}
-.cancel-btn:hover {
-  background: #b91c1c;
+.buy-btn:disabled {
+  background: #4b5563;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
 }
 .buy-modal-overlay {
   position: fixed;
@@ -71,314 +86,169 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(30, 32, 38, 0.55);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3vh 0;
-  box-sizing: border-box;
+  padding: 1rem;
 }
 .buy-modal {
-  background: #23272f;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  padding: 2.5rem 2rem;
-  min-width: 340px;
-  max-width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
+  background: rgba(30, 41, 59, 0.95);
+  border-radius: 24px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 .buy-modal h2 {
-  color: #6ee7b7;
-  margin-bottom: 1rem;
+  color: #4ade80;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 .buy-modal form {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 }
 .buy-modal form label {
   font-weight: 600;
-  margin-bottom: 0.3rem;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
   display: block;
-  color: #fff;
-}
-.buy-modal form input,
-.buy-modal form textarea {
-  margin-bottom: 0.7rem;
 }
 .buy-modal input {
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #444;
-  background: #2d323b;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   color: #fff;
   font-size: 1rem;
   width: 100%;
+  transition: all 0.3s ease;
 }
-@media (max-width: 900px) {
-  .plans-list {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  .plans-page {
-    padding: 2rem 4vw 3rem 4vw;
-  }
+.buy-modal input:focus {
+  outline: none;
+  border-color: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
 }
-@media (max-width: 600px) {
-  .plans-list {
-    flex-direction: column;
-    gap: 1.2rem;
-    align-items: stretch;
-  }
-  .plan-card {
-    width: 100%;
-    min-width: unset;
-    max-width: 100%;
-    padding: 1.2rem 0.7rem;
-    font-size: 1rem;
-  }
-  .plans-page {
-    padding: 1.2rem 2vw 2rem 2vw;
-  }
-  .buy-modal {
-    max-height: 90vh;
-    overflow-y: auto;
-    min-width: unset;
-    max-width: 98vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .buy-modal-content {
-    max-height: unset;
-    overflow-y: unset;
-    width: 100%;
-  }
-  .buy-modal h2 {
-    font-size: 1.2rem;
-  }
-  .buy-modal-overlay {
-    align-items: flex-start;
-    padding-top: 2vh;
-  }
-  .buy-modal form {
-    gap: 0.7rem;
-  }
-  /* Stack modal QR and form vertically */
-  .buy-modal > div[style*='flex-direction: row'] {
-    flex-direction: column !important;
-    gap: 1.2rem !important;
-    align-items: stretch !important;
-  }
-  .buy-modal form {
-    min-width: unset !important;
-    max-width: 100% !important;
-  }
-  .buy-modal .file-upload-section {
-    padding: 0.5rem;
-  }
-  .buy-modal .modal-buttons {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .buy-modal .modal-buttons button {
-    width: 100%;
-  }
-  .buy-modal > div[style*='background: #fff'] {
-    min-width: unset !important;
-    max-width: 100% !important;
-    padding: 10px !important;
-    margin: 0 auto 1.2rem auto !important;
-    background: #fff !important;
-    border-radius: 12px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-  }
-  .buy-modal img {
-    width: 100% !important;
-    max-width: 180px !important;
-    height: auto !important;
-    margin: 0 auto 10px auto !important;
-    display: block !important;
-    background: #fff !important;
-    border-radius: 8px !important;
-    border: 1px solid #eee !important;
-  }
-  .buy-modal .upi-id-label {
-    font-weight: 600;
-    font-size: 1.05em;
-    color: #222;
-    margin-bottom: 0.5rem;
-    text-align: center;
-    width: 100%;
-  }
-  .buy-modal .upi-instructions {
-    font-size: 0.95em;
-    color: #888;
-    margin-top: 0.7rem;
-    text-align: center;
-    width: 100%;
-  }
-}
-
-.file-upload-section {
-  margin: 1rem 0;
-  padding: 1rem;
-  border: 1px dashed var(--border-color);
-  border-radius: 4px;
-  background: var(--bg-light);
-}
-
-.file-upload-section label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
-}
-
-.file-upload-section input[type="file"] {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  background: white;
-}
-
-.file-info {
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  background: var(--bg-light);
-  border-radius: 4px;
+.balance-info {
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .status-message {
   margin: 1rem 0;
-  padding: 0.75rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
-
 .status-message.success {
-  background: var(--accent-green-light);
-  color: var(--accent-green);
-  border: 1px solid var(--accent-green);
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.2);
 }
-
 .status-message.error {
-  background: var(--accent-red-light);
-  color: var(--accent-red);
-  border: 1px solid var(--accent-red);
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
-
 .modal-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  margin-top: 1.2rem;
-  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
 }
-
 .modal-buttons button {
   width: 100%;
-  max-width: 100%;
-  font-size: 1.1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 0.9rem 0;
-  border-radius: 8px;
-  margin: 0 auto;
+  transition: all 0.3s ease;
 }
-
-.modal-buttons button + button {
-  margin-top: 0.5rem;
-}
-
 .buy-modal .buy-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   color: #fff;
   border: none;
 }
-
-.buy-modal .buy-btn:hover {
-  background: #1e40af;
+.buy-modal .buy-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  transform: translateY(-2px);
 }
-
 .buy-modal .cancel-btn {
-  background: #95a5a6;
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 .buy-modal .cancel-btn:hover {
-  background: #7f8c8d;
+  background: rgba(255, 255, 255, 0.15);
 }
-
-.buy-modal img {
-  max-width: 180px;
-  width: auto;
-  height: auto;
-  margin: 0 auto 10px auto;
-  display: block;
-  background: #fff;
-  border-radius: 8px;
-  border: 1px solid #eee;
+.wallet-balance-display {
+  text-align: center;
+  margin: 0 auto 2rem auto;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  font-size: 1.1rem;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-@media (max-width: 600px) {
-  .buy-modal img {
-    width: 100% !important;
-    max-width: 180px !important;
-    height: auto !important;
-    margin: 0 auto 10px auto !important;
-    display: block !important;
-    background: #fff !important;
-    border-radius: 8px !important;
-    border: 1px solid #eee !important;
+.balance-amount {
+  color: #4ade80;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+@media (max-width: 640px) {
+  .plans-page {
+    padding: 1.5rem 0.5rem 3rem 0.5rem;
   }
-}
-
-.buy-modal-flex {
-  display: flex;
-  flex-direction: row;
-  gap: 2.5rem;
-  width: 100%;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.upi-qr-section {
-  min-width: 220px;
-  max-width: 320px;
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.buy-modal-flex form {
-  width: 55%;
-}
-
-@media (max-width: 900px) {
-  .buy-modal-flex {
-    flex-direction: column;
-    gap: 1.2rem;
-    align-items: stretch;
+  .plans-page h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.2rem;
   }
-  .upi-qr-section,
-  .buy-modal-flex form {
-    width: 100%;
-    max-width: 100%;
+  .wallet-balance-display {
+    margin: 0 0.5rem 1.5rem 0.5rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+  .balance-amount {
+    font-size: 1.3rem;
+  }
+  .plans-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  .plan-card {
+    padding: 1.5rem;
+  }
+  .plan-card h2 {
+    font-size: 1.3rem;
+  }
+  .buy-modal {
+    padding: 1.5rem;
+    margin: 0 0.5rem;
+  }
+  .buy-modal h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+  .modal-buttons button {
+    padding: 0.9rem;
   }
 } 

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
+import { FaWallet, FaCheckCircle, FaTimesCircle, FaClock } from 'react-icons/fa';
 
-export default function ProfilePage() {
+export default function ProfilePage({ setUser, setToken }) {
+  const navigate = useNavigate();
   // Placeholder user data
   const user = {
     id: '916000314727',
@@ -11,8 +14,50 @@ export default function ProfilePage() {
     progress: 0, // out of 450
   };
 
+  const [transactions, setTransactions] = useState([]);
+  const [txnLoading, setTxnLoading] = useState(false);
+  const [txnError, setTxnError] = useState('');
+
+  useEffect(() => {
+    if (!setToken) return;
+    setTxnLoading(true);
+    fetch('/api/wallet/transactions', {
+      headers: { Authorization: `Bearer ${setToken}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        setTransactions(data.transactions || []);
+        setTxnLoading(false);
+      })
+      .catch(() => {
+        setTxnError('Failed to load transactions');
+        setTxnLoading(false);
+      });
+  }, [setToken]);
+
   const handleMenuClick = (label) => {
-    alert(`${label} coming soon!`);
+    if (label === 'Messages') {
+      navigate('/messages');
+    } else if (label === 'Personal Information') {
+      navigate('/personal-info');
+    } else if (label === 'Income Details') {
+      navigate('/income-details');
+    } else if (label === 'Withdrawal Details') {
+      navigate('/withdrawal-details');
+    } else if (label === 'About Us') {
+      navigate('/about-us');
+    } else if (label === 'Language') {
+      navigate('/language');
+    } else if (label === 'Contact Us') {
+      navigate('/contact-us');
+    } else if (label === 'Logout') {
+      if (setUser) setUser(null);
+      if (setToken) setToken(null);
+      localStorage.removeItem('token');
+      navigate('/');
+    } else {
+      alert(`${label} coming soon!`);
+    }
   };
 
   return (
@@ -72,6 +117,31 @@ export default function ProfilePage() {
           <span className="menu-icon">🚪</span> Logout
         </button>
       </div>
+      <section className="wallet-transactions-section">
+        <h2><FaWallet style={{ marginRight: 8 }} />Wallet Transactions</h2>
+        {txnLoading && <div>Loading...</div>}
+        {txnError && <div className="status-message error">{txnError}</div>}
+        {!txnLoading && !txnError && transactions.length === 0 && (
+          <div className="status-message">No transactions found.</div>
+        )}
+        <ul className="wallet-txn-list">
+          {transactions.map(txn => (
+            <li key={txn.id} className={`wallet-txn-item txn-${txn.status}`}>
+              <span className="txn-amount" style={{ color: txn.amount > 0 ? '#4ade80' : '#ef4444' }}>
+                {txn.amount > 0 ? '+' : ''}{txn.amount} ₹
+              </span>
+              <span className="txn-type">{txn.type === 'topup' ? 'Top-up' : 'Purchase'}</span>
+              <span className="txn-status">
+                {txn.status === 'success' && <FaCheckCircle color="#4ade80" title="Success" />}
+                {txn.status === 'pending' && <FaClock color="#fbbf24" title="Pending" />}
+                {txn.status === 'failed' && <FaTimesCircle color="#ef4444" title="Failed" />}
+                {txn.status.charAt(0).toUpperCase() + txn.status.slice(1)}
+              </span>
+              <span className="txn-date">{new Date(txn.createdAt).toLocaleString()}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 } 

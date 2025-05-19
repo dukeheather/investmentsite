@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './HomePage.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
   const [tab, setTab] = useState('day');
+  const navigate = useNavigate();
 
   return (
     <div className="homepage-container">
@@ -15,19 +17,19 @@ export default function HomePage() {
         </div>
       </div>
       <div className="homepage-actions">
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => navigate('/recharge')}>
           <span className="action-icon">💳</span>
           Recharge
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => navigate('/withdraw')}>
           <span className="action-icon">👛</span>
           Withdraw
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => navigate('/service')}>
           <span className="action-icon">🧑‍💼</span>
           Service
         </button>
-        <button className="action-btn">
+        <button className="action-btn" onClick={() => navigate('/channel')}>
           <span className="action-icon">📢</span>
           Channel
         </button>

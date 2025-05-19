@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,106 +32,96 @@ const plans = [
 export default function InvestmentPlans({ user, token }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [success, setSuccess] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [investmentId, setInvestmentId] = useState(null);
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchWalletBalance();
+  }, []);
+
+  const fetchWalletBalance = async () => {
+    try {
+      const res = await fetch('/api/wallet/balance', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setWalletBalance(data.balance || 0);
+    } catch (err) {
+      console.error('Failed to fetch wallet balance:', err);
+    }
+  };
 
   const handleBuy = (plan) => {
     setSelectedPlan(plan);
     setShowModal(true);
-    setSuccess('');
-    setSelectedFile(null);
-    setInvestmentId(null);
+    setMessage('');
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedPlan(null);
-    setSelectedFile(null);
-    setInvestmentId(null);
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setSuccess('File size too large. Maximum size is 5MB.');
-        return;
-      }
-      if (!file.type.startsWith('image/')) {
-        setSuccess('Only image files are allowed.');
-        return;
-      }
-      setSelectedFile(file);
-      setSuccess('');
-    }
   };
 
   const handlePurchase = async (e) => {
     e.preventDefault();
-    setSuccess("");
+    setMessage('');
     const form = e.target;
     const amount = form.amount.value;
-    const transactionId = form.transactionId.value;
     const notes = form.notes.value;
-
-    if (!selectedFile) {
-      setSuccess("Payment screenshot is required.");
-      return;
-    }
 
     try {
       const amountNum = Number(amount);
       if (amountNum < selectedPlan.min || amountNum > selectedPlan.max) {
-        setSuccess(`Amount must be between $${selectedPlan.min} and $${selectedPlan.max}.`);
+        setMessage(`Amount must be between $${selectedPlan.min} and $${selectedPlan.max}.`);
         return;
       }
 
-      setUploading(true);
-      const formData = new FormData();
-      formData.append('planName', selectedPlan.name);
-      formData.append('amount', amount);
-      formData.append('transactionId', transactionId);
-      formData.append('notes', notes);
-      formData.append('screenshot', selectedFile);
-
-      const purchaseRes = await fetch('https://investmentsite-q1sz.onrender.com/api/upload/purchase-with-screenshot', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!purchaseRes.ok) {
-        let err;
-        try {
-          err = await purchaseRes.json();
-        } catch {
-          setSuccess('An error occurred. Please try again.');
-          setUploading(false);
-          return;
-        }
-        throw new Error(err.error || 'Failed to create investment');
+      if (amountNum > walletBalance) {
+        setMessage('Insufficient wallet balance. Please top up your wallet first.');
+        return;
       }
 
-      const { message } = await purchaseRes.json();
-      setSuccess(message);
+      setLoading(true);
+      const res = await fetch('/api/purchase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          planName: selectedPlan.name,
+          amount: amountNum,
+          notes,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to purchase plan');
+      }
+
+      await fetchWalletBalance();
+      
+      setMessage('Plan purchased successfully!');
       setTimeout(() => {
         setShowModal(false);
+        navigate('/dashboard');
       }, 2000);
     } catch (error) {
-      setSuccess(error.message || 'An error occurred. Please try again.');
+      setMessage(error.message || 'An error occurred. Please try again.');
     } finally {
-      setUploading(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className="plans-page">
       <h1>Investment Plans</h1>
+      <div className="wallet-balance-display">
+        Wallet Balance: <span className="balance-amount">${walletBalance.toFixed(2)}</span>
+      </div>
       <div className="plans-list">
         {plans.map(plan => (
           <div className="plan-card" key={plan.id}>
@@ -140,7 +130,13 @@ export default function InvestmentPlans({ user, token }) {
             <div>Maximum Investment: <b>${plan.max}</b></div>
             <div>Expected Profit: <b>{plan.profit}</b></div>
             <div className="plan-outcome">{plan.outcome}</div>
-            <button className="buy-btn" onClick={() => handleBuy(plan)}>Buy / Invest</button>
+            <button 
+              className="buy-btn" 
+              onClick={() => handleBuy(plan)}
+              disabled={walletBalance < plan.min}
+            >
+              {walletBalance < plan.min ? 'Insufficient Balance' : 'Buy / Invest'}
+            </button>
           </div>
         ))}
       </div>
@@ -149,84 +145,49 @@ export default function InvestmentPlans({ user, token }) {
           <div className="buy-modal">
             <h2>Buy {selectedPlan.name}</h2>
             <div className="buy-modal-content">
-              <div className="buy-modal-flex">
-                <div className="upi-qr-section">
-                  <div className="upi-id-label">
-                    <b>UPI ID:</b> dexstroidmlbb@oksbi
-                  </div>
-                  <img
-                    src="/upi-qr.jpeg"
-                    alt="Scan to Pay UPI QR"
-                    className="upi-qr-img"
+              <form onSubmit={handlePurchase}>
+                <div>
+                  <label>Amount to Invest ($):</label>
+                  <input
+                    name="amount"
+                    type="number"
+                    min={selectedPlan.min}
+                    max={selectedPlan.max}
+                    required
+                    autoComplete="off"
+                    placeholder={`Enter amount (${selectedPlan.min} - ${selectedPlan.max})`}
                   />
-                  <div className="upi-instructions">
-                    Scan this QR code with any UPI app to pay.
+                  <div className="balance-info">
+                    Your Balance: ${walletBalance.toFixed(2)}
                   </div>
                 </div>
-                <form onSubmit={handlePurchase}>
-                  <p>Send payment to our account and enter your transaction details below. Upload a screenshot of your payment for verification.</p>
-                  <div>
-                    <label>Amount Sent ($):</label>
-                    <input
-                      name="amount"
-                      type="number"
-                      min={selectedPlan.min}
-                      max={selectedPlan.max}
-                      required
-                      autoComplete="off"
-                      placeholder={`Enter amount (${selectedPlan.min} - ${selectedPlan.max})`}
-                    />
-                    <div style={{ fontSize: '0.9em', color: '#aaa', marginTop: '2px' }}>
-                      Allowed: ${selectedPlan.min} - ${selectedPlan.max}
-                    </div>
+                <div>
+                  <label>Notes (optional):</label>
+                  <input name="notes" type="text" placeholder="Add any notes about this investment" />
+                </div>
+                {message && (
+                  <div className={`status-message ${message.includes('successfully') ? 'success' : 'error'}`}>
+                    {message}
                   </div>
-                  <div>
-                    <label>UTR ID:</label>
-                    <input name="transactionId" type="number" required maxLength={12} inputMode="numeric" pattern="[0-9]{1,12}" placeholder="Enter 12-digit UTR ID" />
-                  </div>
-                  <div>
-                    <label>Notes (optional):</label>
-                    <input name="notes" type="text" />
-                  </div>
-                  <div className="file-upload-section">
-                    <label>Payment Screenshot:</label>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      onChange={handleFileSelect}
-                      disabled={uploading}
-                      required
-                    />
-                    {selectedFile && (
-                      <div className="file-info">
-                        Selected: {selectedFile.name}
-                      </div>
-                    )}
-                  </div>
-                  {success && (
-                    <div className={`status-message ${success.includes('error') ? 'error' : 'success'}`}>
-                      {success}
-                    </div>
-                  )}
-                  <div className="modal-buttons">
-                    <button 
-                      type="submit" 
-                      className="buy-btn" 
-                      disabled={uploading}
-                    >
-                      {uploading ? 'Uploading...' : 'Submit for Verification'}
-                    </button>
-                    <button 
-                      type="button" 
-                      className="cancel-btn" 
-                      onClick={closeModal}
-                      disabled={uploading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
+                )}
+                <div className="modal-buttons">
+                  <button 
+                    type="submit" 
+                    className="buy-btn" 
+                    disabled={loading}
+                  >
+                    {loading ? 'Processing...' : 'Confirm Purchase'}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="cancel-btn" 
+                    onClick={closeModal}
+                    disabled={loading}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
