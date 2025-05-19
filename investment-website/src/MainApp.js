@@ -115,34 +115,6 @@ export default function MainApp() {
             <li><Link to="/dashboard" onClick={closeMobileMenu}>Dashboard</Link></li>
             <li><Link to="/admin" onClick={closeMobileMenu}>Admin</Link></li>
           </ul>
-          <div className="navbar-right">
-            <div className="navbar-auth">
-              {user ? (
-                <div className="user-avatar-wrapper">
-                  <button className="user-avatar" onClick={handleDropdown} aria-label="User menu">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="16" cy="16" r="16" fill="#6ee7b7" />
-                      <circle cx="16" cy="13" r="6" fill="#232526" />
-                      <ellipse cx="16" cy="24.5" rx="8" ry="4.5" fill="#232526" />
-                    </svg>
-                  </button>
-                  {dropdownOpen && (
-                    <div className="user-dropdown">
-                      <button onClick={handleLogout}>Logout</button>
-                      <button onClick={() => {closeDropdown(); alert('Edit Profile coming soon!')}}>Edit Profile</button>
-                      <button onClick={() => {closeDropdown(); alert('Help coming soon!')}}>Help</button>
-                      <button onClick={() => {closeDropdown(); alert('Ticket system coming soon!')}}>Ticket</button>
-                    </div>
-                  )}
-                </div>
-              ) : null}
-            </div>
-            <button className="hamburger" onClick={handleHamburger} aria-label="Open menu">
-              <span className="bar"></span>
-              <span className="bar"></span>
-              <span className="bar"></span>
-            </button>
-          </div>
         </nav>
         <Routes>
           <Route path="/" element={<HomePage />} />
