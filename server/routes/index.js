@@ -371,4 +371,15 @@ router.post('/api/admin/manual-topup/verify', async (req, res) => {
   }
 });
 
+// Health check endpoint
+router.get('/api/health', async (req, res) => {
+  try {
+    // Try a simple DB query
+    await prisma.user.findFirst();
+    res.json({ status: 'ok', db: 'connected' });
+  } catch (e) {
+    res.status(500).json({ status: 'error', db: 'disconnected', error: e.message });
+  }
+});
+
 module.exports = router;
