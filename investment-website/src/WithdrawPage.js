@@ -84,7 +84,11 @@ export default function WithdrawPage({ token }) {
           min={1}
           max={balance}
           value={amount}
-          onChange={e => setAmount(e.target.value)}
+          onChange={e => {
+            let val = e.target.value;
+            if (Number(val) > balance) val = balance;
+            setAmount(val);
+          }}
           required
           autoComplete="off"
           placeholder="Enter amount"
