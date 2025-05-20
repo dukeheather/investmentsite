@@ -45,7 +45,7 @@
 }
 
 body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
-  background: #fff !important;
+  background: #f7fafc !important;
   color: #232526;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
@@ -522,25 +522,33 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   max-width: 540px;
   margin: 0 auto;
   padding: 1.5rem 0.7rem 2.5rem 0.7rem;
-  background: #fff;
+  background: #f7fafc;
   border-radius: 18px;
   min-height: 100vh;
   box-sizing: border-box;
 }
 
-.improved-wallet-card {
+.app-card {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(34,197,94,0.08);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(34,197,94,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
   border: 1.5px solid #e5e7eb;
-  padding: 1.1rem 1.2rem 1.3rem 1.2rem;
-  margin: 0 auto 1.5rem auto;
-  max-width: 340px;
+  padding: 2rem 1.3rem 1.7rem 1.3rem;
+  margin-bottom: 1.5rem;
+  max-width: 420px;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.improved-wallet-card {
+  composes: app-card;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.1rem;
+  padding: 1.3rem 1.1rem 1.5rem 1.1rem;
+  max-width: 340px;
 }
 
 .wallet-balance-info {
@@ -608,16 +616,10 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
 }
 
 .dashboard-plan-card {
-  background: #fff;
+  composes: app-card;
   color: #232526;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(34,197,94,0.08);
-  border: 1.5px solid #e5e7eb;
-  padding: 1.2rem 1rem;
   margin-bottom: 1.1rem;
-  max-width: 420px;
-  width: 100%;
-  transition: box-shadow 0.2s, transform 0.2s;
+  padding: 1.2rem 1rem;
 }
 
 .dashboard-plan-card h3 {
@@ -663,11 +665,7 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
     padding: 1.2rem 0.2rem 2rem 0.2rem;
     border-radius: 0;
   }
-  .improved-wallet-card {
-    padding: 1rem 0.5rem;
-    max-width: 98vw;
-  }
-  .dashboard-plan-card {
+  .improved-wallet-card, .dashboard-plan-card, .app-card {
     padding: 1rem 0.5rem;
     max-width: 98vw;
   }

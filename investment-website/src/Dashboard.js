@@ -93,7 +93,7 @@ export default function Dashboard({ user, token }) {
 
   return (
     <div className="dashboard-page">
-      <div className="wallet-balance-card improved-wallet-card">
+      <div className="wallet-balance-card improved-wallet-card app-card">
         <div className="wallet-balance-info">
           <div className="wallet-balance-label">
             <FaWallet className="wallet-icon" />
@@ -117,7 +117,7 @@ export default function Dashboard({ user, token }) {
           runningPlans.length === 0 ? <div>No active plans.</div> :
           <div className="dashboard-plans-list">
             {runningPlans.map(plan => (
-              <div className="dashboard-plan-card" key={plan.id}>
+              <div className="dashboard-plan-card app-card" key={plan.id}>
                 <h3>{plan.planName}</h3>
                 <div>Amount Invested: <b>${plan.amount}</b></div>
                 <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
@@ -147,7 +147,7 @@ export default function Dashboard({ user, token }) {
           pendingPlans.length === 0 ? <div>No pending investments.</div> :
           <div className="dashboard-plans-list">
             {pendingPlans.map(plan => (
-              <div className="dashboard-plan-card" key={plan.id}>
+              <div className="dashboard-plan-card app-card" key={plan.id}>
                 <h3>{plan.planName}</h3>
                 <div>Amount Invested: <b>${plan.amount}</b></div>
                 <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
