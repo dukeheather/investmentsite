@@ -91,7 +91,7 @@ export default function InvestmentPlans({ user, token }) {
     try {
       const amountNum = Number(amount);
       if (amountNum < selectedPlan.min || amountNum > selectedPlan.max) {
-        setMessage(`Amount must be between $${selectedPlan.min} and $${selectedPlan.max}.`);
+        setMessage(`Amount must be between ₹${selectedPlan.min} and ₹${selectedPlan.max}.`);
         return;
       }
 
@@ -136,14 +136,14 @@ export default function InvestmentPlans({ user, token }) {
   return (
     <div className="plans-page">
       <div className="wallet-balance-display">
-        Wallet Balance: <span className="balance-amount">${walletBalance.toFixed(2)}</span>
+        Wallet Balance: <span className="balance-amount">₹{walletBalance.toFixed(2)}</span>
       </div>
       <div className="plans-list">
         {plans.map(plan => (
           <div className="plan-card" key={plan.id}>
             <h2>{plan.name}</h2>
-            <div>Minimum Investment: <b>${plan.min}</b></div>
-            <div>Maximum Investment: <b>${plan.max}</b></div>
+            <div>Minimum Investment: <b>₹{plan.min}</b></div>
+            <div>Maximum Investment: <b>₹{plan.max}</b></div>
             <div>Expected Profit: <b>{plan.profit}</b></div>
             <div className="plan-outcome">{plan.outcome}</div>
             <button 
@@ -163,7 +163,7 @@ export default function InvestmentPlans({ user, token }) {
             <div className="buy-modal-content">
               <form onSubmit={handleShowConfirm}>
                 <div>
-                  <label>Amount to Invest ($):</label>
+                  <label>Amount to Invest (₹):</label>
                   <input
                     name="amount"
                     type="number"
@@ -171,10 +171,10 @@ export default function InvestmentPlans({ user, token }) {
                     max={selectedPlan.max}
                     required
                     autoComplete="off"
-                    placeholder={`Enter amount (${selectedPlan.min} - ${selectedPlan.max})`}
+                    placeholder={`Enter amount (₹${selectedPlan.min} - ₹${selectedPlan.max})`}
                   />
                   <div className="balance-info">
-                    Your Balance: ${walletBalance.toFixed(2)}
+                    Your Balance: ₹{walletBalance.toFixed(2)}
                   </div>
                 </div>
                 <div>
@@ -183,7 +183,7 @@ export default function InvestmentPlans({ user, token }) {
                 </div>
                 {message && (
                   <div className={`status-message ${message.includes('successfully') ? 'success' : 'error'}`}>
-                    {message}
+                    {message.replace(/\$/g, '₹').replace(/\$/g, '₹').replace(/\$/g, '₹').replace(/\$/g, '₹').replace(/\$/g, '₹')}
                   </div>
                 )}
                 <div className="modal-buttons">

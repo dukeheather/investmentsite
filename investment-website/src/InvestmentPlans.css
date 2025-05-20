@@ -76,59 +76,74 @@ h1 {
 }
 
 .plan-card {
-  background: #fff;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0f7ef 100%);
   color: #232526;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(34,197,94,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
-  border: 1.5px solid #e5e7eb;
-  padding: 2.2rem 1.5rem 2rem 1.5rem;
-  margin-bottom: 0.7rem;
+  border-radius: 22px;
+  box-shadow: 0 6px 32px rgba(34,197,94,0.13), 0 2px 8px rgba(0,0,0,0.06);
+  border: none;
+  padding: 2.5rem 2rem 2.2rem 2rem;
+  margin-bottom: 1.2rem;
   max-width: 420px;
   width: 100%;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.22s, transform 0.22s, background 0.22s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
 }
 
 .plan-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-  border-color: rgba(74, 222, 128, 0.3);
+  transform: translateY(-7px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(34,197,94,0.18), 0 4px 16px rgba(0,0,0,0.08);
+  background: linear-gradient(135deg, #e0f7ef 0%, #f8fafc 100%);
 }
 
 .plan-card h2 {
   color: var(--accent-green);
-  font-size: 1.18rem;
-  font-weight: 800;
-  margin-bottom: 1.1rem;
+  font-size: 1.35rem;
+  font-weight: 900;
+  margin-bottom: 1.3rem;
+  letter-spacing: 0.01em;
 }
 
 .plan-card > div {
-  font-size: 1.08rem;
-  margin-bottom: 0.7rem;
+  font-size: 1.13rem;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
 }
 
 .plan-card .plan-outcome {
   color: #64748b;
-  font-size: 0.98rem;
-  margin: 1.1rem 0 1.5rem 0;
+  font-size: 1.01rem;
+  margin: 1.2rem 0 1.7rem 0;
+  font-weight: 400;
 }
 
-.buy-btn {
-  font-size: 1.13rem;
-  font-weight: 700;
-  padding: 1rem 0;
-  border-radius: 12px;
+.plan-card .buy-btn {
+  font-size: 1.18rem;
+  font-weight: 800;
+  padding: 1.1rem 0;
+  border-radius: 14px;
   margin-top: 0.7rem;
   background: linear-gradient(90deg, #22c55e 60%, #4ade80 100%);
-  box-shadow: 0 2px 8px rgba(34,197,94,0.10);
-  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.13);
   color: #fff;
   border: none;
+  width: 100%;
+  transition: background 0.22s, transform 0.18s;
+  letter-spacing: 0.01em;
+  display: block;
 }
 
-.buy-btn:disabled {
-  background: #374151;
-  color: #b5eec5;
+.plan-card .buy-btn:disabled {
+  background: #b5eec5;
+  color: #fff;
   opacity: 0.7;
+}
+
+.plan-card .buy-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .buy-modal, .recharge-modal-mobile-fix {
@@ -313,10 +328,20 @@ h1 {
     padding: 0 0.5rem;
   }
   .plan-card {
-    padding: 1.5rem;
+    padding: 1.5rem 0.7rem 1.3rem 0.7rem;
+    max-width: 98vw;
   }
   .plan-card h2 {
-    font-size: 1.3rem;
+    font-size: 1.13rem;
+    margin-bottom: 1rem;
+  }
+  .plan-card > div {
+    font-size: 1.01rem;
+    margin-bottom: 0.6rem;
+  }
+  .plan-card .buy-btn {
+    font-size: 1.08rem;
+    padding: 0.9rem 0;
   }
   .buy-modal {
     padding: 1.5rem;
