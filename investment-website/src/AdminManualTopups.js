@@ -18,7 +18,7 @@ export default function AdminManualTopups({ token }) {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/admin/manual-topups', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/admin/manual-topups', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -36,7 +36,7 @@ export default function AdminManualTopups({ token }) {
     setSuccess('');
     setError('');
     try {
-      const res = await fetch('/api/admin/manual-topup/verify', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/admin/manual-topup/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

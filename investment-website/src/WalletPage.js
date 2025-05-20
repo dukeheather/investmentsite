@@ -16,7 +16,7 @@ export default function WalletPage({ token }) {
   }, []);
 
   const fetchBalance = async () => {
-    const res = await fetch('/api/wallet/balance', {
+    const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -24,7 +24,7 @@ export default function WalletPage({ token }) {
   };
 
   const fetchTransactions = async () => {
-    const res = await fetch('/api/wallet/transactions', {
+    const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/transactions', {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -53,7 +53,7 @@ export default function WalletPage({ token }) {
     setLoading(true);
     setMessage('');
     try {
-      const res = await fetch('/api/wallet/topup/initiate', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/topup/initiate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

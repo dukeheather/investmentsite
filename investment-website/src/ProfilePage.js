@@ -14,7 +14,7 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
   useEffect(() => {
     // Fetch user if not provided
     if (!userProp && setToken) {
-      fetch('/api/auth/me', {
+      fetch('https://investmentsite-q1sz.onrender.com/api/auth/me', {
         headers: { Authorization: `Bearer ${setToken}` },
       })
         .then(res => res.json())
@@ -26,7 +26,7 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
   useEffect(() => {
     if (!setToken) return;
     setTxnLoading(true);
-    fetch('/api/wallet/transactions', {
+    fetch('https://investmentsite-q1sz.onrender.com/api/wallet/transactions', {
       headers: { Authorization: `Bearer ${setToken}` },
     })
       .then(res => res.json())

@@ -14,7 +14,7 @@ export default function PersonalInfoPage({ token }) {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch('/api/user/profile', {
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/user/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -39,7 +39,7 @@ export default function PersonalInfoPage({ token }) {
     setSuccess('');
     setError('');
     try {
-      const res = await fetch('/api/user/profile', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/user/profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

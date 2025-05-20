@@ -16,7 +16,7 @@ export default function WithdrawPage({ token }) {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch('/api/wallet/balance', {
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -51,7 +51,7 @@ export default function WithdrawPage({ token }) {
       return;
     }
     try {
-      const res = await fetch('/api/wallet/withdraw', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/withdraw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

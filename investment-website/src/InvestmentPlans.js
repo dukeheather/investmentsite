@@ -43,7 +43,7 @@ export default function InvestmentPlans({ user, token }) {
 
   const fetchWalletBalance = async () => {
     try {
-      const res = await fetch('/api/wallet/balance', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -84,7 +84,7 @@ export default function InvestmentPlans({ user, token }) {
       }
 
       setLoading(true);
-      const res = await fetch('/api/purchase', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/purchase', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

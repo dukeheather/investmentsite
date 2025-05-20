@@ -31,7 +31,7 @@ export default function ManualPaymentPage({ token }) {
     formData.append('reference', reference);
     formData.append('screenshot', screenshot);
     try {
-      const res = await fetch('/api/wallet/manual-topup', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/manual-topup', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

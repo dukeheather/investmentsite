@@ -68,7 +68,7 @@ export default function Dashboard({ user, token }) {
 
   const fetchBalance = async () => {
     try {
-      const res = await fetch('/api/wallet/balance', {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
