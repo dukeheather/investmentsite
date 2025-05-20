@@ -314,28 +314,37 @@ const manualTopupStorage = multer.diskStorage({
 const manualTopupUpload = multer({ storage: manualTopupStorage });
 
 // Manual wallet top-up (user uploads screenshot and reference)
-router.post('/api/wallet/manual-topup', manualTopupUpload.single('screenshot'), async (req, res) => {
-  const userId = getUserIdFromToken(req);
-  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-  const { amount, reference } = req.body;
-  if (!amount || !reference || !req.file) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-  try {
-    const txn = await prisma.walletTransaction.create({
-      data: {
-        userId,
-        amount: parseFloat(amount),
-        type: 'topup',
-        status: 'pending',
-        gatewayTxnId: reference,
-        screenshotUrl: `/manual-topups/${req.file.filename}`,
-      },
-    });
-    res.json({ success: true, transaction: txn });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to submit manual top-up' });
-  }
+router.post('/api/wallet/manual-topup', (req, res, next) => {
+  manualTopupUpload.single('screenshot')(req, res, function (err) {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(500).json({ error: 'File upload failed: ' + err.message });
+    }
+    (async () => {
+      const userId = getUserIdFromToken(req);
+      if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+      const { amount, reference } = req.body;
+      if (!amount || !reference || !req.file) {
+        return res.status(400).json({ error: 'All fields are required' });
+      }
+      try {
+        const txn = await prisma.walletTransaction.create({
+          data: {
+            userId,
+            amount: parseFloat(amount),
+            type: 'topup',
+            status: 'pending',
+            gatewayTxnId: reference,
+            screenshotUrl: `/manual-topups/${req.file.filename}`,
+          },
+        });
+        res.json({ success: true, transaction: txn });
+      } catch (err) {
+        console.error('Manual top-up DB error:', err);
+        res.status(500).json({ error: 'Failed to submit manual top-up: ' + err.message });
+      }
+    })();
+  });
 });
 
 // Admin: List all pending manual top-ups
