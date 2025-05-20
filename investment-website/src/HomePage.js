@@ -40,27 +40,6 @@ export default function HomePage() {
         <button className={tab === 'day' ? 'toggle-btn active' : 'toggle-btn'} onClick={() => setTab('day')}>Day income</button>
         <button className={tab === 'vip' ? 'toggle-btn active' : 'toggle-btn'} onClick={() => setTab('vip')}>VIP Products</button>
       </div>
-      <div className="homepage-cards modern-cards">
-        <div className="info-card modern-info-card">
-          <div className="info-label">Price</div>
-          <div className="info-value">₹ 450</div>
-        </div>
-        <div className="info-card modern-info-card">
-          <div className="info-label">Daily profit</div>
-          <div className="info-value">₹ 120</div>
-        </div>
-        <div className="info-card modern-info-card">
-          <div className="info-label">Day</div>
-          <div className="info-value">30</div>
-        </div>
-        <div className="info-card modern-info-card">
-          <div className="info-label">Total profit</div>
-          <div className="info-value">₹ 3600</div>
-        </div>
-        <div className="info-card image-card modern-info-card">
-          <img src="https://images.unsplash.com/photo-1514361892635-cebb9b6c7ca5?auto=format&fit=crop&w=200&q=80" alt="Product" />
-        </div>
-      </div>
     </div>
   );
 } 
