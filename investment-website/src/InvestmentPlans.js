@@ -141,8 +141,8 @@ export default function InvestmentPlans({ user, token }) {
         ))}
       </div>
       {showModal && (
-        <div className="buy-modal-overlay">
-          <div className="buy-modal">
+        <div className="modal-overlay">
+          <div className="modal-content">
             <h2>Buy {selectedPlan.name}</h2>
             <div className="buy-modal-content">
               <form onSubmit={handlePurchase}>
