@@ -44,12 +44,13 @@ model Investment {
 }
 
 model WalletTransaction {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  amount    Float
-  type      String   // 'topup' or 'deduct'
-  status    String   // 'pending', 'success', 'failed'
-  gatewayTxnId String?
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int
+  amount        Float
+  type          String   // 'topup' or 'deduct'
+  status        String   // 'pending', 'success', 'failed'
+  gatewayTxnId  String?
+  screenshotUrl String?
+  createdAt     DateTime @default(now())
 }
