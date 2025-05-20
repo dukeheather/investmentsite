@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
+import CircleLoader from './components/CircleLoader';
 
 const plans = [
   {
@@ -35,6 +36,7 @@ export default function InvestmentPlans({ user, token }) {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,6 +64,16 @@ export default function InvestmentPlans({ user, token }) {
   const closeModal = () => {
     setShowModal(false);
     setSelectedPlan(null);
+  };
+
+  const handleShowConfirm = (e) => {
+    e.preventDefault();
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmPurchase = (e) => {
+    setShowConfirmDialog(false);
+    handlePurchase(e);
   };
 
   const handlePurchase = async (e) => {
@@ -145,7 +157,7 @@ export default function InvestmentPlans({ user, token }) {
           <div className="modal-content">
             <h2>Buy {selectedPlan.name}</h2>
             <div className="buy-modal-content">
-              <form onSubmit={handlePurchase}>
+              <form onSubmit={handleShowConfirm}>
                 <div>
                   <label>Amount to Invest ($):</label>
                   <input
@@ -176,7 +188,7 @@ export default function InvestmentPlans({ user, token }) {
                     className="buy-btn" 
                     disabled={loading}
                   >
-                    {loading ? 'Processing...' : 'Confirm Purchase'}
+                    {loading ? <CircleLoader /> : 'Confirm Purchase'}
                   </button>
                   <button 
                     type="button" 
@@ -190,6 +202,22 @@ export default function InvestmentPlans({ user, token }) {
               </form>
             </div>
           </div>
+          {showConfirmDialog && (
+            <div className="modal-overlay" style={{zIndex: 3000}}>
+              <div className="modal-content" style={{maxWidth: 340, textAlign: 'center'}}>
+                <h3>Are you sure you want to proceed?</h3>
+                <p>This action will invest your selected amount in the {selectedPlan.name}.</p>
+                <div className="modal-buttons">
+                  <button className="buy-btn" onClick={handleConfirmPurchase} disabled={loading}>
+                    {loading ? <CircleLoader /> : 'Yes, Proceed'}
+                  </button>
+                  <button className="cancel-btn" onClick={() => setShowConfirmDialog(false)} disabled={loading}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
