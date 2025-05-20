@@ -5,7 +5,7 @@ const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 
 export default function LoginRegister({ user, setUser, setToken }) {
   const [mode, setMode] = useState('login');
-  const [form, setForm] = useState({ email: '', password: '', phone: '' });
+  const [form, setForm] = useState({ email: '', password: '', phone: '', referralCode: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +38,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
-      setForm({ email: '', password: '', phone: '' });
+      setForm({ email: '', password: '', phone: '', referralCode: '' });
     } catch (err) {
       setError('Network error.');
     } finally {
@@ -48,7 +48,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
 
   const handleLogout = () => {
     setUser(null);
-    setForm({ email: '', password: '', phone: '' });
+    setForm({ email: '', password: '', phone: '', referralCode: '' });
     localStorage.removeItem('token');
     setToken(null);
   };
@@ -84,17 +84,28 @@ export default function LoginRegister({ user, setUser, setToken }) {
           disabled={loading}
         />
         {mode === 'register' && (
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            value={form.phone}
-            onChange={handleChange}
-            autoComplete="off"
-            disabled={loading}
-            pattern="[0-9]{10,15}"
-            title="Enter a valid phone number"
-          />
+          <>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone Number"
+              value={form.phone}
+              onChange={handleChange}
+              autoComplete="off"
+              disabled={loading}
+              pattern="[0-9]{10,15}"
+              title="Enter a valid phone number"
+            />
+            <input
+              type="text"
+              name="referralCode"
+              placeholder="Referral Code (Optional)"
+              value={form.referralCode}
+              onChange={handleChange}
+              autoComplete="off"
+              disabled={loading}
+            />
+          </>
         )}
         {error && <div className="auth-error">{error}</div>}
         <button type="submit" className="auth-btn" disabled={loading}>
