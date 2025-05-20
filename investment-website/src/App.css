@@ -44,9 +44,9 @@
   }
 }
 
-body, .homepage {
-  background: var(--background-light);
-  color: var(--text-main);
+body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
+  background: #fff !important;
+  color: #232526;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -1107,4 +1107,45 @@ body, .homepage {
     width: 100%;
     margin-left: 0;
   }
+}
+
+.header-bar {
+  width: 100%;
+  height: 54px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.header-back-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #22c55e;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.header-back-placeholder,
+.header-right-placeholder {
+  width: 2.2rem;
+  display: inline-block;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #232526;
+  letter-spacing: 0.01em;
 }

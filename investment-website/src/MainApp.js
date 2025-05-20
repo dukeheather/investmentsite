@@ -23,6 +23,7 @@ import RechargeWalletPage from './RechargeWalletPage';
 import CircleLoader from './components/CircleLoader';
 import ManualPaymentPage from './ManualPaymentPage';
 import AdminManualTopups from './AdminManualTopups';
+import HeaderBar from './components/HeaderBar';
 
 function Spinner() {
   return <CircleLoader />;
@@ -113,6 +114,7 @@ export default function MainApp() {
 
   return (
     <>
+      <HeaderBar />
       {globalError && <div className="global-error">{globalError}</div>}
       {!user && (
         <div className="modal-overlay">
