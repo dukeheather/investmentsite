@@ -1191,3 +1191,89 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   font-size: 1.18em;
   text-shadow: 0 2px 8px rgba(34,197,94,0.10);
 }
+
+.service-page-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2.2rem 1rem 2.5rem 1rem;
+  background: none;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.service-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--accent-green);
+  margin-bottom: 2rem;
+  letter-spacing: 0.01em;
+}
+.service-header-icon {
+  font-size: 2.1rem;
+  color: var(--accent-green);
+}
+.service-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 32px rgba(34,197,94,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+  padding: 2.2rem 1.5rem 2rem 1.5rem;
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+.service-info {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1.2rem;
+}
+.service-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.1rem 0 0 0;
+  font-size: 1.08rem;
+  color: #232526;
+}
+.service-contact-list li {
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.service-icon {
+  color: var(--accent-green);
+  font-size: 1.1rem;
+  margin-right: 0.3rem;
+}
+.service-contact-btn {
+  background: linear-gradient(90deg, #22c55e 60%, #6ee7b7 100%);
+  color: #fff;
+  font-size: 1.13rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  padding: 1rem 0;
+  width: 100%;
+  margin-top: 0.7rem;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.10);
+  transition: background 0.18s, transform 0.18s;
+  letter-spacing: 0.01em;
+  display: block;
+  cursor: pointer;
+}
+.service-contact-btn:hover {
+  background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%);
+  transform: translateY(-2px) scale(1.01);
+}
+.service-coming-soon {
+  color: #bdbdbd;
+  font-style: italic;
+  font-size: 0.98em;
+}
