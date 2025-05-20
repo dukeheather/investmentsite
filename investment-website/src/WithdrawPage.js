@@ -19,7 +19,7 @@ export default function WithdrawPage({ token }) {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        setBalance(data.balance || 0);
+        setBalance(Number(data.balance) || 0);
       } catch {
         setBalance(0);
       }
