@@ -8,6 +8,7 @@ const axios = require('axios');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 function getUserIdFromToken(req) {
   const auth = req.headers.authorization;
@@ -394,6 +395,86 @@ router.get('/api/health', async (req, res) => {
     res.json({ status: 'ok', db: 'connected' });
   } catch (e) {
     res.status(500).json({ status: 'error', db: 'disconnected', error: e.message });
+  }
+});
+
+// POST /api/register
+router.post('/api/register', async (req, res) => {
+  const { email, password, referralCode } = req.body;
+  try {
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered.' });
+    }
+
+    // If referral code provided, verify it exists
+    let referredBy = null;
+    if (referralCode) {
+      const referrer = await prisma.user.findUnique({ where: { referralCode } });
+      if (!referrer) {
+        return res.status(400).json({ error: 'Invalid referral code.' });
+      }
+      referredBy = referralCode;
+    }
+
+    // Generate a unique referral code
+    const generateReferralCode = () => {
+      const timestamp = Date.now().toString(36);
+      const random = Math.random().toString(36).substring(2, 8);
+      return `REF_${timestamp}${random}`.toUpperCase();
+    };
+
+    // Create new user with generated referral code
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: await bcrypt.hash(password, 10),
+        referredBy,
+        referralCode: generateReferralCode(),
+      },
+    });
+
+    // If user was referred, credit ₹50 to referrer's wallet
+    if (referredBy) {
+      await prisma.user.update({
+        where: { referralCode },
+        data: { walletBalance: { increment: 50 } },
+      });
+
+      // Record the referral bonus transaction
+      await prisma.walletTransaction.create({
+        data: {
+          userId: user.id,
+          amount: 50,
+          type: 'referral_bonus',
+          status: 'success',
+          gatewayTxnId: `REF_${Date.now()}`,
+        },
+      });
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+    res.json({ token, user: { email: user.email, id: user.id } });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Failed to register user.' });
+  }
+});
+
+// GET /api/referral-code
+router.get('/api/referral-code', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { referralCode: true },
+    });
+    res.json({ referralCode: user.referralCode });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch referral code.' });
   }
 });
 

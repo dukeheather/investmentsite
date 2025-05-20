@@ -11,7 +11,7 @@ const plans = [
     max: 4999,
     profit: '12%/month',
     outcome: 'Perfect for beginners with steady returns.',
-    duration: '20 days',
+    duration: '3 month',
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const plans = [
     max: 49999,
     profit: '18%/month',
     outcome: 'Higher returns for experienced investors.',
-    duration: '1 month',
+    duration: '3 month',
   },
   {
     id: 3,

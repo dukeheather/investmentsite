@@ -11,6 +11,8 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
   const [txnLoading, setTxnLoading] = useState(false);
   const [txnError, setTxnError] = useState('');
   const [walletBalance, setWalletBalance] = useState(0);
+  const [referralCode, setReferralCode] = useState('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -61,6 +63,28 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
         setTxnLoading(false);
       });
   }, [setToken]);
+
+  useEffect(() => {
+    fetchReferralCode();
+  }, []);
+
+  const fetchReferralCode = async () => {
+    try {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/referral-code', {
+        headers: { Authorization: `Bearer ${setToken}` },
+      });
+      const data = await res.json();
+      setReferralCode(data.referralCode);
+    } catch (error) {
+      console.error('Failed to fetch referral code:', error);
+    }
+  };
+
+  const copyReferralCode = () => {
+    navigator.clipboard.writeText(referralCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleMenuClick = (label) => {
     if (label === 'Messages') {
@@ -176,6 +200,18 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
           ))}
         </ul>
       </section>
+      <div className="referral-section">
+        <h3>Your Referral Code</h3>
+        <div className="referral-code-display">
+          <span>{referralCode}</span>
+          <button onClick={copyReferralCode} className="copy-btn">
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+        <p className="referral-info">
+          Share this code with friends! When they register using your code, you'll get ₹50 in your wallet.
+        </p>
+      </div>
     </div>
   );
 } 
