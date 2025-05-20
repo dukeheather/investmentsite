@@ -147,7 +147,7 @@ export default function MainApp() {
           <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/language" element={<LanguagePage />} />
           <Route path="/contact-us" element={<ContactUsPage />} />
-          <Route path="/withdraw" element={<WithdrawPage />} />
+          <Route path="/withdraw" element={<WithdrawPage token={token} />} />
           <Route path="/service" element={<ServicePage />} />
           <Route path="/channel" element={<ChannelPage />} />
           <Route path="/recharge" element={<RechargeWalletPage token={token} />} />
