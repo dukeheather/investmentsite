@@ -135,7 +135,6 @@ export default function InvestmentPlans({ user, token }) {
 
   return (
     <div className="plans-page">
-      <h1>Investment Plans</h1>
       <div className="wallet-balance-display">
         Wallet Balance: <span className="balance-amount">${walletBalance.toFixed(2)}</span>
       </div>
