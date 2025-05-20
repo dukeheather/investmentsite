@@ -7,26 +7,29 @@ const plans = [
   {
     id: 1,
     name: 'Starter Plan',
-    min: 100,
-    max: 999,
-    profit: '10%/yr',
-    outcome: 'Steady returns for beginners.',
+    min: 350,
+    max: 4999,
+    profit: '12%/month',
+    outcome: 'Perfect for beginners with steady returns.',
+    duration: '20 days',
   },
   {
     id: 2,
     name: 'Growth Plan',
-    min: 1000,
-    max: 9999,
-    profit: '15%/yr',
-    outcome: 'Balanced risk and reward for growth.',
+    min: 500,
+    max: 49999,
+    profit: '18%/month',
+    outcome: 'Higher returns for experienced investors.',
+    duration: '1 month',
   },
   {
     id: 3,
     name: 'Elite Plan',
-    min: 10000,
-    max: 100000,
-    profit: '20%/yr',
-    outcome: 'Maximum returns and premium support.',
+    min: 5000,
+    max: 500000,
+    profit: '25%/month',
+    outcome: 'Premium returns with dedicated support.',
+    duration: '3 months',
   },
 ];
 
@@ -145,6 +148,7 @@ export default function InvestmentPlans({ user, token }) {
             <div>Minimum Investment: <b>₹{plan.min}</b></div>
             <div>Maximum Investment: <b>₹{plan.max}</b></div>
             <div>Expected Profit: <b>{plan.profit}</b></div>
+            <div>Duration: <b>{plan.duration}</b></div>
             <div className="plan-outcome">{plan.outcome}</div>
             <button 
               className="buy-btn" 
