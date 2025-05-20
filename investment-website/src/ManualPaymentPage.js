@@ -36,7 +36,12 @@ export default function ManualPaymentPage({ token }) {
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error('Server error: Invalid response');
+      }
       if (!res.ok) throw new Error(data.error || 'Failed to submit payment');
       setSuccess('Payment submitted! Awaiting admin verification.');
       setReference('');
