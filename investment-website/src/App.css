@@ -1066,3 +1066,94 @@ body, .homepage {
     font-size: 1rem;
   }
 }
+
+/* Improved Wallet Card Styles for Dashboard */
+.improved-wallet-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2.5rem;
+  padding: 2.2rem 2.5rem;
+  background: linear-gradient(135deg, #23272f 60%, #1a1f2c 100%);
+  border-radius: 22px;
+  box-shadow: 0 6px 32px rgba(34,197,94,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+  border: 1.5px solid #22c55e22;
+  margin-bottom: 2.7rem;
+  min-width: 340px;
+  max-width: 480px;
+}
+.wallet-balance-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 0.7rem;
+}
+.wallet-balance-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #b5eec5;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.wallet-icon {
+  color: var(--accent-green);
+  font-size: 1.3rem;
+}
+.wallet-balance-amount {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--accent-green);
+  font-size: 2.1rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.rupee-icon {
+  font-size: 1.5rem;
+  color: var(--accent-green);
+  margin-right: 0.1rem;
+}
+.wallet-divider {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(180deg, #22c55e33 0%, #23272f 100%);
+  border-radius: 2px;
+  margin: 0 2rem;
+  display: block;
+}
+.improved-recharge-btn {
+  font-size: 1.18rem;
+  font-weight: 800;
+  padding: 1.2rem 2.7rem;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #22c55e 60%, #4ade80 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(34,197,94,0.13);
+  border: none;
+  transition: background 0.2s, transform 0.2s;
+  margin-left: 0;
+}
+.improved-recharge-btn:hover {
+  background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+@media (max-width: 600px) {
+  .improved-wallet-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+    padding: 1.2rem 0.7rem;
+    min-width: unset;
+    max-width: 98vw;
+  }
+  .wallet-divider {
+    display: none;
+  }
+  .improved-recharge-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+}

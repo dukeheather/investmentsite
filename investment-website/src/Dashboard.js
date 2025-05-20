@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
+import { FaWallet, FaRupeeSign } from "react-icons/fa";
 
 const API_URL = 'https://investmentsite-q1sz.onrender.com/api/dashboard';
 
@@ -92,12 +93,19 @@ export default function Dashboard({ user, token }) {
 
   return (
     <div className="dashboard-page">
-      <div className="wallet-balance-card" style={{ maxWidth: 350, margin: '0 auto 2rem auto', background: 'rgba(255,255,255,0.07)', borderRadius: 16, padding: '1.2rem 1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ fontSize: '1.1rem', color: '#94a3b8' }}>Wallet Balance</div>
-          <div style={{ fontSize: '1.7rem', color: '#4ade80', fontWeight: 700 }}>₹ {walletBalance.toFixed(2)}</div>
+      <div className="wallet-balance-card improved-wallet-card">
+        <div className="wallet-balance-info">
+          <div className="wallet-balance-label">
+            <FaWallet className="wallet-icon" />
+            <span>Wallet Balance</span>
+          </div>
+          <div className="wallet-balance-amount">
+            <FaRupeeSign className="rupee-icon" />
+            <span>{walletBalance.toFixed(2)}</span>
+          </div>
         </div>
-        <button className="buy-btn" style={{ minWidth: 100, marginLeft: 16 }} onClick={() => navigate('/recharge')}>
+        <div className="wallet-divider" />
+        <button className="buy-btn improved-recharge-btn" onClick={() => navigate('/recharge')}>
           Recharge
         </button>
       </div>
