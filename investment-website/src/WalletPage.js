@@ -7,6 +7,7 @@ export default function WalletPage({ token }) {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [notif, setNotif] = useState(null);
 
   useEffect(() => {
     fetchBalance();
@@ -28,6 +29,23 @@ export default function WalletPage({ token }) {
     });
     const data = await res.json();
     setTransactions(data.transactions || []);
+    // Show notification for latest manual top-up status change
+    const lastManual = data.transactions?.find(
+      t => t.type === 'topup' && t.screenshotUrl && (t.status === 'success' || t.status === 'failed')
+    );
+    if (lastManual && !localStorage.getItem('notif-topup-' + lastManual.id)) {
+      setNotif({
+        id: lastManual.id,
+        status: lastManual.status,
+        amount: lastManual.amount,
+        date: lastManual.createdAt,
+      });
+    }
+  };
+
+  const handleDismissNotif = () => {
+    if (notif) localStorage.setItem('notif-topup-' + notif.id, '1');
+    setNotif(null);
   };
 
   const handleTopup = async (e) => {
@@ -67,6 +85,14 @@ export default function WalletPage({ token }) {
   return (
     <div className="wallet-container">
       <h2 className="wallet-title">Wallet</h2>
+      {notif && (
+        <div className={`wallet-notif-banner notif-${notif.status}`}> 
+          <span>
+            {notif.status === 'success' ? 'Your manual top-up of ' : 'Your manual top-up of '}<b>₹{notif.amount}</b> on {new Date(notif.date).toLocaleDateString()} was <b>{notif.status === 'success' ? 'APPROVED' : 'REJECTED'}</b>.
+          </span>
+          <button className="notif-dismiss-btn" onClick={handleDismissNotif}>×</button>
+        </div>
+      )}
       <div className="wallet-balance-card">
         <div className="wallet-balance-label">Balance</div>
         <div className="wallet-balance-value">₹ {balance.toFixed(2)}</div>
@@ -97,6 +123,9 @@ export default function WalletPage({ token }) {
                 <span className="txn-amount">{txn.amount > 0 ? '+' : ''}{txn.amount}</span>
                 <span className={`txn-status ${txn.status}`}>{txn.status}</span>
                 <span className="txn-date">{new Date(txn.createdAt).toLocaleDateString()}</span>
+                {txn.screenshotUrl && (
+                  <a href={txn.screenshotUrl} target="_blank" rel="noopener noreferrer" className="txn-screenshot-link">View Screenshot</a>
+                )}
               </li>
             ))}
           </ul>
