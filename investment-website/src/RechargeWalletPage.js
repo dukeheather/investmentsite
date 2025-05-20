@@ -21,10 +21,14 @@ export default function RechargeWalletPage({ token }) {
         },
         body: JSON.stringify({ amount }),
       });
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error('Server error: Invalid response');
+      }
       if (!res.ok) throw new Error(data.error || 'Failed to initiate payment');
       setPaytmParams(data.paytmParams);
-      // Auto-submit the form to Paytm if params are received
       setTimeout(() => {
         document.getElementById('paytmForm')?.submit();
       }, 500);
@@ -36,13 +40,13 @@ export default function RechargeWalletPage({ token }) {
   };
 
   return (
-    <div className="plans-page">
+    <div className="plans-page recharge-page-mobile-fix">
       <h1>Recharge Wallet</h1>
       <div className="wallet-balance-display" style={{ marginBottom: '2.5rem' }}>
         Add funds to your wallet using Paytm. Enter the amount and proceed to payment.
       </div>
       {!paytmParams ? (
-        <form className="buy-modal" style={{ maxWidth: 400, margin: '0 auto' }} onSubmit={handleSubmit}>
+        <form className="buy-modal recharge-modal-mobile-fix" style={{ maxWidth: 400, margin: '0 auto' }} onSubmit={handleSubmit}>
           <label htmlFor="amount">Amount (₹):</label>
           <input
             id="amount"
@@ -61,7 +65,7 @@ export default function RechargeWalletPage({ token }) {
           </button>
         </form>
       ) : (
-        <div className="buy-modal" style={{ maxWidth: 400, margin: '0 auto', textAlign: 'center' }}>
+        <div className="buy-modal recharge-modal-mobile-fix" style={{ maxWidth: 400, margin: '0 auto', textAlign: 'center' }}>
           <div className="status-message success">
             Redirecting to Paytm for payment...<br />
             If not redirected, <b>click the button below</b>.

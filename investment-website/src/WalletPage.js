@@ -43,7 +43,12 @@ export default function WalletPage({ token }) {
         },
         body: JSON.stringify({ amount }),
       });
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error('Server error: Invalid response');
+      }
       if (data.paytmParams) {
         // Redirect to Paytm payment page (simulate for now)
         setMessage('Redirecting to Paytm...');
@@ -53,7 +58,7 @@ export default function WalletPage({ token }) {
         setMessage(data.error || 'Failed to initiate payment');
       }
     } catch (err) {
-      setMessage('Network error');
+      setMessage(err.message || 'Network error');
     } finally {
       setLoading(false);
     }

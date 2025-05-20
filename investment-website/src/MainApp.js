@@ -20,9 +20,10 @@ import WithdrawPage from './WithdrawPage';
 import ServicePage from './ServicePage';
 import ChannelPage from './ChannelPage';
 import RechargeWalletPage from './RechargeWalletPage';
+import CircleLoader from './components/CircleLoader';
 
 function Spinner() {
-  return <div className="global-spinner">Loading...</div>;
+  return <CircleLoader />;
 }
 
 const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';

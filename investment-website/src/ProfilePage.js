@@ -2,21 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 import { FaWallet, FaCheckCircle, FaTimesCircle, FaClock } from 'react-icons/fa';
+import CircleLoader from './components/CircleLoader';
 
-export default function ProfilePage({ setUser, setToken }) {
+export default function ProfilePage({ setUser, setToken, user: userProp }) {
   const navigate = useNavigate();
-  // Placeholder user data
-  const user = {
-    id: '916000314727',
-    balance: 0,
-    recharge: 0,
-    income: 0,
-    progress: 0, // out of 450
-  };
-
+  const [user, setUserState] = useState(userProp || null);
   const [transactions, setTransactions] = useState([]);
   const [txnLoading, setTxnLoading] = useState(false);
   const [txnError, setTxnError] = useState('');
+
+  useEffect(() => {
+    // Fetch user if not provided
+    if (!userProp && setToken) {
+      fetch('/api/auth/me', {
+        headers: { Authorization: `Bearer ${setToken}` },
+      })
+        .then(res => res.json())
+        .then(data => setUserState(data.user))
+        .catch(() => {});
+    }
+  }, [userProp, setToken]);
 
   useEffect(() => {
     if (!setToken) return;
@@ -61,33 +66,31 @@ export default function ProfilePage({ setUser, setToken }) {
   };
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <div className="profile-bg"></div>
-        <div className="profile-avatar">
-          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="28" cy="28" r="28" fill="#6ee7b7" />
-            <circle cx="28" cy="22" r="10" fill="#232526" />
-            <ellipse cx="28" cy="40" rx="14" ry="8" fill="#232526" />
+    <div className="profile-container modern-profile">
+      <div className="profile-header modern-profile-header">
+        <div className="profile-avatar modern-profile-avatar">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="32" fill="#4ade80" />
+            <circle cx="32" cy="26" r="12" fill="#232526" />
+            <ellipse cx="32" cy="46" rx="18" ry="10" fill="#232526" />
           </svg>
         </div>
-        <div className="profile-id">{user.id}</div>
-        <div className="profile-progress-bar">
-          <div className="profile-progress" style={{ width: `${(user.progress/450)*100}%` }}></div>
-          <span className="profile-progress-label">{user.progress}/450</span>
+        <div className="profile-info-block">
+          <div className="profile-id modern-profile-id">{user?.phone ? `+${user.phone}` : user?.email}</div>
+          <div className="profile-email modern-profile-email">{user?.email}</div>
         </div>
       </div>
-      <div className="profile-stats-card">
+      <div className="profile-stats-card modern-profile-stats">
         <div className="profile-stat">
-          <div className="stat-value">{user.balance}</div>
+          <div className="stat-value">{user?.balance ?? 0}</div>
           <div className="stat-label">Balance</div>
         </div>
         <div className="profile-stat">
-          <div className="stat-value">{user.recharge}</div>
+          <div className="stat-value">{user?.recharge ?? 0}</div>
           <div className="stat-label">Recharge</div>
         </div>
         <div className="profile-stat">
-          <div className="stat-value">{user.income}</div>
+          <div className="stat-value">{user?.income ?? 0}</div>
           <div className="stat-label">Total income</div>
         </div>
       </div>
@@ -119,7 +122,7 @@ export default function ProfilePage({ setUser, setToken }) {
       </div>
       <section className="wallet-transactions-section">
         <h2><FaWallet style={{ marginRight: 8 }} />Wallet Transactions</h2>
-        {txnLoading && <div>Loading...</div>}
+        {txnLoading && <CircleLoader />}
         {txnError && <div className="status-message error">{txnError}</div>}
         {!txnLoading && !txnError && transactions.length === 0 && (
           <div className="status-message">No transactions found.</div>

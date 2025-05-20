@@ -209,7 +209,7 @@ router.post('/api/admin/update-investment-status', async (req, res) => {
 // Initiate Paytm payment for wallet top-up
 router.post('/api/wallet/topup/initiate', async (req, res) => {
   const { amount } = req.body;
-  const userId = req.user?.id;
+  const userId = getUserIdFromToken(req);
   if (!userId || !amount || isNaN(amount) || amount <= 0) {
     return res.status(400).json({ error: 'Invalid request' });
   }

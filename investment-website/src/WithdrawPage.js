@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './InvestmentPlans.css';
+import CircleLoader from './components/CircleLoader';
 
 export default function WithdrawPage({ token }) {
   const [balance, setBalance] = useState(0);
@@ -75,7 +76,7 @@ export default function WithdrawPage({ token }) {
       <h1>Withdraw Funds</h1>
       <form className="buy-modal" style={{ maxWidth: 400, margin: '0 auto' }} onSubmit={handleSubmit}>
         {loading ? (
-          <div>Loading...</div>
+          <CircleLoader />
         ) : (
           <>
             <div className="wallet-balance-display" style={{ marginBottom: 16 }}>

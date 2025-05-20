@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
+import CircleLoader from './components/CircleLoader';
 
 const API_URL = 'https://investmentsite-q1sz.onrender.com/api/dashboard';
 
@@ -104,7 +105,7 @@ export default function Dashboard({ user, token }) {
       
       <div className="dashboard-section">
         <h2 className="dashboard-section-title">Active Investment Plans</h2>
-        {loading ? <div>Loading...</div> : (
+        {loading ? <CircleLoader /> : (
           runningPlans.length === 0 ? <div>No active plans.</div> :
           <div className="dashboard-plans-list">
             {runningPlans.map(plan => (
@@ -134,7 +135,7 @@ export default function Dashboard({ user, token }) {
 
       <div className="dashboard-section">
         <h2 className="dashboard-section-title">Pending Verification Investments</h2>
-        {loading ? <div>Loading...</div> : (
+        {loading ? <CircleLoader /> : (
           pendingPlans.length === 0 ? <div>No pending investments.</div> :
           <div className="dashboard-plans-list">
             {pendingPlans.map(plan => (
@@ -167,7 +168,7 @@ export default function Dashboard({ user, token }) {
 
       <div className="dashboard-section">
         <h2 className="dashboard-section-title">Investment History</h2>
-        {loading ? <div>Loading...</div> : (
+        {loading ? <CircleLoader /> : (
           history.length === 0 ? <div>No investment history.</div> :
           <table className="dashboard-history-table">
             <thead>

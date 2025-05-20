@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './InvestmentPlans.css';
+import CircleLoader from './components/CircleLoader';
 
 export default function PersonalInfoPage({ token }) {
-  const [form, setForm] = useState({ name: '', email: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '' });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
@@ -18,7 +19,7 @@ export default function PersonalInfoPage({ token }) {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to fetch profile');
-        setForm({ name: data.name || '', email: data.email || '' });
+        setForm({ name: data.name || '', email: data.email || '', phone: data.phone || '' });
       } catch (err) {
         setError(err.message || 'Failed to fetch profile');
       } finally {
@@ -59,15 +60,17 @@ export default function PersonalInfoPage({ token }) {
   return (
     <div className="plans-page">
       <h1>Personal Information</h1>
-      <form className="buy-modal" style={{ maxWidth: 400, margin: '0 auto' }} onSubmit={handleSave}>
+      <form className="buy-modal modern-info-form" style={{ maxWidth: 400, margin: '0 auto' }} onSubmit={handleSave}>
         {loading ? (
-          <div>Loading...</div>
+          <CircleLoader />
         ) : (
           <>
             <label>Name</label>
             <input name="name" value={form.name} onChange={handleChange} required autoComplete="off" />
             <label>Email</label>
             <input name="email" type="email" value={form.email} onChange={handleChange} required autoComplete="off" />
+            <label>Phone Number</label>
+            <input name="phone" type="tel" value={form.phone} onChange={handleChange} autoComplete="off" pattern="[0-9]{10,15}" title="Enter a valid phone number" />
             {success && <div className="status-message success">{success}</div>}
             {error && <div className="status-message error">{error}</div>}
             <button className="buy-btn" type="submit" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
