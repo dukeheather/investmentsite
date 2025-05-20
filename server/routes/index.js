@@ -5,6 +5,8 @@ const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
 const PaytmChecksum = require('paytmchecksum');
 const axios = require('axios');
+const multer = require('multer');
+const path = require('path');
 
 function getUserIdFromToken(req) {
   const auth = req.headers.authorization;
@@ -291,6 +293,81 @@ router.post('/api/wallet/paytm-callback', async (req, res) => {
     }
   } catch (err) {
     return res.status(500).json({ error: 'Callback error' });
+  }
+});
+
+const manualTopupStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '..', 'public', 'manual-topups'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const manualTopupUpload = multer({ storage: manualTopupStorage });
+
+// Manual wallet top-up (user uploads screenshot and reference)
+router.post('/api/wallet/manual-topup', manualTopupUpload.single('screenshot'), async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  const { amount, reference } = req.body;
+  if (!amount || !reference || !req.file) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+  try {
+    const txn = await prisma.walletTransaction.create({
+      data: {
+        userId,
+        amount: parseFloat(amount),
+        type: 'topup',
+        status: 'pending',
+        gatewayTxnId: reference,
+        screenshotUrl: `/manual-topups/${req.file.filename}`,
+      },
+    });
+    res.json({ success: true, transaction: txn });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to submit manual top-up' });
+  }
+});
+
+// Admin: List all pending manual top-ups
+router.get('/api/admin/manual-topups', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  if (!await isAdmin(userId)) return res.status(403).json({ error: 'Forbidden: Admin access required' });
+  try {
+    const topups = await prisma.walletTransaction.findMany({
+      where: { type: 'topup', status: 'pending', screenshotUrl: { not: null } },
+      include: { user: { select: { email: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json({ topups });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch manual top-ups' });
+  }
+});
+
+// Admin: Approve/reject manual top-up
+router.post('/api/admin/manual-topup/verify', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  if (!await isAdmin(userId)) return res.status(403).json({ error: 'Forbidden: Admin access required' });
+  const { id, action } = req.body;
+  if (!id || !['approve', 'reject'].includes(action)) return res.status(400).json({ error: 'Invalid request' });
+  try {
+    const txn = await prisma.walletTransaction.findUnique({ where: { id: Number(id) } });
+    if (!txn || txn.status !== 'pending') return res.status(400).json({ error: 'Transaction not found or not pending' });
+    if (action === 'approve') {
+      await prisma.walletTransaction.update({ where: { id: txn.id }, data: { status: 'success' } });
+      await prisma.user.update({ where: { id: txn.userId }, data: { walletBalance: { increment: txn.amount } } });
+    } else {
+      await prisma.walletTransaction.update({ where: { id: txn.id }, data: { status: 'failed' } });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update transaction' });
   }
 });
 

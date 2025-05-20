@@ -21,6 +21,8 @@ import ServicePage from './ServicePage';
 import ChannelPage from './ChannelPage';
 import RechargeWalletPage from './RechargeWalletPage';
 import CircleLoader from './components/CircleLoader';
+import ManualPaymentPage from './ManualPaymentPage';
+import AdminManualTopups from './AdminManualTopups';
 
 function Spinner() {
   return <CircleLoader />;
@@ -134,6 +136,7 @@ export default function MainApp() {
           <Route path="/plans" element={<InvestmentPlans user={user} token={token} />} />
           <Route path="/dashboard" element={<Dashboard user={user} token={token} />} />
           <Route path="/admin" element={<ProtectedRoute user={user}><AdminDashboard token={token} /></ProtectedRoute>} />
+          <Route path="/admin/manual-topups" element={<ProtectedRoute user={user}><AdminManualTopups token={token} /></ProtectedRoute>} />
           <Route path="/profile" element={<ProfilePage setUser={setUser} setToken={token} />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/personal-info" element={<PersonalInfoPage />} />
@@ -146,6 +149,7 @@ export default function MainApp() {
           <Route path="/service" element={<ServicePage />} />
           <Route path="/channel" element={<ChannelPage />} />
           <Route path="/recharge" element={<RechargeWalletPage token={token} />} />
+          <Route path="/manual-payment" element={<ManualPaymentPage token={token} />} />
         </Routes>
       </div>
       <BottomNav />
