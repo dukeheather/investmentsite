@@ -958,3 +958,111 @@ body, .homepage {
     display: flex;
   }
 }
+
+/* Modern Dashboard UI Improvements */
+.wallet-balance-card {
+  background: linear-gradient(135deg, #23272f 60%, #1a1f2c 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(34,197,94,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
+  padding: 1.7rem 2rem 1.7rem 2rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 400px;
+  width: 100%;
+  border: 1.5px solid #22c55e22;
+}
+.wallet-balance-card .buy-btn {
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 1.1rem 2.2rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #22c55e 60%, #4ade80 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.10);
+  border: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.wallet-balance-card .buy-btn:hover {
+  background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%);
+}
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2.2rem;
+  text-align: center;
+}
+.dashboard-title .green {
+  color: var(--accent-green);
+}
+.dashboard-section-title {
+  color: var(--accent-green);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+.dashboard-plans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.dashboard-plan-card {
+  background: linear-gradient(135deg, #23272f 60%, #1a1f2c 100%);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(34,197,94,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
+  padding: 1.7rem 1.5rem 1.5rem 1.5rem;
+  margin-bottom: 1.2rem;
+  border: 1.5px solid #22c55e22;
+  min-width: 260px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.dashboard-plan-card h3 {
+  color: var(--accent-green);
+  font-size: 1.18rem;
+  font-weight: 800;
+  margin-bottom: 0.7rem;
+}
+.dashboard-plan-card > div {
+  font-size: 1.08rem;
+  margin-bottom: 0.5rem;
+}
+.status-row {
+  margin-top: 0.7rem;
+}
+.dashboard-status {
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.3rem 1.1rem;
+  margin-left: 0.5rem;
+}
+.verification-note {
+  margin-top: 1rem;
+  background: rgba(234, 179, 8, 0.13);
+  color: #eab308;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .wallet-balance-card {
+    padding: 1rem 0.7rem;
+    max-width: 98vw;
+  }
+  .dashboard-title {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .dashboard-section-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.7rem;
+  }
+  .dashboard-plan-card {
+    padding: 1rem 0.7rem;
+    font-size: 1rem;
+  }
+}
