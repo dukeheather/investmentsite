@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
+import AdminManualTopups from './AdminManualTopups';
 
 export default function AdminDashboard({ token }) {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -9,6 +10,7 @@ export default function AdminDashboard({ token }) {
   const [success, setSuccess] = useState('');
   const [selectedInvestment, setSelectedInvestment] = useState(null);
   const [adminNotes, setAdminNotes] = useState('');
+  const [tab, setTab] = useState('investments');
 
   useEffect(() => {
     checkAdminStatus();
@@ -81,92 +83,96 @@ export default function AdminDashboard({ token }) {
   return (
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
-      <h2>Pending Investments</h2>
-      
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
-
-      <div className="pending-investments">
-        {pendingInvestments.length === 0 ? (
-          <p>No pending investments to review</p>
-        ) : (
-          pendingInvestments.map(investment => (
-            <div key={investment.id} className="investment-card">
-              <div className="investment-header">
-                <h3>{investment.planName}</h3>
-                <span className="amount">${investment.amount}</span>
-              </div>
-              
-              <div className="investment-details">
-                <p><strong>Investor:</strong> {investment.user.firstName} {investment.user.lastName}</p>
-                <p><strong>Email:</strong> {investment.user.email}</p>
-                <p><strong>Transaction ID:</strong> {investment.transactionId}</p>
-                <p><strong>Date:</strong> {new Date(investment.createdAt).toLocaleString()}</p>
-                {investment.notes && <p><strong>Notes:</strong> {investment.notes}</p>}
-                {investment.screenshotUrl && (
-                  <div className="screenshot-preview">
-                    <img src={investment.screenshotUrl} alt="Payment Screenshot" />
-                  </div>
-                )}
-              </div>
-
-              <div className="investment-actions">
-                <button 
-                  className="approve-btn"
-                  onClick={() => setSelectedInvestment(investment)}
-                >
-                  Review
-                </button>
-              </div>
-            </div>
-          ))
-        )}
+      <div className="admin-tabs">
+        <button className={tab === 'investments' ? 'active' : ''} onClick={() => setTab('investments')}>Pending Investments</button>
+        <button className={tab === 'manual-topups' ? 'active' : ''} onClick={() => setTab('manual-topups')}>Manual Top-ups</button>
       </div>
-
-      {selectedInvestment && (
-        <div className="review-modal">
-          <div className="review-modal-content">
-            <h3>Review Investment</h3>
-            <div className="review-details">
-              <p><strong>Plan:</strong> {selectedInvestment.planName}</p>
-              <p><strong>Amount:</strong> ${selectedInvestment.amount}</p>
-              <p><strong>Investor:</strong> {selectedInvestment.user.firstName} {selectedInvestment.user.lastName}</p>
-            </div>
-            
-            <div className="admin-notes">
-              <label>Admin Notes:</label>
-              <textarea
-                value={adminNotes}
-                onChange={(e) => setAdminNotes(e.target.value)}
-                placeholder="Add notes about this investment..."
-              />
-            </div>
-
-            <div className="review-actions">
-              <button 
-                className="approve-btn"
-                onClick={() => handleStatusUpdate('running')}
-              >
-                Approve Investment
-              </button>
-              <button 
-                className="reject-btn"
-                onClick={() => handleStatusUpdate('rejected')}
-              >
-                Reject Investment
-              </button>
-              <button 
-                className="cancel-btn"
-                onClick={() => {
-                  setSelectedInvestment(null);
-                  setAdminNotes('');
-                }}
-              >
-                Cancel
-              </button>
-            </div>
+      {tab === 'investments' && (
+        <>
+          <h2>Pending Investments</h2>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
+          <div className="pending-investments">
+            {pendingInvestments.length === 0 ? (
+              <p>No pending investments to review</p>
+            ) : (
+              pendingInvestments.map(investment => (
+                <div key={investment.id} className="investment-card">
+                  <div className="investment-header">
+                    <h3>{investment.planName}</h3>
+                    <span className="amount">${investment.amount}</span>
+                  </div>
+                  <div className="investment-details">
+                    <p><strong>Investor:</strong> {investment.user.firstName} {investment.user.lastName}</p>
+                    <p><strong>Email:</strong> {investment.user.email}</p>
+                    <p><strong>Transaction ID:</strong> {investment.transactionId}</p>
+                    <p><strong>Date:</strong> {new Date(investment.createdAt).toLocaleString()}</p>
+                    {investment.notes && <p><strong>Notes:</strong> {investment.notes}</p>}
+                    {investment.screenshotUrl && (
+                      <div className="screenshot-preview">
+                        <img src={investment.screenshotUrl} alt="Payment Screenshot" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="investment-actions">
+                    <button 
+                      className="approve-btn"
+                      onClick={() => setSelectedInvestment(investment)}
+                    >
+                      Review
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        </div>
+          {selectedInvestment && (
+            <div className="review-modal">
+              <div className="review-modal-content">
+                <h3>Review Investment</h3>
+                <div className="review-details">
+                  <p><strong>Plan:</strong> {selectedInvestment.planName}</p>
+                  <p><strong>Amount:</strong> ${selectedInvestment.amount}</p>
+                  <p><strong>Investor:</strong> {selectedInvestment.user.firstName} {selectedInvestment.user.lastName}</p>
+                </div>
+                <div className="admin-notes">
+                  <label>Admin Notes:</label>
+                  <textarea
+                    value={adminNotes}
+                    onChange={(e) => setAdminNotes(e.target.value)}
+                    placeholder="Add notes about this investment..."
+                  />
+                </div>
+                <div className="review-actions">
+                  <button 
+                    className="approve-btn"
+                    onClick={() => handleStatusUpdate('running')}
+                  >
+                    Approve Investment
+                  </button>
+                  <button 
+                    className="reject-btn"
+                    onClick={() => handleStatusUpdate('rejected')}
+                  >
+                    Reject Investment
+                  </button>
+                  <button 
+                    className="cancel-btn"
+                    onClick={() => {
+                      setSelectedInvestment(null);
+                      setAdminNotes('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      {tab === 'manual-topups' && (
+        <AdminManualTopups token={token} />
       )}
     </div>
   );
