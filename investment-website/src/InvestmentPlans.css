@@ -362,9 +362,9 @@ h1 {
 
 .modal-content {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 18px;
   box-shadow: 0 8px 32px rgba(30, 41, 59, 0.13);
-  padding: 2.2rem 1.5rem;
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
   width: 95%;
   max-width: 400px;
   max-height: 90vh;
@@ -374,8 +374,171 @@ h1 {
   align-items: stretch;
 }
 
+.modal-content h2 {
+  color: #2563eb;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.buy-modal-content form,
+.buy-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.buy-modal-content label {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.buy-modal-content input[type='number'],
+.buy-modal-content input[type='text'] {
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  background: #f9fafb;
+  color: #222;
+  font-size: 1.05rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.buy-modal-content input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #2563eb22;
+}
+
+.balance-info {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  display: inline-block;
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.modal-buttons button {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.buy-btn {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: #fff;
+  font-weight: 700;
+}
+
+.buy-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.cancel-btn {
+  background: #f1f5f9;
+  color: #222;
+  font-weight: 600;
+  border: 1.5px solid #e2e8f0;
+}
+
+.cancel-btn:hover {
+  background: #e2e8f0;
+}
+
 @media (max-width: 600px) {
   .modal-content {
     padding: 1.2rem 0.7rem;
   }
+}
+
+.preset-amount-btn {
+  background: #f1f5f9;
+  color: #2563eb;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 18px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  margin-bottom: 0.2rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  outline: none;
+}
+.preset-amount-btn.active {
+  background: linear-gradient(90deg, #4ade80 0%, #2563eb 100%);
+  color: #fff;
+  border: 1.5px solid #2563eb;
+}
+.preset-amount-btn:hover:not(.active) {
+  background: #e0f2fe;
+  color: #2563eb;
+}
+
+.amount-display-box {
+  font-size: 2rem;
+  font-weight: 700;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 0.7rem 0;
+  text-align: center;
+  border: 1.5px solid #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.channel-btn {
+  background: #f1f5f9;
+  color: #2563eb;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  padding: 0.8rem 0.5rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  outline: none;
+  width: 100%;
+}
+.channel-btn.active {
+  background: linear-gradient(90deg, #4ade80 0%, #2563eb 100%);
+  color: #fff;
+  border: 1.5px solid #2563eb;
+}
+.channel-btn .channel-check {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+.channel-btn:not(.active):hover {
+  background: #e0f2fe;
+  color: #2563eb;
+}
+
+.recharge-info-box {
+  margin-bottom: 0.5rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
 } 
