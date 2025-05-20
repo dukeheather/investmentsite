@@ -18,13 +18,28 @@ export default function RechargeWalletPage({ token }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleAmountChange = (e) => {
+    const val = e.target.value;
+    // Allow empty string for editing
+    if (val === '' || /^[0-9]+$/.test(val)) {
+      setAmount(val);
+    }
+  };
+
+  const handleAmountBlur = () => {
+    if (amount === '' || Number(amount) < 450) {
+      setAmount(450);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    if (!amount || isNaN(amount) || Number(amount) <= 0) {
-      setError('Enter a valid amount');
+    if (!amount || isNaN(amount) || Number(amount) < 450) {
+      setError('Minimum recharge is 450');
       setLoading(false);
+      setAmount(450);
       return;
     }
     navigate('/manual-payment', { state: { amount, channel: selectedChannel } });
@@ -33,7 +48,21 @@ export default function RechargeWalletPage({ token }) {
 
   return (
     <div className="plans-page recharge-page-mobile-fix" style={{paddingTop: '0.7rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-      <div className="buy-modal recharge-modal-mobile-fix" style={{ maxWidth: 380, width: '100%', margin: '0 auto', borderRadius: 14, boxShadow: '0 2px 12px rgba(30,41,59,0.08)', padding: '1.2rem 1rem', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="buy-modal recharge-modal-mobile-fix" style={{
+        maxWidth: 420,
+        width: '100%',
+        minWidth: 0,
+        margin: '0 auto',
+        borderRadius: 14,
+        boxShadow: '0 2px 12px rgba(30,41,59,0.08)',
+        padding: '1.2rem 1rem',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        background: '#3a4251',
+        overflow: 'hidden',
+      }}>
         <div style={{fontWeight: 700, fontSize: '1.02rem', marginBottom: 6, textAlign: 'center'}}>Balance Recharge</div>
         <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 8, textAlign: 'center'}}>Please enter the recharge amount</div>
         <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10, justifyContent: 'center', width: '100%'}}>
@@ -54,7 +83,8 @@ export default function RechargeWalletPage({ token }) {
             type="number"
             min={450}
             value={amount}
-            onChange={e => setAmount(Math.max(450, Number(e.target.value)))}
+            onChange={handleAmountChange}
+            onBlur={handleAmountBlur}
             className="amount-display-box"
             style={{
               fontSize: '1.35rem', fontWeight: 700, background: '#f8fafc', borderRadius: 10, padding: '0.5rem 0.7rem', textAlign: 'center', border: '1.2px solid #e2e8f0', minWidth: 110, maxWidth: 180, color: '#2563eb', boxShadow: '0 1px 4px rgba(30,41,59,0.04)', letterSpacing: '0.01em', width: '100%'
