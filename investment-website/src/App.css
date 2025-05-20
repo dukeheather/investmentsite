@@ -89,6 +89,32 @@ body, .homepage {
   }
 }
 
+/* .navbar {
+}
+.logo {
+}
+*/
+
+/* .navbar {
+  background: linear-gradient(90deg, #f8fafc 60%, #e0f7ef 100%);
+  box-shadow: 0 4px 24px rgba(34,197,94,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
+  padding: 1.2rem 3.5rem 1.2rem 3.5rem;
+  border-radius: 0 0 18px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 70px;
+}
+.logo {
+  color: var(--accent-green);
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  text-shadow: 0 2px 8px rgba(34,197,94,0.08);
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  user-select: none;
+} */
+
 .navbar {
   background: linear-gradient(90deg, #f8fafc 60%, #e0f7ef 100%);
   box-shadow: 0 4px 24px rgba(34,197,94,0.08), 0 1.5px 8px rgba(0,0,0,0.04);

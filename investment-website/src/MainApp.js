@@ -122,7 +122,7 @@ export default function MainApp() {
         </div>
       )}
       <div className={user ? '' : 'blurred'}>
-        <nav className="navbar">
+        {/* <nav className="navbar">
           <div className="logo">Astral</div>
           <ul className={`nav-links${mobileMenuOpen ? ' open' : ''}`}>
             <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
@@ -130,7 +130,7 @@ export default function MainApp() {
             <li><Link to="/dashboard" onClick={closeMobileMenu}>Dashboard</Link></li>
             <li><Link to="/admin" onClick={closeMobileMenu}>Admin</Link></li>
           </ul>
-        </nav>
+        </nav> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/plans" element={<InvestmentPlans user={user} token={token} />} />
