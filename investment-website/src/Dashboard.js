@@ -40,7 +40,7 @@ export default function Dashboard({ user, token }) {
   const [walletBalance, setWalletBalance] = useState(0);
   const navigate = useNavigate();
 
-  // Polling for real-time updates (every 5 seconds)
+  // Polling for real-time updates (every 30 seconds)
   useEffect(() => {
     let interval;
     const fetchDashboard = async () => {
@@ -58,7 +58,7 @@ export default function Dashboard({ user, token }) {
       setLoading(false);
     };
     fetchDashboard();
-    interval = setInterval(fetchDashboard, 5000);
+    interval = setInterval(fetchDashboard, 30000);
     return () => clearInterval(interval);
   }, [token]);
 
@@ -119,7 +119,7 @@ export default function Dashboard({ user, token }) {
             {runningPlans.map(plan => (
               <div className="dashboard-plan-card app-card" key={plan.id}>
                 <h3>{plan.planName}</h3>
-                <div>Amount Invested: <b>${plan.amount}</b></div>
+                <div>Amount Invested: <b>₹{plan.amount}</b></div>
                 <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
                 <div className="status-row">
                   <span>Status: </span>
@@ -149,7 +149,7 @@ export default function Dashboard({ user, token }) {
             {pendingPlans.map(plan => (
               <div className="dashboard-plan-card app-card" key={plan.id}>
                 <h3>{plan.planName}</h3>
-                <div>Amount Invested: <b>${plan.amount}</b></div>
+                <div>Amount Invested: <b>₹{plan.amount}</b></div>
                 <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
                 <div className="status-row">
                   <span>Status: </span>
@@ -193,7 +193,7 @@ export default function Dashboard({ user, token }) {
               {history.map((item, idx) => (
                 <tr key={idx}>
                   <td data-label="Plan">{item.planName}</td>
-                  <td data-label="Amount">${item.amount}</td>
+                  <td data-label="Amount">₹{item.amount}</td>
                   <td data-label="Start Date">{new Date(item.createdAt).toLocaleDateString()}</td>
                   <td data-label="End Date">-</td>
                   <td data-label="Status">
