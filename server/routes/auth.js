@@ -22,15 +22,56 @@ function authMiddleware(req, res, next) {
 
 // Register
 router.post('/register', async (req, res) => {
-  const { email, password, phone } = req.body;
+  const { email, password, phone, referralCode } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
   try {
     const existing = await prisma.user.findFirst({ where: { OR: [{ email }, { phone }] } });
     if (existing) return res.status(400).json({ error: 'Email or phone already registered' });
+
+    // Referral code logic
+    let referredBy = null;
+    if (referralCode) {
+      const referrer = await prisma.user.findUnique({ where: { referralCode } });
+      if (!referrer) {
+        return res.status(400).json({ error: 'Invalid referral code.' });
+      }
+      referredBy = referralCode;
+    }
+
+    // Generate unique referral code
+    const generateReferralCode = () => {
+      return 'REF_' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    };
+    let newReferralCode;
+    let codeExists = true;
+    while (codeExists) {
+      newReferralCode = generateReferralCode();
+      codeExists = await prisma.user.findUnique({ where: { referralCode: newReferralCode } });
+    }
+
     const hash = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data: { email, password: hash, phone },
+      data: { email, password: hash, phone, referredBy, referralCode: newReferralCode },
     });
+
+    // Credit referrer if applicable
+    if (referredBy) {
+      await prisma.user.update({
+        where: { referralCode: referredBy },
+        data: { walletBalance: { increment: 50 } },
+      });
+      // Optionally, log this as a transaction
+      await prisma.walletTransaction.create({
+        data: {
+          userId: user.id,
+          amount: 50,
+          type: 'referral_bonus',
+          status: 'success',
+          gatewayTxnId: `REF_${Date.now()}`,
+        },
+      });
+    }
+
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '30d' });
     res.json({ token, user: { id: user.id, email: user.email, phone: user.phone } });
   } catch (err) {
