@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
@@ -37,6 +37,7 @@ export default function InvestmentPlans({ user, token }) {
   const [loading, setLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingForm, setPendingForm] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,12 +69,16 @@ export default function InvestmentPlans({ user, token }) {
 
   const handleShowConfirm = (e) => {
     e.preventDefault();
+    setPendingForm(e);
     setShowConfirmDialog(true);
   };
 
-  const handleConfirmPurchase = (e) => {
+  const handleConfirmPurchase = () => {
     setShowConfirmDialog(false);
-    handlePurchase(e);
+    if (pendingForm) {
+      handlePurchase(pendingForm);
+      setPendingForm(null);
+    }
   };
 
   const handlePurchase = async (e) => {
