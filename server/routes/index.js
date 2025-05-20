@@ -7,6 +7,7 @@ const PaytmChecksum = require('paytmchecksum');
 const axios = require('axios');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 function getUserIdFromToken(req) {
   const auth = req.headers.authorization;
@@ -298,7 +299,12 @@ router.post('/api/wallet/paytm-callback', async (req, res) => {
 
 const manualTopupStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '..', 'public', 'manual-topups'));
+    const dir = path.join(__dirname, '..', 'public', 'manual-topups');
+    // Ensure directory exists
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
