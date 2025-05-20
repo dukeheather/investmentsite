@@ -93,6 +93,9 @@ export default function Dashboard({ user, token }) {
 
   return (
     <div className="dashboard-page">
+      <div className="dashboard-welcome-banner">
+        Welcome, <span className="dashboard-welcome-user">{user?.name || user?.email}</span>
+      </div>
       <div className="wallet-balance-card improved-wallet-card app-card">
         <div className="wallet-balance-info">
           <div className="wallet-balance-label">
@@ -109,7 +112,6 @@ export default function Dashboard({ user, token }) {
           Recharge
         </button>
       </div>
-      <h1 className="dashboard-title">Welcome, <span className="green">{user?.name || user?.email}</span></h1>
       
       <div className="dashboard-section">
         <h2 className="dashboard-section-title">Active Investment Plans</h2>
