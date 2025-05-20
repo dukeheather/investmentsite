@@ -32,39 +32,43 @@ export default function RechargeWalletPage({ token }) {
   };
 
   return (
-    <div className="plans-page recharge-page-mobile-fix" style={{paddingTop: '0.7rem'}}>
-      <h1 style={{marginBottom: '0.7rem', fontSize: '1.35rem', fontWeight: 800, color: '#22c55e'}}>Recharge</h1>
-      <div className="buy-modal recharge-modal-mobile-fix" style={{ maxWidth: 350, margin: '0 auto', borderRadius: 14, boxShadow: '0 2px 12px rgba(30,41,59,0.08)', padding: '1.2rem 1rem' }}>
-        <div style={{fontWeight: 700, fontSize: '1.02rem', marginBottom: 6}}>Balance Recharge</div>
-        <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 8}}>Please enter the recharge amount</div>
-        <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10, justifyContent: 'center'}}>
+    <div className="plans-page recharge-page-mobile-fix" style={{paddingTop: '0.7rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+      <div className="buy-modal recharge-modal-mobile-fix" style={{ maxWidth: 380, width: '100%', margin: '0 auto', borderRadius: 14, boxShadow: '0 2px 12px rgba(30,41,59,0.08)', padding: '1.2rem 1rem', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{fontWeight: 700, fontSize: '1.02rem', marginBottom: 6, textAlign: 'center'}}>Balance Recharge</div>
+        <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 8, textAlign: 'center'}}>Please enter the recharge amount</div>
+        <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10, justifyContent: 'center', width: '100%'}}>
           {PRESET_AMOUNTS.map(val => (
             <button
               key={val}
               type="button"
               className={amount === val ? 'preset-amount-btn active' : 'preset-amount-btn'}
-              style={{fontSize: '1rem', padding: '0.45rem 0.9rem', borderRadius: 14, minWidth: 60}}
+              style={{fontSize: '1rem', padding: '0.45rem 0.9rem', borderRadius: 14, minWidth: 60, flex: '1 1 70px', maxWidth: 90}}
               onClick={() => setAmount(val)}
             >
               {val}
             </button>
           ))}
         </div>
-        <div style={{display: 'flex', justifyContent: 'center', marginBottom: 14}}>
-          <div className="amount-display-box" style={{
-            fontSize: '1.35rem', fontWeight: 700, background: '#f8fafc', borderRadius: 10, padding: '0.5rem 0.7rem', textAlign: 'center', border: '1.2px solid #e2e8f0', minWidth: 110, color: '#2563eb', boxShadow: '0 1px 4px rgba(30,41,59,0.04)', letterSpacing: '0.01em', display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            <span style={{fontWeight: 600, fontSize: '1.1rem', marginRight: 3, color: '#64748b'}}>₹</span> {amount}
-          </div>
+        <div style={{display: 'flex', justifyContent: 'center', marginBottom: 14, width: '100%'}}>
+          <input
+            type="number"
+            min={450}
+            value={amount}
+            onChange={e => setAmount(Math.max(450, Number(e.target.value)))}
+            className="amount-display-box"
+            style={{
+              fontSize: '1.35rem', fontWeight: 700, background: '#f8fafc', borderRadius: 10, padding: '0.5rem 0.7rem', textAlign: 'center', border: '1.2px solid #e2e8f0', minWidth: 110, maxWidth: 180, color: '#2563eb', boxShadow: '0 1px 4px rgba(30,41,59,0.04)', letterSpacing: '0.01em', width: '100%'
+            }}
+          />
         </div>
-        <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 7}}>Please select the recharge channel</div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 13}}>
+        <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 7, textAlign: 'center'}}>Please select the recharge channel</div>
+        <div style={{display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 13, width: '100%'}}>
           {CHANNELS.map(ch => (
             <button
               key={ch.value}
               type="button"
               className={selectedChannel === ch.value ? 'channel-btn active' : 'channel-btn'}
-              style={{fontSize: '1rem', padding: '0.6rem 0.5rem', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, background: selectedChannel === ch.value ? 'linear-gradient(90deg, #4ade80 0%, #2563eb 100%)' : '#f1f5f9', color: selectedChannel === ch.value ? '#fff' : '#2563eb', border: selectedChannel === ch.value ? '1.5px solid #2563eb' : '1.2px solid #e2e8f0'}}
+              style={{fontSize: '1rem', padding: '0.6rem 0.5rem', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, background: selectedChannel === ch.value ? 'linear-gradient(90deg, #4ade80 0%, #2563eb 100%)' : '#f1f5f9', color: selectedChannel === ch.value ? '#fff' : '#2563eb', border: selectedChannel === ch.value ? '1.5px solid #2563eb' : '1.2px solid #e2e8f0', width: '100%', maxWidth: 240, margin: '0 auto'}} 
               onClick={() => setSelectedChannel(ch.value)}
             >
               {selectedChannel === ch.value && <FaCheck style={{marginRight: 4}} />}
@@ -73,13 +77,13 @@ export default function RechargeWalletPage({ token }) {
             </button>
           ))}
         </div>
-        <form onSubmit={handleSubmit} style={{marginBottom: 0}}>
+        <form onSubmit={handleSubmit} style={{marginBottom: 0, width: '100%'}}>
           {error && <div className="status-message error" style={{marginBottom: 8, fontSize: '0.97rem'}}>{error}</div>}
           <button className="buy-btn" type="submit" disabled={loading} style={{marginBottom: 16, width: '100%', fontSize: '1.05rem', borderRadius: 10, padding: '0.7rem 0'}}>
             {loading ? <CircleLoader /> : 'Proceed to Payment'}
           </button>
         </form>
-        <div className="recharge-notes-list" style={{display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10}}>
+        <div className="recharge-notes-list" style={{display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10, width: '100%'}}>
           <div className="recharge-note-card" style={{background: '#e0f7ef', color: '#22c55e', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '0.97rem', display: 'flex', alignItems: 'center', gap: 8}}>
             <span style={{fontSize: '1.2rem'}}>💡</span> MinimumRecharge: 450Rs.
           </div>
