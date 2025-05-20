@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './InvestmentPlans.css';
 import CircleLoader from './components/CircleLoader';
+import { FaWallet, FaRupeeSign } from 'react-icons/fa';
 
 export default function WithdrawPage({ token }) {
   const [balance, setBalance] = useState(0);
@@ -72,17 +73,19 @@ export default function WithdrawPage({ token }) {
   };
 
   return (
-    <div className="plans-page">
-      <h1>Withdraw Funds</h1>
-      <form className="buy-modal" style={{ maxWidth: 400, margin: '0 auto' }} onSubmit={handleSubmit}>
+    <div className="withdraw-page-centered">
+      <h1 className="withdraw-title">Withdraw Funds</h1>
+      <form className="withdraw-card" onSubmit={handleSubmit}>
         {loading ? (
           <CircleLoader />
         ) : (
           <>
-            <div className="wallet-balance-display" style={{ marginBottom: 16 }}>
-              Wallet Balance: <span className="balance-amount">₹{balance.toFixed(2)}</span>
+            <div className="withdraw-balance-row">
+              <FaWallet className="withdraw-wallet-icon" />
+              <span className="withdraw-balance-label">Wallet Balance:</span>
+              <span className="withdraw-balance-amount"><FaRupeeSign className="withdraw-rupee-icon" />{balance.toFixed(2)}</span>
             </div>
-            <label>Amount to Withdraw</label>
+            <label className="withdraw-label">Amount to Withdraw</label>
             <input
               name="amount"
               type="number"
@@ -93,8 +96,9 @@ export default function WithdrawPage({ token }) {
               required
               autoComplete="off"
               placeholder="Enter amount"
+              className="withdraw-input"
             />
-            <label>UPI ID / Bank Details</label>
+            <label className="withdraw-label">UPI ID / Bank Details</label>
             <input
               name="upi"
               value={upi}
@@ -102,10 +106,11 @@ export default function WithdrawPage({ token }) {
               required
               autoComplete="off"
               placeholder="Enter your UPI ID or bank details"
+              className="withdraw-input"
             />
             {success && <div className="status-message success">{success}</div>}
             {error && <div className="status-message error">{error}</div>}
-            <button className="buy-btn" type="submit" disabled={submitting}>{submitting ? 'Submitting...' : 'Withdraw'}</button>
+            <button className="withdraw-btn" type="submit" disabled={submitting}>{submitting ? 'Submitting...' : 'Withdraw'}</button>
           </>
         )}
       </form>
