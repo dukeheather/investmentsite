@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
-import { FaWallet, FaCheckCircle, FaTimesCircle, FaClock } from 'react-icons/fa';
+import { FaWallet, FaCheckCircle, FaTimesCircle, FaClock, FaRupeeSign } from 'react-icons/fa';
 import CircleLoader from './components/CircleLoader';
 
 export default function ProfilePage({ setUser, setToken, user: userProp }) {
@@ -10,18 +10,40 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
   const [transactions, setTransactions] = useState([]);
   const [txnLoading, setTxnLoading] = useState(false);
   const [txnError, setTxnError] = useState('');
+  const [walletBalance, setWalletBalance] = useState(0);
 
   useEffect(() => {
-    // Fetch user if not provided
-    if (!userProp && setToken) {
+    const fetchUserData = () => {
+      if (!setToken) return;
       fetch('https://investmentsite-q1sz.onrender.com/api/auth/me', {
         headers: { Authorization: `Bearer ${setToken}` },
       })
         .then(res => res.json())
         .then(data => setUserState(data.user))
         .catch(() => {});
-    }
-  }, [userProp, setToken]);
+    };
+    fetchUserData();
+    const interval = setInterval(fetchUserData, 10000); // Poll every 10 seconds
+    return () => clearInterval(interval);
+  }, [setToken]);
+
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      if (!setToken) return;
+      try {
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
+          headers: { Authorization: `Bearer ${setToken}` },
+        });
+        const data = await res.json();
+        setWalletBalance(data.balance || 0);
+      } catch (err) {
+        console.error('Failed to fetch wallet balance:', err);
+      }
+    };
+    fetchWalletBalance();
+    const interval = setInterval(fetchWalletBalance, 10000); // Poll every 10 seconds
+    return () => clearInterval(interval);
+  }, [setToken]);
 
   useEffect(() => {
     if (!setToken) return;
@@ -82,15 +104,24 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
       </div>
       <div className="profile-stats-card modern-profile-stats">
         <div className="profile-stat">
-          <div className="stat-value">{user?.balance ?? 0}</div>
+          <div className="stat-value">
+            <FaRupeeSign className="rupee-icon" />
+            {walletBalance.toFixed(2)}
+          </div>
           <div className="stat-label">Balance</div>
         </div>
         <div className="profile-stat">
-          <div className="stat-value">{user?.recharge ?? 0}</div>
+          <div className="stat-value">
+            <FaRupeeSign className="rupee-icon" />
+            {user?.recharge?.toFixed(2) ?? '0.00'}
+          </div>
           <div className="stat-label">Recharge</div>
         </div>
         <div className="profile-stat">
-          <div className="stat-value">{user?.income ?? 0}</div>
+          <div className="stat-value">
+            <FaRupeeSign className="rupee-icon" />
+            {user?.income?.toFixed(2) ?? '0.00'}
+          </div>
           <div className="stat-label">Total income</div>
         </div>
       </div>
@@ -131,7 +162,7 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
           {transactions.map(txn => (
             <li key={txn.id} className={`wallet-txn-item txn-${txn.status}`}>
               <span className="txn-amount" style={{ color: txn.amount > 0 ? '#4ade80' : '#ef4444' }}>
-                {txn.amount > 0 ? '+' : ''}{txn.amount} ₹
+                {txn.amount > 0 ? '+' : ''}<FaRupeeSign className="rupee-icon" />{txn.amount.toFixed(2)}
               </span>
               <span className="txn-type">{txn.type === 'topup' ? 'Top-up' : 'Purchase'}</span>
               <span className="txn-status">

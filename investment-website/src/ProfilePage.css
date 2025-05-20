@@ -84,6 +84,13 @@
   color: var(--accent-green);
   font-size: 1.3rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.stat-value .rupee-icon {
+  font-size: 1.1rem;
+  color: var(--accent-green);
 }
 .stat-label {
   color: var(--text-muted);
@@ -166,6 +173,12 @@
 .txn-amount {
   min-width: 80px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.txn-amount .rupee-icon {
+  font-size: 0.9rem;
 }
 .txn-type {
   min-width: 70px;
