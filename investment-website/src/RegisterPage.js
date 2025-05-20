@@ -69,6 +69,8 @@ const RegisterPage = () => {
             <input
               type="text"
               name="referralCode"
+              value={referralCode}
+              onChange={e => setReferralCode(e.target.value)}
               placeholder="Enter referral code to get ₹50 bonus"
             />
           </div>

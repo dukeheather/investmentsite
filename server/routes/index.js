@@ -398,6 +398,11 @@ router.get('/api/health', async (req, res) => {
   }
 });
 
+// Generate a unique referral code
+const generateReferralCode = () => {
+  return 'REF_' + Math.random().toString(36).substr(2, 8).toUpperCase();
+};
+
 // POST /api/register
 router.post('/api/register', async (req, res) => {
   const { email, password, referralCode } = req.body;
@@ -418,12 +423,13 @@ router.post('/api/register', async (req, res) => {
       referredBy = referralCode;
     }
 
-    // Generate a unique referral code
-    const generateReferralCode = () => {
-      const timestamp = Date.now().toString(36);
-      const random = Math.random().toString(36).substring(2, 8);
-      return `REF_${timestamp}${random}`.toUpperCase();
-    };
+    // Ensure unique referral code
+    let newReferralCode;
+    let codeExists = true;
+    while (codeExists) {
+      newReferralCode = generateReferralCode();
+      codeExists = await prisma.user.findUnique({ where: { referralCode: newReferralCode } });
+    }
 
     // Create new user with generated referral code
     const user = await prisma.user.create({
@@ -431,17 +437,16 @@ router.post('/api/register', async (req, res) => {
         email,
         password: await bcrypt.hash(password, 10),
         referredBy,
-        referralCode: generateReferralCode(),
+        referralCode: newReferralCode,
       },
     });
 
     // If user was referred, credit ₹50 to referrer's wallet
     if (referredBy) {
       await prisma.user.update({
-        where: { referralCode },
+        where: { referralCode: referredBy },
         data: { walletBalance: { increment: 50 } },
       });
-
       // Record the referral bonus transaction
       await prisma.walletTransaction.create({
         data: {
