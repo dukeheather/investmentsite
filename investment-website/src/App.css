@@ -48,6 +48,7 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   background: #f7fafc !important;
   color: #232526;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
 }
 
 .App {
@@ -526,6 +527,7 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   border-radius: 18px;
   min-height: 100vh;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .app-card {
@@ -535,10 +537,11 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   border: 1.5px solid #e5e7eb;
   padding: 2rem 1.3rem 1.7rem 1.3rem;
   margin-bottom: 1.5rem;
-  max-width: 420px;
+  max-width: 100%;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box;
 }
 
 .improved-wallet-card {
@@ -548,7 +551,9 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   align-items: center;
   gap: 1.1rem;
   padding: 1.3rem 1.1rem 1.5rem 1.1rem;
-  max-width: 340px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .wallet-balance-info {
@@ -620,6 +625,9 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
   color: #232526;
   margin-bottom: 1.1rem;
   padding: 1.2rem 1rem;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-plan-card h3 {
@@ -662,12 +670,15 @@ body, .homepage, .dashboard-page, .plans-page, .withdraw-page-centered {
 
 @media (max-width: 600px) {
   .dashboard-page {
-    padding: 1.2rem 0.2rem 2rem 0.2rem;
+    padding: 1.2rem 0.1rem 2rem 0.1rem;
     border-radius: 0;
+    max-width: 100vw;
   }
   .improved-wallet-card, .dashboard-plan-card, .app-card {
-    padding: 1rem 0.5rem;
-    max-width: 98vw;
+    padding: 1rem 0.3rem;
+    max-width: 100vw;
+    width: 100vw;
+    box-sizing: border-box;
   }
 }
 
