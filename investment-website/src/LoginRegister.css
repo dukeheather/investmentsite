@@ -72,17 +72,19 @@ body, html, #root {
 .auth-center-card input {
   padding: 1rem 1.1rem;
   border-radius: 12px;
-  border: 1.5px solid #2d323b;
-  background: #181c24;
-  color: #fff;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #232526;
   font-size: 1.08rem;
   margin-bottom: 0.2rem;
-  transition: border 0.2s, box-shadow 0.2s;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 2px 12px rgba(30,41,59,0.07);
 }
 .auth-center-card input:focus {
   outline: none;
   border-color: #4ade80;
-  box-shadow: 0 0 0 2px #4ade8033;
+  box-shadow: 0 0 0 2px #4ade8033, 0 2px 12px rgba(30,41,59,0.10);
+  background: #f8fafc;
 }
 .auth-btn {
   background: linear-gradient(90deg, #22c55e 60%, #4ade80 100%);
@@ -98,6 +100,10 @@ body, html, #root {
   transition: background 0.2s, transform 0.18s;
   letter-spacing: 0.01em;
   box-shadow: 0 2px 8px rgba(34,197,94,0.13);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  animation: btnIdleAnim 2.5s infinite linear;
 }
 .auth-btn:hover:not(:disabled) {
   background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%);
@@ -182,6 +188,20 @@ body, html, #root {
 @keyframes moveDots2 {
   0% { background-position: 30px 30px; }
   100% { background-position: 90px 90px; }
+}
+@keyframes btnIdleAnim {
+  0% {
+    box-shadow: 0 2px 8px rgba(34,197,94,0.13), 0 0 0 0 #4ade8033;
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(34,197,94,0.18), 0 0 0 8px #4ade8011;
+    filter: brightness(1.04);
+  }
+  100% {
+    box-shadow: 0 2px 8px rgba(34,197,94,0.13), 0 0 0 0 #4ade8033;
+    filter: brightness(1);
+  }
 }
 @media (max-width: 600px) {
   .auth-banner, .auth-banner img {
