@@ -321,7 +321,20 @@ body, html, #root {
   max-width: 100vw;
   height: 180px;
   object-fit: cover;
+  object-position: bottom;
   display: block;
   border-radius: 0;
   filter: brightness(1.04) saturate(1.08);
+  position: relative;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
+.auth-banner-top::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 80%, rgba(24,28,36,0.85) 100%);
 } 
