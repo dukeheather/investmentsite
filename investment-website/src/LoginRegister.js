@@ -55,70 +55,84 @@ export default function LoginRegister({ user, setUser, setToken }) {
 
   if (user) {
     return (
-      <div className="auth-box">
-        <div className="auth-welcome">Welcome, {user.email}!{user.phone && <div style={{fontSize:'0.95em',color:'#4ade80'}}>Phone: {user.phone}</div>}</div>
-        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      <div className="auth-fullscreen-bg">
+        <div className="auth-banner">
+          <img src="https://images.unsplash.com/photo-1514361892635-cebb9b6c7ca5?auto=format&fit=crop&w=600&q=80" alt="Banner" />
+          <div className="auth-banner-gradient" />
+        </div>
+        <div className="auth-center-card">
+          <div className="auth-welcome">Welcome, {user.email}!{user.phone && <div style={{fontSize:'0.95em',color:'#4ade80'}}>Phone: {user.phone}</div>}</div>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        </div>
+        <div className="auth-animated-bg" />
       </div>
     );
   }
 
   return (
-    <div className="auth-box">
-      <h2>{mode === 'login' ? 'Login' : 'Register'}</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          autoComplete="off"
-          disabled={loading}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          disabled={loading}
-        />
-        {mode === 'register' && (
-          <>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={form.phone}
-              onChange={handleChange}
-              autoComplete="off"
-              disabled={loading}
-              pattern="[0-9]{10,15}"
-              title="Enter a valid phone number"
-            />
-            <input
-              type="text"
-              name="referralCode"
-              placeholder="Referral Code (Optional)"
-              value={form.referralCode}
-              onChange={handleChange}
-              autoComplete="off"
-              disabled={loading}
-            />
-          </>
-        )}
-        {error && <div className="auth-error">{error}</div>}
-        <button type="submit" className="auth-btn" disabled={loading}>
-          {loading ? 'Please wait...' : mode === 'login' ? 'Login' : 'Register'}
-        </button>
-      </form>
-      <div className="auth-switch">
-        {mode === 'login' ? (
-          <span>Don't have an account? <button type="button" onClick={() => setMode('register')} disabled={loading}>Register</button></span>
-        ) : (
-          <span>Already have an account? <button type="button" onClick={() => setMode('login')} disabled={loading}>Login</button></span>
-        )}
+    <div className="auth-fullscreen-bg">
+      <div className="auth-banner">
+        <img src="https://images.unsplash.com/photo-1514361892635-cebb9b6c7ca5?auto=format&fit=crop&w=600&q=80" alt="Banner" />
+        <div className="auth-banner-gradient" />
       </div>
+      <div className="auth-center-card">
+        <h2>{mode === 'login' ? 'Login' : 'Register'}</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            autoComplete="off"
+            disabled={loading}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            disabled={loading}
+          />
+          {mode === 'register' && (
+            <>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={form.phone}
+                onChange={handleChange}
+                autoComplete="off"
+                disabled={loading}
+                pattern="[0-9]{10,15}"
+                title="Enter a valid phone number"
+              />
+              <input
+                type="text"
+                name="referralCode"
+                placeholder="Referral Code (Optional)"
+                value={form.referralCode}
+                onChange={handleChange}
+                autoComplete="off"
+                disabled={loading}
+              />
+            </>
+          )}
+          {error && <div className="auth-error">{error}</div>}
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? 'Please wait...' : mode === 'login' ? 'Login' : 'Register'}
+          </button>
+        </form>
+        <div className="auth-switch">
+          {mode === 'login' ? (
+            <span>Don't have an account? <button type="button" onClick={() => setMode('register')} disabled={loading}>Register</button></span>
+          ) : (
+            <span>Already have an account? <button type="button" onClick={() => setMode('login')} disabled={loading}>Login</button></span>
+          )}
+        </div>
+      </div>
+      <div className="auth-animated-bg" />
     </div>
   );
 } 

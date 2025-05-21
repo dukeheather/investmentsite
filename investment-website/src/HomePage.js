@@ -36,10 +36,10 @@ export default function HomePage() {
           Channel
         </button>
       </div>
-      <div className="homepage-toggle">
+      {/* <div className="homepage-toggle">
         <button className={tab === 'day' ? 'toggle-btn active' : 'toggle-btn'} onClick={() => setTab('day')}>Day income</button>
         <button className={tab === 'vip' ? 'toggle-btn active' : 'toggle-btn'} onClick={() => setTab('vip')}>VIP Products</button>
-      </div>
+      </div> */}
     </div>
   );
 } 
