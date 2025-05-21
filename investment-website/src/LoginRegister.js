@@ -71,123 +71,119 @@ export default function LoginRegister({ user, setUser, setToken }) {
     </span>
   );
 
-  if (user) {
-    return (
-      <div className="auth-fullscreen-bg">
-        <div className="auth-banner">
-          <img src="/static/vineyard-banner.jpg" alt="Banner" />
-          <div className="auth-banner-gradient" />
-        </div>
-        <div className="auth-center-card">
-          <div className="auth-welcome">Welcome, {user.email}!{user.phone && <div style={{fontSize:'0.95em',color:'#4ade80'}}>Phone: {user.phone}</div>}</div>
-          <button className="logout-btn" onClick={handleLogout}>Logout</button>
-        </div>
-        <div className="auth-animated-bg" />
-      </div>
-    );
-  }
-
   return (
     <div className="auth-fullscreen-bg">
-      <div className="auth-banner">
+      <div className="auth-banner-top">
         <img src="/static/vineyard-banner.jpg" alt="Banner" />
-        <div className="auth-banner-gradient" />
       </div>
       <div className="auth-center-card">
-        <h2 className="auth-title-left">{mode === 'login' ? 'Login' : 'User Registration'}</h2>
-        <form onSubmit={handleSubmit}>
-          {mode === 'login' ? (
-            <>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                autoComplete="off"
-                disabled={loading}
-              />
-              <div className="input-eye-wrap">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  placeholder="Password"
-                  value={form.password}
-                  onChange={handleChange}
-                  disabled={loading}
-                />
-                <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
-              </div>
-            </>
-          ) : (
-            <>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                autoComplete="off"
-                disabled={loading}
-              />
-              <div className="input-eye-wrap">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  placeholder="Password"
-                  value={form.password}
-                  onChange={handleChange}
-                  disabled={loading}
-                />
-                <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
-              </div>
-              <div className="input-eye-wrap">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={form.confirmPassword}
-                  onChange={handleChange}
-                  disabled={loading}
-                />
-                <span onClick={() => setShowConfirmPassword(v => !v)}><EyeIcon open={showConfirmPassword} /></span>
-              </div>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                autoComplete="off"
-                disabled={loading}
-                pattern="[0-9]{10,15}"
-                title="Enter a valid phone number"
-              />
-              <input
-                type="text"
-                name="referralCode"
-                placeholder="Referral Code (Optional)"
-                value={form.referralCode}
-                onChange={handleChange}
-                autoComplete="off"
-                disabled={loading}
-              />
-            </>
-          )}
-          {error && <div className="auth-error">{error}</div>}
-          <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? 'Please wait...' : mode === 'login' ? 'Login' : 'Register'}
-          </button>
-        </form>
-        <div className="auth-switch">
-          {mode === 'login' ? (
-            <span>Don't have an account? <button type="button" onClick={() => setMode('register')} disabled={loading}>Register</button></span>
-          ) : (
-            <span>Already have an account? <button type="button" onClick={() => setMode('login')} disabled={loading}>Login</button></span>
-          )}
-        </div>
+        {user ? (
+          <>
+            <div className="auth-welcome">Welcome, {user.email}!{user.phone && <div style={{fontSize:'0.95em',color:'#4ade80'}}>Phone: {user.phone}</div>}</div>
+            <button className="logout-btn" onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <h2 className="auth-title-left">{mode === 'login' ? 'Login' : 'User Registration'}</h2>
+            <form onSubmit={handleSubmit}>
+              {mode === 'login' ? (
+                <>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    disabled={loading}
+                  />
+                  <div className="input-eye-wrap">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      placeholder="Password"
+                      value={form.password}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                    <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    disabled={loading}
+                  />
+                  <div className="input-eye-wrap">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      placeholder="Password"
+                      value={form.password}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                    <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
+                  </div>
+                  <div className="input-eye-wrap">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      name="confirmPassword"
+                      placeholder="Confirm Password"
+                      value={form.confirmPassword}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                    <span onClick={() => setShowConfirmPassword(v => !v)}><EyeIcon open={showConfirmPassword} /></span>
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    value={form.phone}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    disabled={loading}
+                    pattern="[0-9]{10,15}"
+                    title="Enter a valid phone number"
+                  />
+                  <input
+                    type="text"
+                    name="referralCode"
+                    placeholder="Referral Code (Optional)"
+                    value={form.referralCode}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    disabled={loading}
+                  />
+                </>
+              )}
+              {error && <div className="auth-error">{error}</div>}
+              <button type="submit" className="auth-btn" disabled={loading}>
+                {loading ? 'Please wait...' : mode === 'login' ? 'Login' : 'Register'}
+              </button>
+            </form>
+            <div className="auth-switch">
+              {mode === 'login' ? (
+                <span>Don't have an account? <button type="button" onClick={() => setMode('register')} disabled={loading}>Register</button></span>
+              ) : (
+                <span>Already have an account? <button type="button" onClick={() => setMode('login')} disabled={loading}>Login</button></span>
+              )}
+            </div>
+          </>
+        )}
       </div>
-      <div className="auth-animated-bg" />
+      <div className="auth-animated-bg">
+        <div className="bg-line" style={{top: '20%'}} />
+        <div className="bg-line bg-line2" />
+        <div className="bg-line bg-line3" />
+      </div>
     </div>
   );
 } 
