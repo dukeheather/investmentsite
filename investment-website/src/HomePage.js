@@ -13,9 +13,9 @@ export default function HomePage() {
         <img src="/static/homepage-banner.jpg" alt="Banner" />
       </div>
       <div className="homepage-welcome">
-        <div className="banner-title">Welcome to <span style={{color:'#4ade80'}}>Astral Invest</span></div>
-        <div className="banner-subtitle">Grow your wealth with confidence</div>
-        <div className="banner-desc">Modern investment plans, instant wallet, and more.</div>
+        <h2 className="banner-title">Welcome to <span className="brand-highlight">SPG Invest</span></h2>
+        <h3 className="banner-subtitle">Grow your wealth with confidence</h3>
+        <p className="banner-desc">Modern investment plans, instant wallet, and more.</p>
       </div>
       <div className="homepage-actions modern-actions">
         <button className="action-btn" onClick={() => navigate('/recharge')}>
