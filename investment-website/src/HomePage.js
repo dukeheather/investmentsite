@@ -11,12 +11,11 @@ export default function HomePage() {
     <div className="homepage-container">
       <div className="homepage-banner modern-banner">
         <img src="/static/homepage-banner.jpg" alt="Banner" />
-        <div className="banner-overlay" />
-        <div className="banner-text modern-banner-text">
-          <div className="banner-title">Welcome to <span style={{color:'#4ade80'}}>Astral Invest</span></div>
-          <div className="banner-subtitle">Grow your wealth with confidence</div>
-          <div className="banner-desc">Modern investment plans, instant wallet, and more.</div>
-        </div>
+      </div>
+      <div className="homepage-welcome">
+        <div className="banner-title">Welcome to <span style={{color:'#4ade80'}}>Astral Invest</span></div>
+        <div className="banner-subtitle">Grow your wealth with confidence</div>
+        <div className="banner-desc">Modern investment plans, instant wallet, and more.</div>
       </div>
       <div className="homepage-actions modern-actions">
         <button className="action-btn" onClick={() => navigate('/recharge')}>

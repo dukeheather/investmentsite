@@ -196,62 +196,57 @@
 
 /* --- Modern HomePage Styles --- */
 .homepage-banner.modern-banner {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  display: block;
   border-radius: 28px;
   overflow: hidden;
   min-height: unset;
   box-shadow: 0 8px 32px 0 rgba(34,197,94,0.13), 0 1.5px 8px rgba(0,0,0,0.06);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.7rem;
   background: none;
   position: relative;
+  padding: 0;
 }
 .homepage-banner.modern-banner img {
   width: 100%;
-  height: 90px;
+  height: 110px;
   object-fit: cover;
   display: block;
-  border-top-left-radius: 28px;
-  border-top-right-radius: 28px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-radius: 28px 28px 0 0;
   filter: brightness(0.97) saturate(1.08);
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
 }
-.banner-overlay {
-  display: none;
+.banner-overlay, .modern-banner-text {
+  display: none !important;
 }
-.modern-banner-text {
-  position: static;
-  left: unset;
-  top: unset;
-  z-index: 2;
-  color: #fff;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+.homepage-welcome {
+  margin-top: 0.2rem;
+  margin-bottom: 1.2rem;
+  padding: 0.7rem 1.2rem 0.7rem 1.2rem;
+  color: #232526;
+  background: none;
+  border-radius: 0 0 28px 28px;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(120deg, rgba(34,197,94,0.22) 0%, rgba(30,41,59,0.18) 100%);
-  padding: 1.1rem 1.3rem 1.1rem 1.3rem;
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  margin-top: 0;
+  text-align: left;
 }
-.modern-banner-text .banner-title {
+.homepage-welcome .banner-title {
   font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: 0.01em;
   margin-bottom: 0.2rem;
+  color: #232526;
 }
-.modern-banner-text .banner-subtitle {
+.homepage-welcome .banner-subtitle {
   font-size: 1.08rem;
   font-weight: 600;
   margin-bottom: 0.1rem;
+  color: #232526;
 }
-.modern-banner-text .banner-desc {
+.homepage-welcome .banner-desc {
   font-size: 0.98rem;
   font-weight: 400;
   opacity: 0.93;
+  color: #232526;
 }
 
 .modern-actions {
@@ -283,22 +278,20 @@
 
 @media (max-width: 600px) {
   .homepage-banner.modern-banner img {
-    height: 60px;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
+    height: 70px;
+    border-radius: 18px 18px 0 0;
   }
-  .modern-banner-text {
-    padding: 0.7rem 0.7rem 0.9rem 0.7rem;
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
+  .homepage-welcome {
+    padding: 0.5rem 0.7rem 0.7rem 0.7rem;
+    border-radius: 0 0 18px 18px;
   }
-  .modern-banner-text .banner-title {
+  .homepage-welcome .banner-title {
     font-size: 1.05rem;
   }
-  .modern-banner-text .banner-subtitle {
+  .homepage-welcome .banner-subtitle {
     font-size: 0.95rem;
   }
-  .modern-banner-text .banner-desc {
+  .homepage-welcome .banner-desc {
     font-size: 0.89rem;
   }
   .modern-actions {
