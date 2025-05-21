@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <div className="homepage-container">
       <div className="homepage-banner modern-banner">
-        <img src="https://images.unsplash.com/photo-1514361892635-cebb9b6c7ca5?auto=format&fit=crop&w=600&q=80" alt="Banner" />
+        <img src="/static/homepage-banner.jpg" alt="Banner" />
         <div className="banner-overlay" />
         <div className="banner-text modern-banner-text">
           <div className="banner-title">Welcome to <span style={{color:'#4ade80'}}>Astral Invest</span></div>
