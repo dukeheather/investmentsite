@@ -94,6 +94,7 @@ body, html, #root {
   border-radius: 14px;
   font-size: 1.18rem;
   font-weight: 800;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   cursor: pointer;
   width: 100%;
   margin-top: 0.5rem;
@@ -103,7 +104,9 @@ body, html, #root {
   position: relative;
   overflow: hidden;
   z-index: 1;
-  animation: btnIdleAnim 2.5s infinite linear;
+  animation: btnGradientMove 2.5s linear infinite, btnIdleAnim 2.5s infinite linear;
+  background-size: 200% 100%;
+  background-position: 0% 0%;
 }
 .auth-btn:hover:not(:disabled) {
   background: linear-gradient(90deg, #16a34a 60%, #22c55e 100%);
@@ -203,6 +206,14 @@ body, html, #root {
     filter: brightness(1);
   }
 }
+@keyframes btnGradientMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
 @media (max-width: 600px) {
   .auth-banner, .auth-banner img {
     height: 120px;
@@ -228,11 +239,13 @@ body, html, #root {
 .auth-title-left {
   color: #fff;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 900;
   text-align: left;
   width: 100%;
   margin-bottom: 1.5rem;
   letter-spacing: 0.01em;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 .input-eye-wrap {
   position: relative;

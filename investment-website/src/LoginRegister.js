@@ -96,19 +96,51 @@ export default function LoginRegister({ user, setUser, setToken }) {
       <div className="auth-center-card">
         <h2 className="auth-title-left">{mode === 'login' ? 'Login' : 'User Registration'}</h2>
         <form onSubmit={handleSubmit}>
-          <div className="input-eye-wrap">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              disabled={loading}
-            />
-            <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
-          </div>
-          {mode === 'register' && (
+          {mode === 'login' ? (
             <>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="off"
+                disabled={loading}
+              />
+              <div className="input-eye-wrap">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+                <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
+              </div>
+            </>
+          ) : (
+            <>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="off"
+                disabled={loading}
+              />
+              <div className="input-eye-wrap">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+                <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
+              </div>
               <div className="input-eye-wrap">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -141,17 +173,6 @@ export default function LoginRegister({ user, setUser, setToken }) {
                 disabled={loading}
               />
             </>
-          )}
-          {mode === 'login' && (
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
-              autoComplete="off"
-              disabled={loading}
-            />
           )}
           {error && <div className="auth-error">{error}</div>}
           <button type="submit" className="auth-btn" disabled={loading}>
