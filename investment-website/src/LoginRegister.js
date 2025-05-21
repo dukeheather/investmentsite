@@ -8,6 +8,8 @@ export default function LoginRegister({ user, setUser, setToken }) {
   const [form, setForm] = useState({ email: '', password: '', phone: '', referralCode: '', confirmPassword: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -58,6 +60,17 @@ export default function LoginRegister({ user, setUser, setToken }) {
     setToken(null);
   };
 
+  // Eye icon SVG
+  const EyeIcon = ({ open }) => (
+    <span style={{ cursor: 'pointer', marginLeft: 8, color: '#64748b', fontSize: '1.2em', verticalAlign: 'middle' }}>
+      {open ? (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1l22 22"/><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7 19 2.73 15.11 1 12c.74-1.32 1.81-2.87 3.11-4.19M9.88 9.88A3 3 0 0 1 12 9c1.66 0 3 1.34 3 3 0 .39-.08.76-.21 1.09"/><path d="M21.17 21.17A10.94 10.94 0 0 0 23 12c-1.73-3.11-6-7-11-7-1.61 0-3.16.31-4.59.86"/></svg>
+      ) : (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12C2.73 15.11 7 19 12 19s9.27-3.89 11-7c-1.73-3.11-6-7-11-7S2.73 8.89 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      )}
+    </span>
+  );
+
   if (user) {
     return (
       <div className="auth-fullscreen-bg">
@@ -81,35 +94,32 @@ export default function LoginRegister({ user, setUser, setToken }) {
         <div className="auth-banner-gradient" />
       </div>
       <div className="auth-center-card">
-        <h2>{mode === 'login' ? 'Login' : 'Register'}</h2>
+        <h2 className="auth-title-left">{mode === 'login' ? 'Login' : 'User Registration'}</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            autoComplete="off"
-            disabled={loading}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            disabled={loading}
-          />
+          <div className="input-eye-wrap">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              disabled={loading}
+            />
+            <span onClick={() => setShowPassword(v => !v)}><EyeIcon open={showPassword} /></span>
+          </div>
           {mode === 'register' && (
             <>
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                disabled={loading}
-              />
+              <div className="input-eye-wrap">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+                <span onClick={() => setShowConfirmPassword(v => !v)}><EyeIcon open={showConfirmPassword} /></span>
+              </div>
               <input
                 type="tel"
                 name="phone"
@@ -131,6 +141,17 @@ export default function LoginRegister({ user, setUser, setToken }) {
                 disabled={loading}
               />
             </>
+          )}
+          {mode === 'login' && (
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              autoComplete="off"
+              disabled={loading}
+            />
           )}
           {error && <div className="auth-error">{error}</div>}
           <button type="submit" className="auth-btn" disabled={loading}>
