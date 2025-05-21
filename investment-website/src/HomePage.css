@@ -195,28 +195,47 @@
 }
 
 /* --- Modern HomePage Styles --- */
-.modern-banner {
-  position: relative;
+.homepage-banner.modern-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   border-radius: 28px;
   overflow: hidden;
-  min-height: 120px;
+  min-height: unset;
   box-shadow: 0 8px 32px 0 rgba(34,197,94,0.13), 0 1.5px 8px rgba(0,0,0,0.06);
   margin-bottom: 1.5rem;
+  background: none;
+  position: relative;
+}
+.homepage-banner.modern-banner img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  display: block;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  filter: brightness(0.97) saturate(1.08);
 }
 .banner-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(120deg, rgba(34,197,94,0.55) 0%, rgba(30,41,59,0.38) 100%);
-  z-index: 1;
+  display: none;
 }
 .modern-banner-text {
-  position: absolute;
-  left: 2rem;
-  top: 1.2rem;
+  position: static;
+  left: unset;
+  top: unset;
   z-index: 2;
   color: #fff;
   text-shadow: 0 2px 12px rgba(0,0,0,0.18);
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, rgba(34,197,94,0.22) 0%, rgba(30,41,59,0.18) 100%);
+  padding: 1.1rem 1.3rem 1.1rem 1.3rem;
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 0;
 }
 .modern-banner-text .banner-title {
   font-size: 1.35rem;
@@ -263,9 +282,15 @@
 }
 
 @media (max-width: 600px) {
+  .homepage-banner.modern-banner img {
+    height: 60px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+  }
   .modern-banner-text {
-    left: 1rem;
-    top: 0.7rem;
+    padding: 0.7rem 0.7rem 0.9rem 0.7rem;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
   }
   .modern-banner-text .banner-title {
     font-size: 1.05rem;
