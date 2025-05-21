@@ -5,7 +5,7 @@ const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 
 export default function LoginRegister({ user, setUser, setToken }) {
   const [mode, setMode] = useState('login');
-  const [form, setForm] = useState({ email: '', password: '', phone: '', referralCode: '' });
+  const [form, setForm] = useState({ email: '', password: '', phone: '', referralCode: '', confirmPassword: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,6 +19,11 @@ export default function LoginRegister({ user, setUser, setToken }) {
     setLoading(true);
     if (mode === 'register' && !form.phone) {
       setError('Phone number is required for registration.');
+      setLoading(false);
+      return;
+    }
+    if (mode === 'register' && form.password !== form.confirmPassword) {
+      setError('Passwords do not match.');
       setLoading(false);
       return;
     }
@@ -38,7 +43,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
-      setForm({ email: '', password: '', phone: '', referralCode: '' });
+      setForm({ email: '', password: '', phone: '', referralCode: '', confirmPassword: '' });
     } catch (err) {
       setError('Network error.');
     } finally {
@@ -48,7 +53,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
 
   const handleLogout = () => {
     setUser(null);
-    setForm({ email: '', password: '', phone: '', referralCode: '' });
+    setForm({ email: '', password: '', phone: '', referralCode: '', confirmPassword: '' });
     localStorage.removeItem('token');
     setToken(null);
   };
@@ -57,7 +62,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
     return (
       <div className="auth-fullscreen-bg">
         <div className="auth-banner">
-          <img src="https://images.unsplash.com/photo-1514361892635-cebb9b6c7ca5?auto=format&fit=crop&w=600&q=80" alt="Banner" />
+          <img src="/static/vineyard-banner.jpg" alt="Banner" />
           <div className="auth-banner-gradient" />
         </div>
         <div className="auth-center-card">
@@ -72,7 +77,7 @@ export default function LoginRegister({ user, setUser, setToken }) {
   return (
     <div className="auth-fullscreen-bg">
       <div className="auth-banner">
-        <img src="https://images.unsplash.com/photo-1514361892635-cebb9b6c7ca5?auto=format&fit=crop&w=600&q=80" alt="Banner" />
+        <img src="/static/vineyard-banner.jpg" alt="Banner" />
         <div className="auth-banner-gradient" />
       </div>
       <div className="auth-center-card">
@@ -97,6 +102,14 @@ export default function LoginRegister({ user, setUser, setToken }) {
           />
           {mode === 'register' && (
             <>
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                disabled={loading}
+              />
               <input
                 type="tel"
                 name="phone"
