@@ -144,6 +144,15 @@ export default function InvestmentPlans({ user, token }) {
       <div className="plans-list">
         {plans.map(plan => (
           <div className="plan-card" key={plan.id}>
+            {plan.name === 'Starter Plan' && (
+              <img src="/static/starter-plan.jpg" alt="Starter Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />
+            )}
+            {plan.name === 'Growth Plan' && (
+              <img src="/static/growth-plan.jpg" alt="Growth Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />
+            )}
+            {plan.name === 'Elite Plan' && (
+              <img src="/static/elite-plan.jpg" alt="Elite Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />
+            )}
             <h2>{plan.name}</h2>
             <div>Minimum Investment: <b>₹{plan.min}</b></div>
             <div>Maximum Investment: <b>₹{plan.max}</b></div>
