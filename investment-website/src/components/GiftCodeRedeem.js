@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaGift } from 'react-icons/fa';
 
+const API_URL = 'https://investmentsite-q1sz.onrender.com/api';
+
 const GiftCodeRedeem = ({ onBalanceUpdate }) => {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +13,12 @@ const GiftCodeRedeem = ({ onBalanceUpdate }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/gift-codes/redeem', { code });
+      const response = await axios.post(`${API_URL}/gift-codes/redeem`, { code }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       
       if (response.data.success) {
         alert('Gift code redeemed successfully!');
