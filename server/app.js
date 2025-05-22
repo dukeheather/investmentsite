@@ -46,7 +46,7 @@ const upload = multer({
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth').router;
 const uploadRouter = require('./routes/upload');
 const giftCodesRouter = require('./routes/giftCodes');
 
