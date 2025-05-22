@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 import axios from 'axios';
 import { FaGift } from 'react-icons/fa';
 
@@ -15,14 +14,14 @@ const GiftCodeRedeem = ({ onBalanceUpdate }) => {
       const response = await axios.post('/api/gift-codes/redeem', { code });
       
       if (response.data.success) {
-        toast.success('Gift code redeemed successfully!');
+        alert('Gift code redeemed successfully!');
         setCode('');
         if (onBalanceUpdate) {
           onBalanceUpdate(response.data.newBalance);
         }
       }
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Failed to redeem gift code');
+      alert(error.response?.data?.error || 'Failed to redeem gift code');
     } finally {
       setIsLoading(false);
     }
