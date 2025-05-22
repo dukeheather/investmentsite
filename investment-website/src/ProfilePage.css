@@ -260,4 +260,26 @@
   color: #666;
   font-size: 0.9rem;
   line-height: 1.4;
+}
+
+.profile-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-main);
+  font-size: 1rem;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: var(--accent-green);
+  background: rgba(255,255,255,0.08);
+}
+
+.profile-input::placeholder {
+  color: var(--text-muted);
 } 

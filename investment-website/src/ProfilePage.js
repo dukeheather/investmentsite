@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 import { FaWallet, FaCheckCircle, FaTimesCircle, FaClock, FaRupeeSign } from 'react-icons/fa';
 import CircleLoader from './components/CircleLoader';
+import GiftCodeRedeem from './components/GiftCodeRedeem';
 
 export default function ProfilePage({ setUser, setToken, user: userProp }) {
   const navigate = useNavigate();
@@ -149,6 +150,7 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
           <div className="stat-label">Total income</div>
         </div>
       </div>
+      <GiftCodeRedeem onBalanceUpdate={(newBalance) => setWalletBalance(newBalance)} />
       <div className="profile-menu-card">
         <button className="profile-menu-item" onClick={() => handleMenuClick('Messages')}>
           <span className="menu-icon">💬</span> Messages
