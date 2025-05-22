@@ -2,20 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
-// Middleware to check if user is authenticated
-const isAuthenticated = (req, res, next) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
-};
+const { authMiddleware } = require('./auth');
 
 // Redeem gift code
-router.post('/redeem', isAuthenticated, async (req, res) => {
+router.post('/redeem', authMiddleware, async (req, res) => {
   try {
     const { code } = req.body;
-    const userId = req.session.userId;
+    const userId = req.user.id;
 
     // Find the gift code
     const giftCode = await prisma.giftCode.findUnique({
@@ -82,10 +75,10 @@ router.post('/redeem', isAuthenticated, async (req, res) => {
 });
 
 // Admin route to create gift codes
-router.post('/create', isAuthenticated, async (req, res) => {
+router.post('/create', authMiddleware, async (req, res) => {
   try {
     const { amount, expiresAt } = req.body;
-    const userId = req.session.userId;
+    const userId = req.user.id;
 
     // Check if user is admin
     const user = await prisma.user.findUnique({
