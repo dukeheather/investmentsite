@@ -1,6 +1,8 @@
 import './App.css';
 import { useRef, useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LoginRegister from './LoginRegister';
 import InvestmentPlans from './InvestmentPlans';
 import Dashboard from './Dashboard';
@@ -115,6 +117,18 @@ export default function MainApp() {
   return (
     <>
       <HeaderBar />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       {globalError && <div className="global-error">{globalError}</div>}
       {!user && (
         <div className="modal-overlay">
