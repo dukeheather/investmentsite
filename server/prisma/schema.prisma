@@ -56,3 +56,14 @@ model WalletTransaction {
   screenshotUrl String?
   createdAt     DateTime @default(now())
 }
+
+model GiftCode {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  amount      Float
+  isUsed      Boolean  @default(false)
+  usedBy      Int?
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+}
