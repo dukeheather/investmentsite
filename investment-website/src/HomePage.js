@@ -68,6 +68,12 @@ export default function HomePage() {
                 <div className="plan-name">{plan.name}</div>
                 <div className="plan-desc">{plan.desc}</div>
                 <div className="plan-details">{plan.details}</div>
+                <button
+                  className="plan-learn-btn"
+                  onClick={() => navigate('/plans', { state: { planName: plan.name } })}
+                >
+                  Learn More
+                </button>
               </div>
             </div>
           ))}
