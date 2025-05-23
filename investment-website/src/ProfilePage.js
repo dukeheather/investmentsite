@@ -115,16 +115,13 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
   return (
     <div className="profile-container modern-profile">
       <div className="profile-header modern-profile-header">
-        <div className="profile-avatar modern-profile-avatar">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="32" cy="32" r="32" fill="#4ade80" />
-            <circle cx="32" cy="26" r="12" fill="#232526" />
-            <ellipse cx="32" cy="46" rx="18" ry="10" fill="#232526" />
-          </svg>
+        <div className="profile-header-top-row">
+          <span className="vip-badge">SVIP</span>
+          <span className="profile-balance">Balance: {walletBalance.toFixed(2)}</span>
         </div>
-        <div className="profile-info-block">
-          <div className="profile-id modern-profile-id">{user?.phone ? `+${user.phone}` : user?.email}</div>
-          <div className="profile-email modern-profile-email">{user?.email}</div>
+        <div className="profile-header-user-row">
+          <span className="profile-masked-phone">{user?.phone ? user.phone.replace(/(\d{3})\d{4}(\d{3})/, '$1****$2') : ''}</span>
+          <span className="profile-user-id">ID:{user?.id || ''}</span>
         </div>
       </div>
       <div className="profile-stats-card modern-profile-stats">
@@ -152,29 +149,35 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
       </div>
       <GiftCodeRedeem onBalanceUpdate={(newBalance) => setWalletBalance(newBalance)} />
       <div className="profile-menu-card">
-        <button className="profile-menu-item" onClick={() => handleMenuClick('Messages')}>
-          <span className="menu-icon">💬</span> Messages
+        <button className="profile-menu-item" onClick={() => navigate('/recharge')}>
+          <span className="menu-icon">💰</span> Recharge
         </button>
-        <button className="profile-menu-item" onClick={() => handleMenuClick('Personal Information')}>
-          <span className="menu-icon">🪪</span> Personal information
+        <button className="profile-menu-item" onClick={() => navigate('/withdraw')}>
+          <span className="menu-icon">🏧</span> Withdraw
         </button>
-        <button className="profile-menu-item" onClick={() => handleMenuClick('Income Details')}>
-          <span className="menu-icon">📈</span> Income details
+        <button className="profile-menu-item" onClick={() => navigate('/bank-info')}>
+          <span className="menu-icon">🏦</span> Bank Information
         </button>
-        <button className="profile-menu-item" onClick={() => handleMenuClick('Withdrawal Details')}>
-          <span className="menu-icon">💸</span> Withdrawal details
+        <button className="profile-menu-item" onClick={() => navigate('/gift-receive')}>
+          <span className="menu-icon">🎁</span> Gift Receive
         </button>
-        <button className="profile-menu-item" onClick={() => handleMenuClick('About Us')}>
-          <span className="menu-icon">ℹ️</span> About us
+        <button className="profile-menu-item" onClick={() => navigate('/income-details')}>
+          <span className="menu-icon">💹</span> My earnings
         </button>
-        <button className="profile-menu-item" onClick={() => handleMenuClick('Language')}>
-          <span className="menu-icon">🌐</span> Language
+        <button className="profile-menu-item" onClick={() => navigate('/my-team')}>
+          <span className="menu-icon">👥</span> My Team
         </button>
-        <button className="profile-menu-item" onClick={() => handleMenuClick('Contact Us')}>
-          <span className="menu-icon">📞</span> Contact us
+        <button className="profile-menu-item" onClick={() => navigate('/my-project')}>
+          <span className="menu-icon">📄</span> My Project
+        </button>
+        <button className="profile-menu-item" onClick={() => navigate('/password')}>
+          <span className="menu-icon">🔑</span> Password
+        </button>
+        <button className="profile-menu-item" onClick={() => navigate('/channel')}>
+          <span className="menu-icon">▶️</span> Selfie Channel
         </button>
         <button className="profile-menu-item logout" onClick={() => handleMenuClick('Logout')}>
-          <span className="menu-icon">🚪</span> Logout
+          <span className="menu-icon">↩️</span> Signout
         </button>
       </div>
       <section className="wallet-transactions-section">

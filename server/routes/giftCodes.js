@@ -110,4 +110,29 @@ router.post('/create', authMiddleware, async (req, res) => {
   }
 });
 
+// Admin GET endpoint to create a gift code (for quick testing)
+router.get('/admin-create', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { amount = 100, expiresAt } = req.query;
+    // Check if user is admin
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user.isAdmin) {
+      return res.status(403).json({ error: 'Only admins can create gift codes' });
+    }
+    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const giftCode = await prisma.giftCode.create({
+      data: {
+        code,
+        amount: parseFloat(amount),
+        expiresAt: expiresAt ? new Date(expiresAt) : null
+      }
+    });
+    res.json({ success: true, giftCode });
+  } catch (error) {
+    console.error('Error creating gift code:', error);
+    res.status(500).json({ error: 'Failed to create gift code' });
+  }
+});
+
 module.exports = router; 
