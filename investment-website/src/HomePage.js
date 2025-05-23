@@ -7,6 +7,28 @@ export default function HomePage() {
   const [tab, setTab] = useState('day');
   const navigate = useNavigate();
 
+  // Example plan data (replace with your real plans)
+  const plans = [
+    {
+      name: "Starter Plan",
+      image: "/static/plan1.jpg",
+      desc: "Earn 5% daily for 30 days. Min: ₹500",
+      details: "Low risk, instant withdrawal.",
+    },
+    {
+      name: "VIP Plan",
+      image: "/static/plan2.jpg",
+      desc: "Earn 8% daily for 20 days. Min: ₹5000",
+      details: "Priority support, higher returns.",
+    },
+    {
+      name: "Pro Plan",
+      image: "/static/plan3.jpg",
+      desc: "Earn 12% daily for 10 days. Min: ₹20000",
+      details: "Best for experienced investors.",
+    },
+  ];
+
   return (
     <div className="homepage-container">
       <div className="homepage-banner modern-banner">
@@ -34,6 +56,22 @@ export default function HomePage() {
           <span className="action-icon"><FaBullhorn /></span>
           Channel
         </button>
+      </div>
+      {/* Plans Section */}
+      <div className="homepage-plans-section">
+        <h3 className="plans-title">Investment Plans</h3>
+        <div className="plans-list">
+          {plans.map(plan => (
+            <div className="plan-card" key={plan.name}>
+              <img src={plan.image} alt={plan.name} className="plan-image" />
+              <div className="plan-info">
+                <div className="plan-name">{plan.name}</div>
+                <div className="plan-desc">{plan.desc}</div>
+                <div className="plan-details">{plan.details}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       {/* <div className="homepage-toggle">
         <button className={tab === 'day' ? 'toggle-btn active' : 'toggle-btn'} onClick={() => setTab('day')}>Day income</button>
