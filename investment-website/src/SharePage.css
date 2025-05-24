@@ -145,4 +145,32 @@ th {
   .referral-code-box button {
     width: 100%;
   }
+}
+
+.level-progress-bar-wrapper {
+  margin-top: 10px;
+}
+
+.level-progress-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: #e0f7ef;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.level-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e 60%, #4ade80 100%);
+  border-radius: 8px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.level-progress-bar-label {
+  font-size: 0.93rem;
+  color: #22c55e;
+  text-align: right;
+  margin-top: 2px;
+  font-weight: 600;
 } 

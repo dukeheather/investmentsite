@@ -46,6 +46,12 @@ const SharePage = () => {
   const currentLevel = levelInfo.find(l => referralLevel === l.level) || levelInfo[0];
   const nextLevel = levelInfo.find(l => l.level === referralLevel + 1);
   const pointsToNext = nextLevel ? nextLevel.min - referralPoints : null;
+  let progress = 1;
+  if (nextLevel) {
+    progress = (referralPoints - currentLevel.min) / (nextLevel.min - currentLevel.min);
+    if (progress < 0) progress = 0;
+    if (progress > 1) progress = 1;
+  }
 
   return (
     <div className="share-page">
@@ -67,6 +73,14 @@ const SharePage = () => {
           <p className="amount">{referralPoints}</p>
           <div style={{ fontSize: '0.98rem', color: '#888', marginTop: 4 }}>
             {nextLevel ? `${pointsToNext} to Level ${nextLevel.level}` : 'Max Level'}
+          </div>
+          <div className="level-progress-bar-wrapper">
+            <div className="level-progress-bar-bg">
+              <div className="level-progress-bar-fill" style={{ width: `${progress * 100}%` }} />
+            </div>
+            <div className="level-progress-bar-label">
+              {nextLevel ? `${Math.round(progress * 100)}% to next level` : 'Max Level'}
+            </div>
           </div>
         </div>
       </div>
