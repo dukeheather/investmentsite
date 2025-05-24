@@ -4,6 +4,7 @@ import './ProfilePage.css';
 import { FaWallet, FaCheckCircle, FaTimesCircle, FaClock, FaRupeeSign } from 'react-icons/fa';
 import CircleLoader from './components/CircleLoader';
 import GiftCodeRedeem from './components/GiftCodeRedeem';
+import { PaperPlaneTilt, WhatsappLogo, Lifebuoy } from 'phosphor-react';
 
 export default function ProfilePage({ setUser, setToken, user: userProp }) {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
   const [walletBalance, setWalletBalance] = useState(0);
   const [referralCode, setReferralCode] = useState('');
   const [copied, setCopied] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -176,6 +178,9 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
         <button className="profile-menu-item" onClick={() => navigate('/channel')}>
           <span className="menu-icon">▶️</span> Selfie Channel
         </button>
+        <button className="profile-menu-item" onClick={() => setShowSupportModal(true)}>
+          <span className="menu-icon"><Lifebuoy size={22} color="#38bdf8" /></span> Support Us
+        </button>
         <button className="profile-menu-item logout" onClick={() => handleMenuClick('Logout')}>
           <span className="menu-icon">↩️</span> Signout
         </button>
@@ -217,6 +222,43 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
           Share this code with friends! When they register using your code, you'll get ₹50 in your wallet.
         </p>
       </div>
+      {/* Support Modal */}
+      {showSupportModal && (
+        <div className="modal-overlay" style={{zIndex: 3000}}>
+          <div className="modal-content" style={{maxWidth: 340, textAlign: 'center', padding: 24}}>
+            <h3>Contact Support</h3>
+            <p style={{margin: '1rem 0 1.5rem 0', color: '#64748b'}}>Reach us on Telegram or WhatsApp for help and support.</p>
+            <a
+              href="https://t.me/your_telegram_placeholder"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, background: '#229ED9', color: '#fff', borderRadius: 8, padding: '0.7rem 1.3rem', fontWeight: 700, fontSize: '1.08rem', marginBottom: 16, textDecoration: 'none', boxShadow: '0 2px 8px rgba(34,197,94,0.10)'
+              }}
+            >
+              <PaperPlaneTilt size={22} weight="fill" /> Telegram
+            </a>
+            <br />
+            <a
+              href="https://wa.me/your_whatsapp_placeholder"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, background: '#25D366', color: '#fff', borderRadius: 8, padding: '0.7rem 1.3rem', fontWeight: 700, fontSize: '1.08rem', marginBottom: 8, textDecoration: 'none', boxShadow: '0 2px 8px rgba(34,197,94,0.10)'
+              }}
+            >
+              <WhatsappLogo size={22} weight="fill" /> WhatsApp
+            </a>
+            <br />
+            <button
+              onClick={() => setShowSupportModal(false)}
+              style={{marginTop: 18, background: '#e0f2fe', color: '#2563eb', border: 'none', borderRadius: 8, padding: '0.6rem 1.2rem', fontWeight: 700, fontSize: '1.05rem', cursor: 'pointer'}}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
