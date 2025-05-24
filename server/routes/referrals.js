@@ -69,6 +69,25 @@ router.post('/apply', async (req, res) => {
       }
     });
 
+    // Credit ₹50 to referrer's wallet and referralEarnings
+    await prisma.user.update({
+      where: { id: referrer.id },
+      data: {
+        walletBalance: { increment: 50 },
+        referralEarnings: { increment: 50 }
+      }
+    });
+    // Create a wallet transaction for the bonus
+    await prisma.walletTransaction.create({
+      data: {
+        userId: referrer.id,
+        amount: 50,
+        type: 'referral_bonus',
+        status: 'success',
+        gatewayTxnId: `REFBONUS_${Date.now()}`
+      }
+    });
+
     res.json({ message: 'Referral code applied successfully' });
   } catch (error) {
     console.error('Error applying referral code:', error);

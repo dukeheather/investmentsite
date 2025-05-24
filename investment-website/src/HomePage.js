@@ -11,7 +11,7 @@ export default function HomePage() {
   const plans = [
     {
       name: "Starter Plan",
-      image: "/static/plan1.jpg",
+      image: "/static/starter-plan.jpg",
       desc: "Earn 5% daily for 30 days. Min: ₹500",
       details: "Low risk, instant withdrawal.",
     },

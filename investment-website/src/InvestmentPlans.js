@@ -148,7 +148,7 @@ export default function InvestmentPlans({ user, token }) {
               <img src="/static/starter-plan.jpg" alt="Starter Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />
             )}
             {plan.name === 'Growth Plan' && (
-              <img src="/static/growth-plan.jpg" alt="Growth Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />
+              <img src="/static/elite-plan.jpg" alt="Growth Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />
             )}
             {plan.name === 'Elite Plan' && (
               <img src="/static/elite-plan.jpg" alt="Elite Plan" className="plan-image" style={{width: '100%', borderRadius: '16px', marginBottom: '1.1rem', objectFit: 'cover', maxHeight: '180px'}} />

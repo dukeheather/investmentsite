@@ -43,7 +43,7 @@ const SharePage = () => {
       <div className="referral-stats">
         <div className="stat-card">
           <h3>Total Earnings</h3>
-          <p className="amount">${referralEarnings.toFixed(2)}</p>
+          <p className="amount">₹{referralEarnings.toFixed(2)}</p>
         </div>
         <div className="stat-card">
           <h3>Total Referrals</h3>
@@ -77,7 +77,7 @@ const SharePage = () => {
                   <tr key={referral.id}>
                     <td>{referral.referredUser}</td>
                     <td>{referral.status}</td>
-                    <td>${referral.commission.toFixed(2)}</td>
+                    <td>₹{referral.commission.toFixed(2)}</td>
                     <td>{new Date(referral.createdAt).toLocaleDateString()}</td>
                   </tr>
                 ))}
