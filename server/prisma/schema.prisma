@@ -24,6 +24,8 @@ model User {
   walletTxns     WalletTransaction[]
   referralCode   String?            @unique
   referredBy     String?
+  referralEarnings Float            @default(0)
+  referrals      Referral[]
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt @default(now())
 }
@@ -66,4 +68,15 @@ model GiftCode {
   usedAt      DateTime?
   createdAt   DateTime @default(now())
   expiresAt   DateTime?
+}
+
+model Referral {
+  id            Int      @id @default(autoincrement())
+  referrer      User     @relation(fields: [referrerId], references: [id])
+  referrerId    Int
+  referredUser  String   // Email of the referred user
+  commission    Float    @default(0)
+  status        String   @default("pending") // pending, active, completed
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
 }

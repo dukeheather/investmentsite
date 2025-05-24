@@ -49,6 +49,7 @@ const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth').router;
 const uploadRouter = require('./routes/upload');
 const giftCodesRouter = require('./routes/giftCodes');
+const referralsRouter = require('./routes/referrals');
 
 const app = express();
 
@@ -82,6 +83,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/dashboard', indexRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/gift-codes', giftCodesRouter);
+app.use('/api/referrals', referralsRouter);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'public', 'build')));

@@ -1,0 +1,138 @@
+const express = require('express');
+const router = express.Router();
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const auth = require('../middleware/auth');
+const crypto = require('crypto');
+
+// Generate a unique referral code
+const generateReferralCode = () => {
+  return crypto.randomBytes(4).toString('hex').toUpperCase();
+};
+
+// Get user's referral data
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      include: {
+        referrals: true
+      }
+    });
+
+    if (!user.referralCode) {
+      // Generate and save referral code if user doesn't have one
+      const referralCode = generateReferralCode();
+      await prisma.user.update({
+        where: { id: req.user.id },
+        data: { referralCode }
+      });
+      user.referralCode = referralCode;
+    }
+
+    res.json({
+      referralCode: user.referralCode,
+      referralEarnings: user.referralEarnings,
+      referrals: user.referrals
+    });
+  } catch (error) {
+    console.error('Error fetching referral data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Apply referral code during registration
+router.post('/apply', async (req, res) => {
+  const { referralCode, email } = req.body;
+
+  try {
+    const referrer = await prisma.user.findUnique({
+      where: { referralCode }
+    });
+
+    if (!referrer) {
+      return res.status(400).json({ error: 'Invalid referral code' });
+    }
+
+    // Update the new user with the referrer's code
+    await prisma.user.update({
+      where: { email },
+      data: { referredBy: referralCode }
+    });
+
+    // Create a new referral record
+    await prisma.referral.create({
+      data: {
+        referrerId: referrer.id,
+        referredUser: email,
+        status: 'pending'
+      }
+    });
+
+    res.json({ message: 'Referral code applied successfully' });
+  } catch (error) {
+    console.error('Error applying referral code:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Process commission when a referred user makes a recharge
+router.post('/process-commission', auth, async (req, res) => {
+  const { userId, amount } = req.body;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user.referredBy) {
+      return res.status(400).json({ error: 'User was not referred' });
+    }
+
+    const referrer = await prisma.user.findUnique({
+      where: { referralCode: user.referredBy }
+    });
+
+    if (!referrer) {
+      return res.status(400).json({ error: 'Referrer not found' });
+    }
+
+    // Calculate commission (2-3% randomly)
+    const commissionRate = Math.random() * (0.03 - 0.02) + 0.02;
+    const commission = amount * commissionRate;
+
+    // Update referrer's earnings
+    await prisma.user.update({
+      where: { id: referrer.id },
+      data: {
+        referralEarnings: {
+          increment: commission
+        },
+        walletBalance: {
+          increment: commission
+        }
+      }
+    });
+
+    // Update referral status
+    await prisma.referral.updateMany({
+      where: {
+        referrerId: referrer.id,
+        referredUser: user.email
+      },
+      data: {
+        status: 'completed',
+        commission: {
+          increment: commission
+        }
+      }
+    });
+
+    res.json({ message: 'Commission processed successfully' });
+  } catch (error) {
+    console.error('Error processing commission:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+module.exports = router; 

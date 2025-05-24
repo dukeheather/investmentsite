@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
@@ -16,7 +16,26 @@ export default function RechargeWalletPage({ token }) {
   const [selectedChannel, setSelectedChannel] = useState('A');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get user ID from token
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUserId(data.user.id);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+    fetchUser();
+  }, [token]);
 
   const handleAmountChange = (e) => {
     const val = e.target.value;
@@ -42,12 +61,58 @@ export default function RechargeWalletPage({ token }) {
       setAmount(450);
       return;
     }
+
+    // Process commission if user was referred
+    if (userId) {
+      try {
+        await fetch('https://investmentsite-q1sz.onrender.com/api/referrals/process-commission', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            userId,
+            amount: Number(amount)
+          })
+        });
+      } catch (error) {
+        console.error('Error processing commission:', error);
+      }
+    }
+
     navigate('/manual-payment', { state: { amount, channel: selectedChannel } });
     setLoading(false);
   };
 
   return (
     <div className="plans-page recharge-page-mobile-fix" style={{paddingTop: '0.7rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+      {/* Modern Instructions & QR Card */}
+      <div style={{
+        maxWidth: 420,
+        width: '100%',
+        margin: '0 auto 1.5rem auto',
+        borderRadius: 18,
+        boxShadow: '0 2px 16px rgba(30,41,59,0.10)',
+        padding: '1.5rem 1.2rem',
+        background: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        border: '1.5px solid #e0f7ef',
+      }}>
+        <div style={{fontWeight: 800, fontSize: '1.35rem', color: '#22c55e', marginBottom: 10, textAlign: 'center', letterSpacing: '0.01em'}}>Manual Wallet Recharge</div>
+        <div style={{fontWeight: 600, fontSize: '1.08rem', color: '#232526', marginBottom: 10, textAlign: 'center'}}>Instructions</div>
+        <div style={{fontSize: '1.05rem', color: '#232526', marginBottom: 12, textAlign: 'center'}}>
+          Please pay <span style={{color:'#22c55e', fontWeight:700}}>₹{amount}</span> to the following UPI ID:<br/>
+          <span style={{fontWeight:700, color:'#2563eb'}}>your-upi@bank</span>
+        </div>
+        <div style={{marginBottom: 14, textAlign: 'center'}}>
+          <div style={{fontWeight: 600, color: '#64748b', marginBottom: 6}}>Scan QR to Pay</div>
+          <img src="/static/your-qr-code.png" alt="UPI QR" style={{width: 160, height: 160, borderRadius: 16, border: '2px solid #e0f7ef', boxShadow: '0 2px 12px rgba(34,197,94,0.08)', background: '#f8fafc', margin: '0 auto'}} />
+        </div>
+      </div>
+      {/* Modern Recharge Form Card */}
       <div className="buy-modal recharge-modal-mobile-fix" style={{
         maxWidth: 420,
         width: '100%',
@@ -63,8 +128,8 @@ export default function RechargeWalletPage({ token }) {
         background: '#3a4251',
         overflow: 'hidden',
       }}>
-        <div style={{fontWeight: 700, fontSize: '1.02rem', marginBottom: 6, textAlign: 'center'}}>Balance Recharge</div>
-        <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 8, textAlign: 'center'}}>Please enter the recharge amount</div>
+        <div style={{fontWeight: 700, fontSize: '1.02rem', marginBottom: 6, textAlign: 'center', color: '#fff'}}>Balance Recharge</div>
+        <div style={{color: '#cbd5e1', fontSize: '0.93rem', marginBottom: 8, textAlign: 'center'}}>Please enter the recharge amount</div>
         <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10, justifyContent: 'center', width: '100%'}}>
           {PRESET_AMOUNTS.map(val => (
             <button
@@ -91,7 +156,7 @@ export default function RechargeWalletPage({ token }) {
             }}
           />
         </div>
-        <div style={{color: '#64748b', fontSize: '0.93rem', marginBottom: 7, textAlign: 'center'}}>Please select the recharge channel</div>
+        <div style={{color: '#cbd5e1', fontSize: '0.93rem', marginBottom: 7, textAlign: 'center'}}>Please select the recharge channel</div>
         <div style={{display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 13, width: '100%'}}>
           {CHANNELS.map(ch => (
             <button

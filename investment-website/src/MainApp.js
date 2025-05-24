@@ -26,6 +26,7 @@ import CircleLoader from './components/CircleLoader';
 import ManualPaymentPage from './ManualPaymentPage';
 import AdminManualTopups from './AdminManualTopups';
 import HeaderBar from './components/HeaderBar';
+import SharePage from './SharePage';
 
 function Spinner() {
   return <CircleLoader />;
@@ -154,6 +155,7 @@ export default function MainApp() {
           <Route path="/channel" element={<ChannelPage />} />
           <Route path="/recharge" element={<RechargeWalletPage token={token} />} />
           <Route path="/manual-payment" element={<ManualPaymentPage token={token} />} />
+          <Route path="/share" element={<SharePage />} />
         </Routes>
       </div>
       <BottomNav />

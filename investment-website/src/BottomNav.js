@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './BottomNav.css';
-import { MdHomeFilled, MdEventNote, MdDashboard, MdPerson } from 'react-icons/md';
+import { MdHomeFilled, MdEventNote, MdDashboard, MdPerson, MdShare } from 'react-icons/md';
 
 const navItems = [
   {
@@ -18,6 +18,11 @@ const navItems = [
     label: 'Dashboard',
     path: '/dashboard',
     icon: <MdDashboard size={28} />,
+  },
+  {
+    label: 'Share',
+    path: '/share',
+    icon: <MdShare size={28} />,
   },
   {
     label: 'Profile',

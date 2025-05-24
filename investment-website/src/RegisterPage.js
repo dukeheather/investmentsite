@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import CircleLoader from '../components/CircleLoader';
 
 const RegisterPage = () => {
@@ -9,6 +9,16 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Get referral code from URL if present
+    const params = new URLSearchParams(location.search);
+    const refCode = params.get('ref');
+    if (refCode) {
+      setReferralCode(refCode);
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,13 +32,29 @@ const RegisterPage = () => {
         body: JSON.stringify({
           email,
           password,
-          referralCode: e.target.referralCode.value,
+          referralCode,
         }),
       });
 
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || 'Failed to register');
+      }
+
+      // Apply referral code if provided
+      if (referralCode) {
+        try {
+          await fetch('https://investmentsite-q1sz.onrender.com/api/referrals/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              referralCode,
+              email,
+            }),
+          });
+        } catch (error) {
+          console.error('Error applying referral code:', error);
+        }
       }
 
       setToken(data.token);
