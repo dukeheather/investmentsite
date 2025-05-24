@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "referralLevel" INTEGER NOT NULL DEFAULT 1,
+ADD COLUMN     "referralPoints" INTEGER NOT NULL DEFAULT 0;
