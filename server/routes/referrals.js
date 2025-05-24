@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const auth = require('../../middleware/auth');
+const auth = require('../middleware/auth');
 const crypto = require('crypto');
 
 // Generate a unique referral code
