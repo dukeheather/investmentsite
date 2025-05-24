@@ -7,6 +7,8 @@ const SharePage = () => {
   const [referralCode, setReferralCode] = useState('');
   const [referralEarnings, setReferralEarnings] = useState(0);
   const [referrals, setReferrals] = useState([]);
+  const [referralLevel, setReferralLevel] = useState(1);
+  const [referralPoints, setReferralPoints] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +21,8 @@ const SharePage = () => {
         setReferralCode(response.data.referralCode);
         setReferralEarnings(response.data.referralEarnings);
         setReferrals(response.data.referrals);
+        setReferralLevel(response.data.referralLevel || 1);
+        setReferralPoints(response.data.referralPoints || 0);
       } catch (error) {
         console.error('Error fetching referral data:', error);
       }
@@ -33,6 +37,16 @@ const SharePage = () => {
     alert('Referral link copied to clipboard!');
   };
 
+  // Level info
+  const levelInfo = [
+    { level: 1, min: 0, max: 4, rate: 3 },
+    { level: 2, min: 5, max: 19, rate: 5 },
+    { level: 3, min: 20, max: Infinity, rate: 10 },
+  ];
+  const currentLevel = levelInfo.find(l => referralLevel === l.level) || levelInfo[0];
+  const nextLevel = levelInfo.find(l => l.level === referralLevel + 1);
+  const pointsToNext = nextLevel ? nextLevel.min - referralPoints : null;
+
   return (
     <div className="share-page">
       <div className="share-header">
@@ -40,6 +54,22 @@ const SharePage = () => {
         <p>Invite friends and earn 2-3% commission on their recharges!</p>
       </div>
 
+      <div className="referral-stats">
+        <div className="stat-card">
+          <h3>Level</h3>
+          <p className="amount">{currentLevel.level}</p>
+          <div style={{ fontSize: '0.98rem', color: '#888', marginTop: 4 }}>
+            {currentLevel.rate}% commission
+          </div>
+        </div>
+        <div className="stat-card">
+          <h3>Points</h3>
+          <p className="amount">{referralPoints}</p>
+          <div style={{ fontSize: '0.98rem', color: '#888', marginTop: 4 }}>
+            {nextLevel ? `${pointsToNext} to Level ${nextLevel.level}` : 'Max Level'}
+          </div>
+        </div>
+      </div>
       <div className="referral-stats">
         <div className="stat-card">
           <h3>Total Earnings</h3>

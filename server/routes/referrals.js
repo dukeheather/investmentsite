@@ -33,7 +33,9 @@ router.get('/', auth, async (req, res) => {
     res.json({
       referralCode: user.referralCode,
       referralEarnings: user.referralEarnings,
-      referrals: user.referrals
+      referrals: user.referrals,
+      referralLevel: user.referralLevel,
+      referralPoints: user.referralPoints
     });
   } catch (error) {
     console.error('Error fetching referral data:', error);
@@ -116,20 +118,27 @@ router.post('/process-commission', auth, async (req, res) => {
       return res.status(400).json({ error: 'Referrer not found' });
     }
 
-    // Calculate commission (2-3% randomly)
-    const commissionRate = Math.random() * (0.03 - 0.02) + 0.02;
+    // Determine commission rate by level
+    let commissionRate = 0.03;
+    if (referrer.referralLevel >= 3) commissionRate = 0.10;
+    else if (referrer.referralLevel === 2) commissionRate = 0.05;
+    // else Level 1: 0.03
     const commission = amount * commissionRate;
 
-    // Update referrer's earnings
+    // Update referrer's earnings and points
+    let newPoints = referrer.referralPoints + 1;
+    let newLevel = referrer.referralLevel;
+    if (newPoints >= 20) newLevel = 3;
+    else if (newPoints >= 5) newLevel = 2;
+    else newLevel = 1;
+
     await prisma.user.update({
       where: { id: referrer.id },
       data: {
-        referralEarnings: {
-          increment: commission
-        },
-        walletBalance: {
-          increment: commission
-        }
+        referralEarnings: { increment: commission },
+        walletBalance: { increment: commission },
+        referralPoints: newPoints,
+        referralLevel: newLevel
       }
     });
 
@@ -141,13 +150,11 @@ router.post('/process-commission', auth, async (req, res) => {
       },
       data: {
         status: 'completed',
-        commission: {
-          increment: commission
-        }
+        commission: { increment: commission }
       }
     });
 
-    res.json({ message: 'Commission processed successfully' });
+    res.json({ message: 'Commission processed successfully', commission, newLevel, newPoints });
   } catch (error) {
     console.error('Error processing commission:', error);
     res.status(500).json({ error: 'Internal server error' });
