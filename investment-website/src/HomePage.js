@@ -62,27 +62,54 @@ export default function HomePage() {
         <h3 className="plans-title">Investment Plans</h3>
         <div className="plans-list">
           {plans.map(plan => (
-            <div className="plan-card" key={plan.name}>
+            <div className="plan-card" key={plan.name} style={{
+              width: '100%',
+              maxWidth: '370px',
+              margin: '0 auto',
+              borderRadius: '22px',
+              boxShadow: '0 6px 32px rgba(34,197,94,0.13), 0 2px 8px rgba(0,0,0,0.06)',
+              background: '#fff',
+              padding: '2rem 1.5rem 1.5rem 1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginBottom: '1.5rem',
+            }}>
               <img
                 src={plan.image}
                 alt={plan.name}
                 className="plan-image"
                 style={{
-                  width: '90px',
-                  height: '90px',
+                  width: '160px',
+                  height: '160px',
                   objectFit: 'cover',
-                  borderRadius: '12px',
+                  borderRadius: '18px',
                   background: '#e0f7ef',
-                  boxShadow: '0 2px 8px rgba(34,197,94,0.10)'
+                  boxShadow: '0 2px 8px rgba(34,197,94,0.10)',
+                  marginBottom: '1.2rem',
+                  display: 'block',
                 }}
                 onError={e => { e.target.onerror = null; e.target.src = '/static/placeholder.jpg'; }}
               />
-              <div className="plan-info">
-                <div className="plan-name">{plan.name}</div>
-                <div className="plan-desc">{plan.desc}</div>
-                <div className="plan-details">{plan.details}</div>
+              <div className="plan-info" style={{ width: '100%', textAlign: 'center' }}>
+                <div className="plan-name" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#181c24', marginBottom: '0.5rem' }}>{plan.name}</div>
+                <div className="plan-desc" style={{ fontSize: '1.08rem', color: '#2563eb', marginBottom: '0.3rem' }}>{plan.desc}</div>
+                <div className="plan-details" style={{ fontSize: '0.99rem', color: '#64748b', marginBottom: '0.7rem' }}>{plan.details}</div>
                 <button
                   className="plan-learn-btn"
+                  style={{
+                    marginTop: '0.7rem',
+                    background: 'linear-gradient(90deg, #22c55e 60%, #2563eb 100%)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '10px',
+                    padding: '0.7rem 1.5rem',
+                    fontSize: '1.08rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 4px rgba(34,197,94,0.08)',
+                    transition: 'background 0.18s, box-shadow 0.18s, transform 0.12s',
+                  }}
                   onClick={() => navigate('/plans', { state: { planName: plan.name } })}
                 >
                   Learn More
