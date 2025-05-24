@@ -201,6 +201,11 @@ export default function InvestmentPlans({ user, token }) {
             <div>Expected Profit: <b>{plan.profit}</b></div>
             <div>Duration: <b>{plan.duration}</b></div>
             <div className="plan-outcome">{plan.outcome}</div>
+            {plan.name === 'Starter Plan' && (
+              <div style={{ color: '#388e3c', marginTop: 8, fontSize: '1.01rem' }}>
+                <b>How it works:</b> Your investment helps fund solar energy projects. We use your funds to install and operate solar panels, generating clean electricity. The returns you earn come from the sale of this green energy, supporting a sustainable future while you earn daily profits.
+              </div>
+            )}
             <button 
               className="buy-btn" 
               onClick={() => handleBuy(plan)}

@@ -119,18 +119,18 @@ router.post('/process-commission', auth, async (req, res) => {
     }
 
     // Determine commission rate by level
-    let commissionRate = 0.03;
-    if (referrer.referralLevel >= 3) commissionRate = 0.10;
+    let commissionRate = 0.03; // Default for level 3
+    if (referrer.referralLevel === 1) commissionRate = 0.10;
     else if (referrer.referralLevel === 2) commissionRate = 0.05;
-    // else Level 1: 0.03
+    // else Level 3: 0.03
     const commission = amount * commissionRate;
 
     // Update referrer's earnings and points
     let newPoints = referrer.referralPoints + 1;
     let newLevel = referrer.referralLevel;
-    if (newPoints >= 20) newLevel = 3;
+    if (newPoints >= 20) newLevel = 1;
     else if (newPoints >= 5) newLevel = 2;
-    else newLevel = 1;
+    else newLevel = 3;
 
     await prisma.user.update({
       where: { id: referrer.id },

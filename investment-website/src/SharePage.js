@@ -39,12 +39,12 @@ const SharePage = () => {
 
   // Level info
   const levelInfo = [
-    { level: 1, min: 0, max: 4, rate: 3 },
+    { level: 3, min: 0, max: 4, rate: 3 },
     { level: 2, min: 5, max: 19, rate: 5 },
-    { level: 3, min: 20, max: Infinity, rate: 10 },
+    { level: 1, min: 20, max: Infinity, rate: 10 },
   ];
   const currentLevel = levelInfo.find(l => referralLevel === l.level) || levelInfo[0];
-  const nextLevel = levelInfo.find(l => l.level === referralLevel + 1);
+  const nextLevel = levelInfo.find(l => l.level === referralLevel - 1);
   const pointsToNext = nextLevel ? nextLevel.min - referralPoints : null;
   let progress = 1;
   if (nextLevel) {
