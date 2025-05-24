@@ -63,7 +63,20 @@ export default function HomePage() {
         <div className="plans-list">
           {plans.map(plan => (
             <div className="plan-card" key={plan.name}>
-              <img src={plan.image} alt={plan.name} className="plan-image" />
+              <img
+                src={plan.image}
+                alt={plan.name}
+                className="plan-image"
+                style={{
+                  width: '90px',
+                  height: '90px',
+                  objectFit: 'cover',
+                  borderRadius: '12px',
+                  background: '#e0f7ef',
+                  boxShadow: '0 2px 8px rgba(34,197,94,0.10)'
+                }}
+                onError={e => { e.target.onerror = null; e.target.src = '/static/placeholder.jpg'; }}
+              />
               <div className="plan-info">
                 <div className="plan-name">{plan.name}</div>
                 <div className="plan-desc">{plan.desc}</div>
