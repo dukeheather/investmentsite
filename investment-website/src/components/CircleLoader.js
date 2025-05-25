@@ -7,4 +7,6 @@ export default function CircleLoader() {
       <div className="circle-loader"></div>
     </div>
   );
-} 
+}
+
+export { CircleLoader }; 

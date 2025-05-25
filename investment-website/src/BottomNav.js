@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './BottomNav.css';
-import { House, CalendarBlank, SquaresFour, ShareNetwork, User } from 'phosphor-react';
+import { House, CalendarBlank, SquaresFour, ShareNetwork, User, UsersThree } from 'phosphor-react';
 
 const navItems = [
   {
@@ -28,6 +28,11 @@ const navItems = [
     label: 'Profile',
     path: '/profile',
     icon: (active) => <User size={32} weight={active ? 'fill' : 'regular'} color={active ? '#f59e42' : '#f59e42'} style={active ? { background: 'linear-gradient(90deg, #fef9c3 60%, #f59e42 100%)', borderRadius: 12, padding: 4 } : {}} />,
+  },
+  {
+    label: 'Team',
+    path: '/my-team',
+    icon: (active) => <UsersThree size={32} weight={active ? 'fill' : 'regular'} color={active ? '#a855f7' : '#a855f7'} style={active ? { background: 'linear-gradient(90deg, #ede9fe 60%, #a855f7 100%)', borderRadius: 12, padding: 4 } : {}} />,
   },
 ];
 
