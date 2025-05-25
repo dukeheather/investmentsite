@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
 import AdminManualTopups from './AdminManualTopups';
+import AdminWithdrawals from './AdminWithdrawals';
 
 export default function AdminDashboard({ token }) {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -86,6 +87,7 @@ export default function AdminDashboard({ token }) {
       <div className="admin-tabs">
         <button className={tab === 'investments' ? 'active' : ''} onClick={() => setTab('investments')}>Pending Investments</button>
         <button className={tab === 'manual-topups' ? 'active' : ''} onClick={() => setTab('manual-topups')}>Manual Top-ups</button>
+        <button className={tab === 'withdrawals' ? 'active' : ''} onClick={() => setTab('withdrawals')}>Withdrawals</button>
       </div>
       {tab === 'investments' && (
         <>
@@ -173,6 +175,9 @@ export default function AdminDashboard({ token }) {
       )}
       {tab === 'manual-topups' && (
         <AdminManualTopups token={token} />
+      )}
+      {tab === 'withdrawals' && (
+        <AdminWithdrawals token={token} />
       )}
     </div>
   );

@@ -483,4 +483,83 @@ router.get('/api/referral-code', async (req, res) => {
   }
 });
 
+// List all pending withdrawals
+router.get('/api/admin/pending-withdrawals', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  if (!await isAdmin(userId)) return res.status(403).json({ error: 'Forbidden: Admin access required' });
+
+  try {
+    const withdrawals = await prisma.walletTransaction.findMany({
+      where: { type: 'withdrawal', status: 'pending' },
+      include: { user: { select: { email: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json({ withdrawals });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch withdrawals' });
+  }
+});
+
+// POST /api/wallet/withdraw
+router.post('/api/wallet/withdraw', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  const { amount, upi } = req.body;
+  if (!amount || isNaN(amount) || Number(amount) <= 0) {
+    return res.status(400).json({ error: 'Enter a valid amount' });
+  }
+  if (!upi) {
+    return res.status(400).json({ error: 'Enter your UPI ID or bank details' });
+  }
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user || user.walletBalance < Number(amount)) {
+    return res.status(400).json({ error: 'Insufficient wallet balance' });
+  }
+  try {
+    // Create a pending withdrawal transaction (do not deduct yet)
+    await prisma.walletTransaction.create({
+      data: {
+        userId,
+        amount: Number(amount),
+        type: 'withdrawal',
+        status: 'pending',
+        gatewayTxnId: null,
+        screenshotUrl: null,
+        upi,
+      },
+    });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to submit withdrawal' });
+  }
+});
+
+// Approve/reject withdrawal
+router.post('/api/admin/withdrawal/verify', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  if (!await isAdmin(userId)) return res.status(403).json({ error: 'Forbidden: Admin access required' });
+  const { id, action } = req.body;
+  if (!id || !['approve', 'reject'].includes(action)) return res.status(400).json({ error: 'Invalid request' });
+  try {
+    const txn = await prisma.walletTransaction.findUnique({ where: { id: Number(id) } });
+    if (!txn || txn.status !== 'pending') return res.status(400).json({ error: 'Transaction not found or not pending' });
+    if (action === 'approve') {
+      // Deduct from user wallet on approval
+      const user = await prisma.user.findUnique({ where: { id: txn.userId } });
+      if (!user || user.walletBalance < txn.amount) {
+        return res.status(400).json({ error: 'User has insufficient balance for withdrawal' });
+      }
+      await prisma.user.update({ where: { id: txn.userId }, data: { walletBalance: { decrement: txn.amount } } });
+      await prisma.walletTransaction.update({ where: { id: txn.id }, data: { status: 'success' } });
+    } else {
+      await prisma.walletTransaction.update({ where: { id: txn.id }, data: { status: 'failed' } });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update withdrawal' });
+  }
+});
+
 module.exports = router;

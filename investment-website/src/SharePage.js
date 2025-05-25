@@ -46,11 +46,16 @@ const SharePage = () => {
   const currentLevel = levelInfo.find(l => referralLevel === l.level) || levelInfo[0];
   const nextLevel = levelInfo.find(l => l.level === referralLevel - 1);
   const pointsToNext = nextLevel ? nextLevel.min - referralPoints : null;
-  let progress = 1;
+  let progress = 0;
+  let isMaxLevel = false;
   if (nextLevel) {
     progress = (referralPoints - currentLevel.min) / (nextLevel.min - currentLevel.min);
     if (progress < 0) progress = 0;
     if (progress > 1) progress = 1;
+  } else if (referralLevel === 1 && referralPoints >= 20) {
+    // Only max if at highest level and enough points
+    progress = 1;
+    isMaxLevel = true;
   }
 
   return (
@@ -72,14 +77,14 @@ const SharePage = () => {
           <h3>Points</h3>
           <p className="amount">{referralPoints}</p>
           <div style={{ fontSize: '0.98rem', color: '#888', marginTop: 4 }}>
-            {nextLevel ? `${pointsToNext} to Level ${nextLevel.level}` : 'Max Level'}
+            {isMaxLevel ? 'Max Level' : nextLevel ? `${pointsToNext} to Level ${nextLevel.level}` : ''}
           </div>
           <div className="level-progress-bar-wrapper">
             <div className="level-progress-bar-bg">
               <div className="level-progress-bar-fill" style={{ width: `${progress * 100}%` }} />
             </div>
             <div className="level-progress-bar-label">
-              {nextLevel ? `${Math.round(progress * 100)}% to next level` : 'Max Level'}
+              {isMaxLevel ? 'Max Level' : nextLevel ? `${Math.round(progress * 100)}% to next level` : ''}
             </div>
           </div>
         </div>
