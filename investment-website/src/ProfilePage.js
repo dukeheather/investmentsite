@@ -169,9 +169,6 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
         <button className="profile-menu-item" onClick={() => navigate('/my-team')}>
           <span className="menu-icon">👥</span> My Team
         </button>
-        <button className="profile-menu-item" onClick={() => navigate('/teams')}>
-          <span className="menu-icon">👥</span> Teams
-        </button>
         <button className="profile-menu-item" onClick={() => navigate('/my-project')}>
           <span className="menu-icon">📄</span> My Project
         </button>

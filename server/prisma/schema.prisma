@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,98 +14,71 @@ datasource db {
 }
 
 model User {
-  id               Int                 @id @default(autoincrement())
-  email            String              @unique
-  password         String
-  phone            String?             @unique
-  isAdmin          Boolean             @default(false)
-  walletBalance    Float               @default(0)
-  referralCode     String?             @unique
-  referredBy       String?
-  referralEarnings Float               @default(0)
-  referralPoints   Int                 @default(0)
-  referralLevel    Int                 @default(1)
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @default(now()) @updatedAt
-  investments      Investment[]
-  referrals        Referral[]
-  createdTeams     Team[]              @relation("TeamCreator")
-  teams            TeamMember[]
-  walletTxns       WalletTransaction[]
+  id             Int                @id @default(autoincrement())
+  email          String             @unique
+  password       String
+  phone          String?            @unique
+  isAdmin        Boolean            @default(false)
+  investments    Investment[]
+  walletBalance  Float              @default(0)
+  walletTxns     WalletTransaction[]
+  referralCode   String?            @unique
+  referredBy     String?
+  referralEarnings Float            @default(0)
+  referrals      Referral[]
+  referralPoints Int                @default(0)
+  referralLevel  Int                @default(1)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt @default(now())
 }
 
 model Investment {
-  id            Int       @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   userId        Int
+  user          User     @relation(fields: [userId], references: [id])
   planName      String
   amount        Float
-  status        String    @default("pending_verification")
+  status        String   @default("pending_verification") // pending_verification, running, rejected
   transactionId String
   notes         String?
   screenshotUrl String?
   adminNotes    String?
   verifiedAt    DateTime?
-  verifiedBy    Int?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  user          User      @relation(fields: [userId], references: [id])
+  verifiedBy    Int?     // ID of the admin who verified/rejected the investment
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
 }
 
 model WalletTransaction {
   id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
   userId        Int
   amount        Float
-  type          String
-  status        String
+  type          String   // 'topup' or 'deduct'
+  status        String   // 'pending', 'success', 'failed'
   gatewayTxnId  String?
   screenshotUrl String?
   createdAt     DateTime @default(now())
-  user          User     @relation(fields: [userId], references: [id])
 }
 
 model GiftCode {
-  id        Int       @id @default(autoincrement())
-  code      String    @unique
-  amount    Float
-  isUsed    Boolean   @default(false)
-  usedBy    Int?
-  usedAt    DateTime?
-  createdAt DateTime  @default(now())
-  expiresAt DateTime?
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  amount      Float
+  isUsed      Boolean  @default(false)
+  usedBy      Int?
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
 }
 
 model Referral {
-  id           Int      @id @default(autoincrement())
-  referrerId   Int
-  referredUser String
-  commission   Float    @default(0)
-  status       String   @default("pending")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
-  referrer     User     @relation(fields: [referrerId], references: [id])
-}
-
-model Team {
-  id          Int          @id @default(autoincrement())
-  name        String
-  description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  creatorId   Int
-  createdBy   User         @relation("TeamCreator", fields: [creatorId], references: [id])
-  members     TeamMember[]
-}
-
-model TeamMember {
-  id       Int      @id @default(autoincrement())
-  teamId   Int
-  userId   Int
-  role     String   @default("member")
-  joinedAt DateTime @default(now())
-  points   Int      @default(0)
-  level    Int      @default(1)
-  team     Team     @relation(fields: [teamId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
-
-  @@unique([teamId, userId])
+  id            Int      @id @default(autoincrement())
+  referrer      User     @relation(fields: [referrerId], references: [id])
+  referrerId    Int
+  referredUser  String   // Email of the referred user
+  commission    Float    @default(0)
+  status        String   @default("pending") // pending, active, completed
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
 }
