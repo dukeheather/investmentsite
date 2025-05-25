@@ -185,6 +185,63 @@ export default function ProfilePage({ setUser, setToken, user: userProp }) {
           <span className="menu-icon">↩️</span> Signout
         </button>
       </div>
+      <div className="bonus-task-section" style={{
+        background: '#f5f6fa',
+        borderRadius: 18,
+        boxShadow: '0 2px 12px rgba(34,197,94,0.06)',
+        padding: '1.5rem 1.2rem',
+        margin: '1.5rem 0',
+        maxWidth: 420,
+        width: '100%',
+        textAlign: 'left',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="bonus" style={{ width: 36, height: 36 }} />
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 18, color: '#232526' }}>Total bonus</div>
+            <div style={{ fontWeight: 900, fontSize: 28, color: '#22c55e', marginTop: 2 }}>₹0</div>
+          </div>
+        </div>
+        <div style={{ fontWeight: 600, color: '#64748b', marginBottom: 10, fontSize: 15 }}>
+          <span role="img" aria-label="clock">⏰</span> Official limited-time event
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {[
+            { req: 670, bonus: 18 },
+            { req: 1280, bonus: 62 },
+            { req: 2750, bonus: 176 },
+            { req: 5200, bonus: 395 },
+          ].map((task, idx) => (
+            <div key={idx} style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: '#fff',
+              borderRadius: 12,
+              padding: '1rem 1.2rem',
+              boxShadow: '0 1px 4px rgba(34,197,94,0.04)',
+              marginBottom: 2,
+            }}>
+              <div>
+                <div style={{ fontWeight: 600, color: '#232526', fontSize: 15 }}>Invite subordinates to purchase ₹{task.req} products</div>
+                <div style={{ fontWeight: 800, color: '#22c55e', fontSize: 20, marginTop: 2 }}>₹{task.bonus}</div>
+                <div style={{ color: '#a3a3a3', fontSize: 13, marginTop: 2 }}>Available: 0</div>
+              </div>
+              <button style={{
+                background: '#a3a3a3',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.7rem 1.2rem',
+                fontWeight: 700,
+                fontSize: 15,
+                cursor: 'pointer',
+                marginLeft: 12,
+              }}>To Complete</button>
+            </div>
+          ))}
+        </div>
+      </div>
       <section className="wallet-transactions-section">
         <h2><FaWallet style={{ marginRight: 8 }} />Wallet Transactions</h2>
         {txnLoading && <CircleLoader />}
