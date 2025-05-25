@@ -562,4 +562,81 @@ router.post('/api/admin/withdrawal/verify', async (req, res) => {
   }
 });
 
+// TEAM ENDPOINTS
+// POST /api/team/create
+router.post('/api/team/create', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  const { name } = req.body;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    // Check if user is already in a team
+    const existing = await prisma.teamMember.findFirst({ where: { userId } });
+    if (existing) return res.status(400).json({ error: 'Already in a team' });
+    // Create team
+    const team = await prisma.team.create({
+      data: { name, ownerId: userId }
+    });
+    // Add owner as first member
+    await prisma.teamMember.create({
+      data: { teamId: team.id, userId, level: 1, points: 0 }
+    });
+    res.json({ team });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to create team' });
+  }
+});
+// POST /api/team/join
+router.post('/api/team/join', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  const { teamId } = req.body;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    // Check if user is already in a team
+    const existing = await prisma.teamMember.findFirst({ where: { userId } });
+    if (existing) return res.status(400).json({ error: 'Already in a team' });
+    // Add to team
+    await prisma.teamMember.create({
+      data: { teamId, userId, level: 3, points: 0 }
+    });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to join team' });
+  }
+});
+// GET /api/team
+router.get('/api/team', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const member = await prisma.teamMember.findFirst({ where: { userId }, include: { team: true } });
+    if (!member) return res.json({ team: null });
+    // Get all members
+    const members = await prisma.teamMember.findMany({
+      where: { teamId: member.teamId },
+      include: { user: true }
+    });
+    // Calculate team points and levels
+    let totalPoints = 0;
+    let totalIncome = 0;
+    members.forEach(m => {
+      totalPoints += m.points;
+      totalIncome += m.user.income || 0;
+    });
+    res.json({ team: member.team, members, totalPoints, totalIncome });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch team' });
+  }
+});
+// POST /api/team/leave
+router.post('/api/team/leave', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    await prisma.teamMember.deleteMany({ where: { userId } });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to leave team' });
+  }
+});
+
 module.exports = router;

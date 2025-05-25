@@ -14,39 +14,41 @@ datasource db {
 }
 
 model User {
-  id             Int                @id @default(autoincrement())
-  email          String             @unique
-  password       String
-  phone          String?            @unique
-  isAdmin        Boolean            @default(false)
-  investments    Investment[]
-  walletBalance  Float              @default(0)
-  walletTxns     WalletTransaction[]
-  referralCode   String?            @unique
-  referredBy     String?
-  referralEarnings Float            @default(0)
-  referrals      Referral[]
-  referralPoints Int                @default(0)
-  referralLevel  Int                @default(1)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt @default(now())
+  id               Int                 @id @default(autoincrement())
+  email            String              @unique
+  password         String
+  phone            String?             @unique
+  isAdmin          Boolean             @default(false)
+  investments      Investment[]
+  walletBalance    Float               @default(0)
+  walletTxns       WalletTransaction[]
+  referralCode     String?             @unique
+  referredBy       String?
+  referralEarnings Float               @default(0)
+  referrals        Referral[]
+  referralPoints   Int                 @default(0)
+  referralLevel    Int                 @default(1)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @default(now()) @updatedAt
+  teams            TeamMember[]
+  ownedTeams       Team[]              @relation("UserOwnedTeams")
 }
 
 model Investment {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   userId        Int
-  user          User     @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id])
   planName      String
   amount        Float
-  status        String   @default("pending_verification") // pending_verification, running, rejected
+  status        String    @default("pending_verification") // pending_verification, running, rejected
   transactionId String
   notes         String?
   screenshotUrl String?
   adminNotes    String?
   verifiedAt    DateTime?
-  verifiedBy    Int?     // ID of the admin who verified/rejected the investment
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt @default(now())
+  verifiedBy    Int? // ID of the admin who verified/rejected the investment
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
 }
 
 model WalletTransaction {
@@ -54,31 +56,53 @@ model WalletTransaction {
   user          User     @relation(fields: [userId], references: [id])
   userId        Int
   amount        Float
-  type          String   // 'topup' or 'deduct'
-  status        String   // 'pending', 'success', 'failed'
+  type          String // 'topup' or 'deduct'
+  status        String // 'pending', 'success', 'failed'
   gatewayTxnId  String?
   screenshotUrl String?
   createdAt     DateTime @default(now())
 }
 
 model GiftCode {
-  id          Int      @id @default(autoincrement())
-  code        String   @unique
-  amount      Float
-  isUsed      Boolean  @default(false)
-  usedBy      Int?
-  usedAt      DateTime?
-  createdAt   DateTime @default(now())
-  expiresAt   DateTime?
+  id        Int       @id @default(autoincrement())
+  code      String    @unique
+  amount    Float
+  isUsed    Boolean   @default(false)
+  usedBy    Int?
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
 }
 
 model Referral {
-  id            Int      @id @default(autoincrement())
-  referrer      User     @relation(fields: [referrerId], references: [id])
-  referrerId    Int
-  referredUser  String   // Email of the referred user
-  commission    Float    @default(0)
-  status        String   @default("pending") // pending, active, completed
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt @default(now())
+  id           Int      @id @default(autoincrement())
+  referrer     User     @relation(fields: [referrerId], references: [id])
+  referrerId   Int
+  referredUser String // Email of the referred user
+  commission   Float    @default(0)
+  status       String   @default("pending") // pending, active, completed
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model Team {
+  id        Int          @id @default(autoincrement())
+  name      String
+  ownerId   Int
+  owner     User         @relation("UserOwnedTeams", fields: [ownerId], references: [id])
+  members   TeamMember[]
+  createdAt DateTime     @default(now())
+}
+
+model TeamMember {
+  id       Int      @id @default(autoincrement())
+  teamId   Int
+  userId   Int
+  team     Team     @relation(fields: [teamId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  level    Int      @default(1)
+  points   Int      @default(0)
+  joinedAt DateTime @default(now())
+
+  @@unique([teamId, userId])
 }
