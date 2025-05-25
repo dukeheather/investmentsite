@@ -582,7 +582,8 @@ router.post('/api/team/create', async (req, res) => {
     });
     res.json({ team });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to create team' });
+    console.error('Create team error:', e);
+    res.status(500).json({ error: e.message || 'Failed to create team' });
   }
 });
 // POST /api/team/join
