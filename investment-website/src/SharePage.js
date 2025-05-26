@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './SharePage.css';
 
-const SharePage = () => {
+const SharePage = ({ token }) => {
   const [referralCode, setReferralCode] = useState('');
   const [referralEarnings, setReferralEarnings] = useState(0);
   const [referrals, setReferrals] = useState([]);
@@ -12,24 +12,38 @@ const SharePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchReferralData = async () => {
+    // Fetch referral code (reliable, like ProfilePage)
+    const fetchReferralCode = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/api/referrals', {
-          headers: { Authorization: `Bearer ${token}` }
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/referral-code', {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setReferralCode(response.data.referralCode);
-        setReferralEarnings(response.data.referralEarnings);
-        setReferrals(response.data.referrals);
-        setReferralLevel(response.data.referralLevel || 1);
-        setReferralPoints(response.data.referralPoints || 0);
+        const data = await res.json();
+        setReferralCode(data.referralCode);
       } catch (error) {
-        console.error('Error fetching referral data:', error);
+        setReferralCode('');
       }
     };
-
-    fetchReferralData();
-  }, []);
+    // Fetch referral stats (optional, for earnings/points/list)
+    const fetchReferralStats = async () => {
+      try {
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/referrals', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setReferralEarnings(data.referralEarnings);
+        setReferrals(data.referrals);
+        setReferralLevel(data.referralLevel || 1);
+        setReferralPoints(data.referralPoints || 0);
+      } catch (error) {
+        // ignore
+      }
+    };
+    if (token) {
+      fetchReferralCode();
+      fetchReferralStats();
+    }
+  }, [token]);
 
   const copyReferralLink = () => {
     const referralLink = `${window.location.origin}/register?ref=${referralCode}`;

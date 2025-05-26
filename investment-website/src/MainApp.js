@@ -156,7 +156,7 @@ export default function MainApp() {
           <Route path="/channel" element={<ChannelPage />} />
           <Route path="/recharge" element={<RechargeWalletPage token={token} />} />
           <Route path="/manual-payment" element={<ManualPaymentPage token={token} />} />
-          <Route path="/share" element={<SharePage />} />
+          <Route path="/share" element={<SharePage token={token} />} />
           <Route path="/my-team" element={<TeamPage user={user} token={token} />} />
         </Routes>
       </div>

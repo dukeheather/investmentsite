@@ -118,7 +118,9 @@ export default function TeamPage({ user, token }) {
           <FaUsers size={32} color="#a855f7" />
           <span className="team-title">Team</span>
         </div>
-        {team ? (
+        {loading ? (
+          <div style={{ width: '100%', textAlign: 'center', padding: '2rem 0' }}><CircleLoader /></div>
+        ) : team ? (
           <>
             <div className="team-name-row">{team.name} <span className="team-id">(ID: {team.id})</span></div>
             <div className="team-stats-row">
