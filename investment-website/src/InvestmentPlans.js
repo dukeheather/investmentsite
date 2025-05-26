@@ -159,10 +159,10 @@ export default function InvestmentPlans({ user, token }) {
             <div>Daily Earnings: <b>{plan.daily}</b></div>
             <button 
               className="buy-btn" 
-              onClick={() => handleBuy(plan)}
-              disabled={walletBalance < plan.min}
+              onClick={() => planType === 'normal' ? handleBuy(plan) : null}
+              disabled={planType === 'vip' ? true : walletBalance < plan.min}
             >
-              {walletBalance < plan.min ? 'Insufficient Balance' : 'Buy / Invest'}
+              {planType === 'vip' ? 'Coming Soon' : (walletBalance < plan.min ? 'Insufficient Balance' : 'Buy / Invest')}
             </button>
           </div>
         ))}

@@ -43,8 +43,11 @@ const SharePage = () => {
     { level: 2, min: 5, max: 19, rate: 5 },
     { level: 1, min: 20, max: Infinity, rate: 10 },
   ];
-  const currentLevel = levelInfo.find(l => referralLevel === l.level) || levelInfo[0];
-  const nextLevel = levelInfo.find(l => l.level === referralLevel - 1);
+  // Always start at level 3 if points are 0 or less
+  let effectiveLevel = referralLevel;
+  if (referralPoints === 0) effectiveLevel = 3;
+  const currentLevel = levelInfo.find(l => effectiveLevel === l.level) || levelInfo[0];
+  const nextLevel = levelInfo.find(l => l.level === effectiveLevel - 1);
   const pointsToNext = nextLevel ? nextLevel.min - referralPoints : null;
   let progress = 0;
   let isMaxLevel = false;
@@ -52,7 +55,7 @@ const SharePage = () => {
     progress = (referralPoints - currentLevel.min) / (nextLevel.min - currentLevel.min);
     if (progress < 0) progress = 0;
     if (progress > 1) progress = 1;
-  } else if (referralLevel === 1 && referralPoints >= 20) {
+  } else if (effectiveLevel === 1 && referralPoints >= 20) {
     // Only max if at highest level and enough points
     progress = 1;
     isMaxLevel = true;
@@ -124,9 +127,9 @@ const SharePage = () => {
       <div className="referral-section">
         <h3>Your Referral Code</h3>
         <div className="referral-code-display">
-          <span>{referralCode}</span>
+          <span>{referralCode ? referralCode : 'N/A'}</span>
           <button onClick={() => {
-            navigator.clipboard.writeText(referralCode);
+            if (referralCode) navigator.clipboard.writeText(referralCode);
           }} className="copy-btn">
             Copy
           </button>

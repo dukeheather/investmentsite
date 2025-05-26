@@ -133,6 +133,42 @@ th {
 }
 
 @media (max-width: 600px) {
+  .share-page {
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  .bonus-task-section,
+  .referral-section,
+  .stat-card,
+  .referral-code-section,
+  .referral-list {
+    max-width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .bonus-task-section {
+    padding: 1rem 0.5rem;
+  }
+  .referral-section {
+    padding: 1rem 0.5rem;
+  }
+  .stat-card {
+    padding: 1rem 0.5rem;
+  }
+  .referral-list {
+    padding: 1rem 0.5rem;
+  }
+  .referral-table {
+    overflow-x: auto;
+    width: 100%;
+  }
+  table {
+    min-width: 480px;
+  }
   .referral-stats {
     grid-template-columns: 1fr;
   }
