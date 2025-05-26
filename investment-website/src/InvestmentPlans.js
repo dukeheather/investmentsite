@@ -209,7 +209,7 @@ export default function InvestmentPlans({ user, token }) {
         {(planType === 'normal' ? investmentPlans : vipPlans).map(plan => (
           <div className="plan-card" key={plan.id}>
             {plan.image && (
-              <img src={plan.image} alt={plan.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 14, marginBottom: 12, background: '#e0f7ef', boxShadow: '0 1px 4px rgba(34,197,94,0.08)' }} />
+              <img src={plan.image} alt={plan.name} style={{ width: '100%', height: 110, objectFit: 'cover', borderRadius: 16, marginBottom: 16, background: '#e0f7ef', boxShadow: '0 1px 4px rgba(34,197,94,0.08)' }} />
             )}
             <h2>{plan.name}</h2>
             <div>Investment Amount: <b>₹{plan.min}</b></div>
