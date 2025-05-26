@@ -5,14 +5,14 @@ import CircleLoader from './components/CircleLoader';
 import { FaRupeeSign } from 'react-icons/fa';
 
 const investmentPlans = [
-  { id: 'A', name: 'Plan A', min: 350, max: 350, daily: `₹${(350 * 0.10).toFixed(2)} (10%)`, duration: '30 days' },
-  { id: 'B', name: 'Plan B', min: 1000, max: 1000, daily: `₹${(1000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'C', name: 'Plan C', min: 2500, max: 2500, daily: `₹${(2500 * 0.10).toFixed(2)} (10%)` },
-  { id: 'D', name: 'Plan D', min: 5000, max: 5000, daily: `₹${(5000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'E', name: 'Plan E', min: 10000, max: 10000, daily: `₹${(10000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'F', name: 'Plan F', min: 25000, max: 25000, daily: `₹${(25000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'G', name: 'Plan G', min: 50000, max: 50000, daily: `₹${(50000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'H', name: 'Plan H', min: 100000, max: 100000, daily: `₹${(100000 * 0.10).toFixed(2)} (10%)` },
+  { id: 'A', name: 'Solar Energy - Rural', min: 350, max: 350, daily: `₹${(350 * 0.10).toFixed(2)} (10%)`, duration: '30 days', image: '/static/solar-rural.jpg' },
+  { id: 'B', name: 'Solar Powered Street Lights', min: 1000, max: 1000, daily: `₹${(1000 * 0.08).toFixed(2)} (8%)`, image: '/static/solar-street-lights.jpg' },
+  { id: 'C', name: 'EV Charging Station Urban', min: 2500, max: 2500, daily: `₹${(2500 * 0.08).toFixed(2)} (8%)`, image: '/static/ev-charging-urban.jpg' },
+  { id: 'D', name: 'Eco-Urban Packaging Industry', min: 5000, max: 5000, daily: `₹${(5000 * 0.08).toFixed(2)} (8%)`, image: '/static/eco-urban-packaging.jpg' },
+  { id: 'E', name: 'Plan E', min: 10000, max: 10000, daily: `₹${(10000 * 0.08).toFixed(2)} (8%)` },
+  { id: 'F', name: 'Plan F', min: 25000, max: 25000, daily: `₹${(25000 * 0.08).toFixed(2)} (8%)` },
+  { id: 'G', name: 'Plan G', min: 50000, max: 50000, daily: `₹${(50000 * 0.08).toFixed(2)} (8%)` },
+  { id: 'H', name: 'Plan H', min: 100000, max: 100000, daily: `₹${(100000 * 0.08).toFixed(2)} (8%)` },
 ];
 const vipPlans = [
   { id: 'VIP1', name: 'VIP 200', min: 200, max: 200, daily: `₹${(200 * 0.10).toFixed(2)} (10%)` },
@@ -160,16 +160,6 @@ export default function InvestmentPlans({ user, token }) {
 
   return (
     <div className="plans-page">
-      <div style={{ display: 'flex', gap: 18, marginBottom: 18, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px rgba(34,197,94,0.07)', padding: '1.1rem 2.2rem', minWidth: 160, textAlign: 'center', marginBottom: 8 }}>
-          <div style={{ color: '#22c55e', fontWeight: 700, fontSize: '1.13rem', marginBottom: 2 }}>Daily Income</div>
-          <div style={{ fontWeight: 900, fontSize: '1.45rem', color: '#181c24' }}><FaRupeeSign style={{marginRight:4}} />{dailyIncome.toFixed(2)}</div>
-        </div>
-        <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px rgba(34,197,94,0.07)', padding: '1.1rem 2.2rem', minWidth: 160, textAlign: 'center', marginBottom: 8 }}>
-          <div style={{ color: '#22c55e', fontWeight: 700, fontSize: '1.13rem', marginBottom: 2 }}>Total Income</div>
-          <div style={{ fontWeight: 900, fontSize: '1.45rem', color: '#181c24' }}><FaRupeeSign style={{marginRight:4}} />{totalIncome.toFixed(2)}</div>
-        </div>
-      </div>
       <div className="wallet-balance-display">
         Wallet Balance: <span className="balance-amount">₹{walletBalance.toFixed(2)}</span>
       </div>
@@ -218,6 +208,9 @@ export default function InvestmentPlans({ user, token }) {
       <div className="plans-list">
         {(planType === 'normal' ? investmentPlans : vipPlans).map(plan => (
           <div className="plan-card" key={plan.id}>
+            {plan.image && (
+              <img src={plan.image} alt={plan.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 14, marginBottom: 12, background: '#e0f7ef', boxShadow: '0 1px 4px rgba(34,197,94,0.08)' }} />
+            )}
             <h2>{plan.name}</h2>
             <div>Investment Amount: <b>₹{plan.min}</b></div>
             {plan.duration && <div>Duration: <b>{plan.duration}</b></div>}
