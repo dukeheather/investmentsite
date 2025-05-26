@@ -32,6 +32,7 @@ export default function InvestmentPlans({ user, token }) {
   const [walletBalance, setWalletBalance] = useState(0);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingForm, setPendingForm] = useState(null);
+  const [planType, setPlanType] = useState('normal'); // 'normal' or 'vip'
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -132,9 +133,25 @@ export default function InvestmentPlans({ user, token }) {
       <div className="wallet-balance-display">
         Wallet Balance: <span className="balance-amount">₹{walletBalance.toFixed(2)}</span>
       </div>
-      <h2 style={{ color: '#22c55e', fontWeight: 800, margin: '1.2rem 0 0.7rem 0' }}>Investment Plans</h2>
+      <div className="plan-type-toggle">
+        <button 
+          className={`toggle-btn ${planType === 'normal' ? 'active' : ''}`}
+          onClick={() => setPlanType('normal')}
+        >
+          Normal Plans
+        </button>
+        <button 
+          className={`toggle-btn ${planType === 'vip' ? 'active' : ''}`}
+          onClick={() => setPlanType('vip')}
+        >
+          VIP Plans
+        </button>
+      </div>
+      <h2 style={{ color: planType === 'normal' ? '#22c55e' : '#f59e42', fontWeight: 800, margin: '1.2rem 0 0.7rem 0' }}>
+        {planType === 'normal' ? 'Investment Plans' : 'VIP Plans'}
+      </h2>
       <div className="plans-list">
-        {investmentPlans.map(plan => (
+        {(planType === 'normal' ? investmentPlans : vipPlans).map(plan => (
           <div className="plan-card" key={plan.id}>
             <h2>{plan.name}</h2>
             <div>Investment Amount: <b>₹{plan.min}</b></div>
@@ -150,23 +167,7 @@ export default function InvestmentPlans({ user, token }) {
           </div>
         ))}
       </div>
-      <h2 style={{ color: '#f59e42', fontWeight: 800, margin: '2.2rem 0 0.7rem 0' }}>VIP Plans</h2>
-      <div className="plans-list">
-        {vipPlans.map(plan => (
-          <div className="plan-card" key={plan.id}>
-            <h2>{plan.name}</h2>
-            <div>Investment Amount: <b>₹{plan.min}</b></div>
-            <div>Daily Earnings: <b>{plan.daily}</b></div>
-            <button 
-              className="buy-btn" 
-              onClick={() => handleBuy(plan)}
-              disabled={walletBalance < plan.min}
-            >
-              {walletBalance < plan.min ? 'Insufficient Balance' : 'Buy / Invest'}
-            </button>
-          </div>
-        ))}
-      </div>
+      
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -197,7 +198,7 @@ export default function InvestmentPlans({ user, token }) {
                     {message.replace(/\$/g, '₹').replace(/\$/g, '₹').replace(/\$/g, '₹').replace(/\$/g, '₹').replace(/\$/g, '₹')}
                   </div>
                 )}
-                <div className="modal-buttons">
+                <div>
                   <button 
                     type="submit" 
                     className="buy-btn" 

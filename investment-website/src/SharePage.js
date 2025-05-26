@@ -60,9 +60,80 @@ const SharePage = () => {
 
   return (
     <div className="share-page">
-      <div className="share-header">
-        <h2>Share & Earn</h2>
-        <p>Invite friends and earn 2-3% commission on their recharges!</p>
+      {/* Total Bonus Section (moved from ProfilePage) */}
+      <div className="bonus-task-section" style={{
+        background: '#f5f6fa',
+        borderRadius: 18,
+        boxShadow: '0 2px 12px rgba(34,197,94,0.06)',
+        padding: '1.5rem 1.2rem',
+        margin: '1.5rem 0',
+        maxWidth: 420,
+        width: '100%',
+        textAlign: 'left',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="bonus" style={{ width: 36, height: 36 }} />
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 18, color: '#232526' }}>Total bonus</div>
+            <div style={{ fontWeight: 900, fontSize: 28, color: '#22c55e', marginTop: 2 }}>₹0</div>
+          </div>
+        </div>
+        <div style={{ fontWeight: 600, color: '#64748b', marginBottom: 10, fontSize: 15 }}>
+          <span role="img" aria-label="clock">⏰</span> Official limited-time event
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {[
+            { req: 670, bonus: 18 },
+            { req: 1280, bonus: 62 },
+            { req: 2750, bonus: 176 },
+            { req: 5200, bonus: 395 },
+          ].map((task, idx) => (
+            <div key={idx} style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: '#fff',
+              borderRadius: 12,
+              padding: '1rem 1.2rem',
+              boxShadow: '0 1px 4px rgba(34,197,94,0.04)',
+              marginBottom: 2,
+            }}>
+              <div>
+                <div style={{ fontWeight: 600, color: '#232526', fontSize: 15 }}>Invite subordinates to purchase ₹{task.req} products</div>
+                <div style={{ fontWeight: 800, color: '#22c55e', fontSize: 20, marginTop: 2 }}>₹{task.bonus}</div>
+                <div style={{ color: '#a3a3a3', fontSize: 13, marginTop: 2 }}>Available: 0</div>
+              </div>
+              <button style={{
+                background: '#a3a3a3',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.7rem 1.2rem',
+                fontWeight: 700,
+                fontSize: 15,
+                cursor: 'pointer',
+                marginLeft: 12,
+              }}>To Complete</button>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Referral Code Section (moved from ProfilePage) */}
+      <div className="referral-section">
+        <h3>Your Referral Code</h3>
+        <div className="referral-code-display">
+          <span>{referralCode}</span>
+          <button onClick={() => {
+            navigator.clipboard.writeText(referralCode);
+          }} className="copy-btn">
+            Copy
+          </button>
+        </div>
+        <p className="referral-info">
+          Share this code with friends! When they register using your code, you'll get ₹50 in your wallet.
+        </p>
       </div>
 
       <div className="referral-stats">
@@ -72,6 +143,10 @@ const SharePage = () => {
           <div style={{ fontSize: '0.98rem', color: '#888', marginTop: 4 }}>
             {currentLevel.rate}% commission
           </div>
+          <div style={{ fontSize: '0.93rem', color: '#22c55e', marginTop: 8 }}>
+            {currentLevel.level === 3 && 'Start here!'}
+            {currentLevel.level === 1 && 'Highest Level!'}
+          </div>
         </div>
         <div className="stat-card">
           <h3>Points</h3>
@@ -79,7 +154,7 @@ const SharePage = () => {
           <div style={{ fontSize: '0.98rem', color: '#888', marginTop: 4 }}>
             {isMaxLevel ? 'Max Level' : nextLevel ? `${pointsToNext} to Level ${nextLevel.level}` : ''}
           </div>
-          <div className="level-progress-bar-wrapper">
+          <div className="level-progress-bar-wrapper" style={{ marginTop: 10 }}>
             <div className="level-progress-bar-bg">
               <div className="level-progress-bar-fill" style={{ width: `${progress * 100}%` }} />
             </div>
@@ -97,14 +172,6 @@ const SharePage = () => {
         <div className="stat-card">
           <h3>Total Referrals</h3>
           <p className="amount">{referrals.length}</p>
-        </div>
-      </div>
-
-      <div className="referral-code-section">
-        <h3>Your Referral Code</h3>
-        <div className="referral-code-box">
-          <span>{referralCode}</span>
-          <button onClick={copyReferralLink}>Copy Link</button>
         </div>
       </div>
 
