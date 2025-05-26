@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
+import { FaRupeeSign } from 'react-icons/fa';
 
 const investmentPlans = [
   { id: 'A', name: 'Plan A', min: 350, max: 350, daily: `₹${(350 * 0.10).toFixed(2)} (10%)`, duration: '30 days' },
@@ -34,9 +35,12 @@ export default function InvestmentPlans({ user, token }) {
   const [pendingForm, setPendingForm] = useState(null);
   const [planType, setPlanType] = useState('normal'); // 'normal' or 'vip'
   const navigate = useNavigate();
+  const [dailyIncome, setDailyIncome] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
 
   useEffect(() => {
     fetchWalletBalance();
+    fetchIncome();
   }, []);
 
   const fetchWalletBalance = async () => {
@@ -49,6 +53,32 @@ export default function InvestmentPlans({ user, token }) {
     } catch (err) {
       console.error('Failed to fetch wallet balance:', err);
     }
+  };
+
+  const fetchIncome = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/dashboard', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        let daily = 0;
+        let total = 0;
+        (data.activePlans || []).forEach(plan => {
+          if (plan.status === 'running') {
+            let rate = 0.05, duration = 30;
+            if (plan.planName === 'Starter Plan') { rate = 0.05; duration = 30; }
+            else if (plan.planName === 'VIP Plan') { rate = 0.08; duration = 20; }
+            else if (plan.planName === 'Pro Plan') { rate = 0.12; duration = 10; }
+            daily += plan.amount * rate;
+            total += plan.amount * rate * duration;
+          }
+        });
+        setDailyIncome(daily);
+        setTotalIncome(total);
+      }
+    } catch {}
   };
 
   const handleBuy = (plan) => {
@@ -130,6 +160,16 @@ export default function InvestmentPlans({ user, token }) {
 
   return (
     <div className="plans-page">
+      <div style={{ display: 'flex', gap: 18, marginBottom: 18, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px rgba(34,197,94,0.07)', padding: '1.1rem 2.2rem', minWidth: 160, textAlign: 'center', marginBottom: 8 }}>
+          <div style={{ color: '#22c55e', fontWeight: 700, fontSize: '1.13rem', marginBottom: 2 }}>Daily Income</div>
+          <div style={{ fontWeight: 900, fontSize: '1.45rem', color: '#181c24' }}><FaRupeeSign style={{marginRight:4}} />{dailyIncome.toFixed(2)}</div>
+        </div>
+        <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px rgba(34,197,94,0.07)', padding: '1.1rem 2.2rem', minWidth: 160, textAlign: 'center', marginBottom: 8 }}>
+          <div style={{ color: '#22c55e', fontWeight: 700, fontSize: '1.13rem', marginBottom: 2 }}>Total Income</div>
+          <div style={{ fontWeight: 900, fontSize: '1.45rem', color: '#181c24' }}><FaRupeeSign style={{marginRight:4}} />{totalIncome.toFixed(2)}</div>
+        </div>
+      </div>
       <div className="wallet-balance-display">
         Wallet Balance: <span className="balance-amount">₹{walletBalance.toFixed(2)}</span>
       </div>
