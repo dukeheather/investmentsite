@@ -147,6 +147,24 @@ const SharePage = ({ token }) => {
           }} className="copy-btn">
             Copy
           </button>
+          <button
+            className="share-btn"
+            style={{ marginLeft: 8 }}
+            onClick={() => {
+              if (referralCode && navigator.share) {
+                navigator.share({
+                  title: 'Join me on SPG Invest!',
+                  text: `Use my referral code ${referralCode} to sign up and get ₹50 bonus!`,
+                  url: window.location.origin + '/register?ref=' + referralCode
+                });
+              } else {
+                alert('Sharing is not supported on this device/browser.');
+              }
+            }}
+            disabled={!referralCode}
+          >
+            Share
+          </button>
         </div>
         <p className="referral-info">
           Share this code with friends! When they register using your code, you'll get ₹50 in your wallet.

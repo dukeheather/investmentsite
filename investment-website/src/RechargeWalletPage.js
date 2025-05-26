@@ -87,33 +87,8 @@ export default function RechargeWalletPage({ token }) {
 
   return (
     <div className="plans-page recharge-page-mobile-fix" style={{paddingTop: '0.7rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-      {/* Modern Instructions & QR Card */}
-      <div style={{
-        maxWidth: 420,
-        width: '100%',
-        margin: '0 auto 1.5rem auto',
-        borderRadius: 18,
-        boxShadow: '0 2px 16px rgba(30,41,59,0.10)',
-        padding: '1.5rem 1.2rem',
-        background: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        border: '1.5px solid #e0f7ef',
-      }}>
-        <div style={{fontWeight: 800, fontSize: '1.35rem', color: '#22c55e', marginBottom: 10, textAlign: 'center', letterSpacing: '0.01em'}}>Manual Wallet Recharge</div>
-        <div style={{fontWeight: 600, fontSize: '1.08rem', color: '#232526', marginBottom: 10, textAlign: 'center'}}>Instructions</div>
-        <div style={{fontSize: '1.05rem', color: '#232526', marginBottom: 12, textAlign: 'center'}}>
-          Please pay <span style={{color:'#22c55e', fontWeight:700}}>₹{amount}</span> to the following UPI ID:<br/>
-          <span style={{fontWeight:700, color:'#2563eb'}}>your-upi@bank</span>
-        </div>
-        <div style={{marginBottom: 14, textAlign: 'center'}}>
-          <div style={{fontWeight: 600, color: '#64748b', marginBottom: 6}}>Scan QR to Pay</div>
-          <img src="/static/your-qr-code.png" alt="UPI QR" style={{width: 160, height: 160, borderRadius: 16, border: '2px solid #e0f7ef', boxShadow: '0 2px 12px rgba(34,197,94,0.08)', background: '#f8fafc', margin: '0 auto'}} />
-        </div>
-      </div>
       {/* Modern Recharge Form Card */}
-      <div className="buy-modal recharge-modal-mobile-fix" style={{
+      <div style={{
         maxWidth: 420,
         width: '100%',
         minWidth: 0,
@@ -143,7 +118,7 @@ export default function RechargeWalletPage({ token }) {
             </button>
           ))}
         </div>
-        <div style={{display: 'flex', justifyContent: 'center', marginBottom: 14, width: '100%'}}>
+        <form onSubmit={handleSubmit} style={{width: '100%'}}>
           <input
             type="number"
             min={450}
@@ -155,24 +130,22 @@ export default function RechargeWalletPage({ token }) {
               fontSize: '1.35rem', fontWeight: 700, background: '#f8fafc', borderRadius: 10, padding: '0.5rem 0.7rem', textAlign: 'center', border: '1.2px solid #e2e8f0', minWidth: 110, maxWidth: 180, color: '#2563eb', boxShadow: '0 1px 4px rgba(30,41,59,0.04)', letterSpacing: '0.01em', width: '100%'
             }}
           />
-        </div>
-        <div style={{color: '#cbd5e1', fontSize: '0.93rem', marginBottom: 7, textAlign: 'center'}}>Please select the recharge channel</div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 13, width: '100%'}}>
-          {CHANNELS.map(ch => (
-            <button
-              key={ch.value}
-              type="button"
-              className={selectedChannel === ch.value ? 'channel-btn active' : 'channel-btn'}
-              style={{fontSize: '1rem', padding: '0.6rem 0.5rem', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, background: selectedChannel === ch.value ? 'linear-gradient(90deg, #4ade80 0%, #2563eb 100%)' : '#f1f5f9', color: selectedChannel === ch.value ? '#fff' : '#2563eb', border: selectedChannel === ch.value ? '1.5px solid #2563eb' : '1.2px solid #e2e8f0', width: '100%', maxWidth: 240, margin: '0 auto'}} 
-              onClick={() => setSelectedChannel(ch.value)}
-            >
-              {selectedChannel === ch.value && <FaCheck style={{marginRight: 4}} />}
-              {ch.icon}
-              {ch.label}
-            </button>
-          ))}
-        </div>
-        <form onSubmit={handleSubmit} style={{marginBottom: 0, width: '100%'}}>
+          <div style={{color: '#cbd5e1', fontSize: '0.93rem', marginBottom: 7, marginTop: 10, textAlign: 'center'}}>Please select the recharge channel</div>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 13, width: '100%'}}>
+            {CHANNELS.map(ch => (
+              <button
+                key={ch.value}
+                type="button"
+                className={selectedChannel === ch.value ? 'channel-btn active' : 'channel-btn'}
+                style={{fontSize: '1rem', padding: '0.6rem 0.5rem', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, background: selectedChannel === ch.value ? 'linear-gradient(90deg, #4ade80 0%, #2563eb 100%)' : '#f1f5f9', color: selectedChannel === ch.value ? '#fff' : '#2563eb', border: selectedChannel === ch.value ? '1.5px solid #2563eb' : '1.2px solid #e2e8f0', width: '100%', maxWidth: 240, margin: '0 auto'}} 
+                onClick={() => setSelectedChannel(ch.value)}
+              >
+                {selectedChannel === ch.value && <FaCheck style={{marginRight: 4}} />}
+                {ch.icon}
+                {ch.label}
+              </button>
+            ))}
+          </div>
           {error && <div className="status-message error" style={{marginBottom: 8, fontSize: '0.97rem'}}>{error}</div>}
           <button className="buy-btn" type="submit" disabled={loading} style={{marginBottom: 16, width: '100%', fontSize: '1.05rem', borderRadius: 10, padding: '0.7rem 0'}}>
             {loading ? <CircleLoader /> : 'Proceed to Payment'}

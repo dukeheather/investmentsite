@@ -368,8 +368,26 @@ h1 {
     padding: 1.2rem 0.5rem;
     max-width: 98vw;
   }
-  .buy-btn {
-    max-width: 100%;
+  .buy-btn, .preset-amount-btn, .channel-btn {
+    width: 100%;
+    min-width: 0;
+    max-width: 100vw;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+  }
+  .amount-display-box {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 1.15rem !important;
+    padding: 0.7rem 0.5rem !important;
+    margin-bottom: 0.7rem !important;
+  }
+  .recharge-note-card {
+    font-size: 0.97rem;
+    padding: 0.7rem 0.5rem;
+    border-radius: 8px;
+    margin-bottom: 0.3rem;
   }
   .wallet-balance-display {
     padding: 0.7rem 0.7rem;
