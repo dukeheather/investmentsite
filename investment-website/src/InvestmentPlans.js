@@ -134,15 +134,40 @@ export default function InvestmentPlans({ user, token }) {
         Wallet Balance: <span className="balance-amount">₹{walletBalance.toFixed(2)}</span>
       </div>
       <div className="plan-type-toggle">
-        <button 
-          className={`toggle-btn ${planType === 'normal' ? 'active' : ''}`}
+        <button
+          className={`toggle-btn${planType === 'normal' ? ' active' : ''}`}
           onClick={() => setPlanType('normal')}
+          style={{
+            border: '2px solid #22c55e',
+            boxShadow: planType === 'normal' ? '0 2px 8px rgba(34,197,94,0.13)' : '0 1px 2px rgba(30,41,59,0.06)',
+            background: planType === 'normal' ? 'linear-gradient(90deg, #22c55e 60%, #4ade80 100%)' : '#fff',
+            color: planType === 'normal' ? '#fff' : '#22c55e',
+            fontWeight: 800,
+            fontSize: '1.18rem',
+            padding: '1.1rem 2.2rem',
+            borderRadius: 16,
+            cursor: 'pointer',
+            transition: 'all 0.18s',
+            marginRight: 18,
+          }}
         >
-          Normal Plans
+          Products
         </button>
-        <button 
-          className={`toggle-btn ${planType === 'vip' ? 'active' : ''}`}
+        <button
+          className={`toggle-btn${planType === 'vip' ? ' active' : ''}`}
           onClick={() => setPlanType('vip')}
+          style={{
+            border: '2px solid #22c55e',
+            boxShadow: planType === 'vip' ? '0 2px 8px rgba(34,197,94,0.13)' : '0 1px 2px rgba(30,41,59,0.06)',
+            background: planType === 'vip' ? 'linear-gradient(90deg, #22c55e 60%, #4ade80 100%)' : '#fff',
+            color: planType === 'vip' ? '#fff' : '#22c55e',
+            fontWeight: 800,
+            fontSize: '1.18rem',
+            padding: '1.1rem 2.2rem',
+            borderRadius: 16,
+            cursor: 'pointer',
+            transition: 'all 0.18s',
+          }}
         >
           VIP Plans
         </button>
