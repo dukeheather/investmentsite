@@ -28,6 +28,7 @@ import AdminManualTopups from './AdminManualTopups';
 import HeaderBar from './components/HeaderBar';
 import SharePage from './SharePage';
 import TeamPage from './TeamPage';
+import BankInfoPage from './BankInfoPage';
 
 function Spinner() {
   return <CircleLoader />;
@@ -158,6 +159,7 @@ export default function MainApp() {
           <Route path="/manual-payment" element={<ManualPaymentPage token={token} />} />
           <Route path="/share" element={<SharePage token={token} />} />
           <Route path="/my-team" element={<TeamPage user={user} token={token} />} />
+          <Route path="/bank-info" element={<BankInfoPage token={token} />} />
         </Routes>
       </div>
       <BottomNav />

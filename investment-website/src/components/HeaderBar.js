@@ -15,6 +15,7 @@ const PAGE_TITLES = {
   '/about-us': 'About Us',
   '/contact-us': 'Contact Us',
   '/admin': 'Admin',
+  '/bank-info': 'Bank Information',
   // Add more routes and titles as needed
 };
 

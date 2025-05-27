@@ -5,24 +5,173 @@ import CircleLoader from './components/CircleLoader';
 import { FaRupeeSign } from 'react-icons/fa';
 
 const investmentPlans = [
-  { id: 'A', name: 'Solar Energy - Rural', min: 350, max: 350, daily: `₹${(350 * 0.10).toFixed(2)} (10%)`, duration: '30 days', image: '/static/solar-rural.jpg' },
-  { id: 'B', name: 'Solar Powered Street Lights', min: 1000, max: 1000, daily: `₹${(1000 * 0.08).toFixed(2)} (8%)`, image: '/static/solar-street-lights.jpg' },
-  { id: 'C', name: 'EV Charging Station Urban', min: 2500, max: 2500, daily: `₹${(2500 * 0.08).toFixed(2)} (8%)`, image: '/static/ev-charging-urban.jpg' },
-  { id: 'D', name: 'Eco-Urban Packaging Industry', min: 5000, max: 5000, daily: `₹${(5000 * 0.08).toFixed(2)} (8%)`, image: '/static/eco-urban-packaging.jpg' },
-  { id: 'E', name: 'Plan E', min: 10000, max: 10000, daily: `₹${(10000 * 0.08).toFixed(2)} (8%)` },
-  { id: 'F', name: 'Plan F', min: 25000, max: 25000, daily: `₹${(25000 * 0.08).toFixed(2)} (8%)` },
-  { id: 'G', name: 'Plan G', min: 50000, max: 50000, daily: `₹${(50000 * 0.08).toFixed(2)} (8%)` },
-  { id: 'H', name: 'Plan H', min: 100000, max: 100000, daily: `₹${(100000 * 0.08).toFixed(2)} (8%)` },
+  { 
+    id: 'A', 
+    name: 'Solar Energy - Rural', 
+    min: 350, 
+    max: 350, 
+    daily: `₹${(350 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹350',
+    circulation: '30 days',
+    totalIncome: `₹${(350 * 0.10 * 30).toFixed(2)}`,
+    duration: '30 days', 
+    image: '/static/solar-rural.jpg' 
+  },
+  { 
+    id: 'B', 
+    name: 'Solar Powered Street Lights', 
+    min: 1000, 
+    max: 1000, 
+    daily: `₹${(1000 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹1000',
+    circulation: '30 days',
+    totalIncome: `₹${(1000 * 0.08 * 30).toFixed(2)}`,
+    image: '/static/solar-street-lights.jpg' 
+  },
+  { 
+    id: 'C', 
+    name: 'EV Charging Station Urban', 
+    min: 2500, 
+    max: 2500, 
+    daily: `₹${(2500 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹2500',
+    circulation: '30 days',
+    totalIncome: `₹${(2500 * 0.08 * 30).toFixed(2)}`,
+    image: '/static/ev-charging-urban.jpg' 
+  },
+  { 
+    id: 'D', 
+    name: 'Eco-Urban Packaging Industry', 
+    min: 5000, 
+    max: 5000, 
+    daily: `₹${(5000 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹5000',
+    circulation: '30 days',
+    totalIncome: `₹${(5000 * 0.08 * 30).toFixed(2)}`,
+    image: '/static/eco-urban-packaging.jpg' 
+  },
+  { 
+    id: 'E', 
+    name: 'Plan E', 
+    min: 10000, 
+    max: 10000, 
+    daily: `₹${(10000 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹10000',
+    circulation: '30 days',
+    totalIncome: `₹${(10000 * 0.08 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'F', 
+    name: 'Plan F', 
+    min: 25000, 
+    max: 25000, 
+    daily: `₹${(25000 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹25000',
+    circulation: '30 days',
+    totalIncome: `₹${(25000 * 0.08 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'G', 
+    name: 'Plan G', 
+    min: 50000, 
+    max: 50000, 
+    daily: `₹${(50000 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹50000',
+    circulation: '30 days',
+    totalIncome: `₹${(50000 * 0.08 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'H', 
+    name: 'Plan H', 
+    min: 100000, 
+    max: 100000, 
+    daily: `₹${(100000 * 0.08).toFixed(2)}`, 
+    totalPrice: '₹100000',
+    circulation: '30 days',
+    totalIncome: `₹${(100000 * 0.08 * 30).toFixed(2)}`
+  },
 ];
 const vipPlans = [
-  { id: 'VIP1', name: 'VIP 200', min: 200, max: 200, daily: `₹${(200 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP2', name: 'VIP 700', min: 700, max: 700, daily: `₹${(700 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP3', name: 'VIP 1000', min: 1000, max: 1000, daily: `₹${(1000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP4', name: 'VIP 1500', min: 1500, max: 1500, daily: `₹${(1500 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP5', name: 'VIP 2000', min: 2000, max: 2000, daily: `₹${(2000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP6', name: 'VIP 4500', min: 4500, max: 4500, daily: `₹${(4500 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP7', name: 'VIP 7000', min: 7000, max: 7000, daily: `₹${(7000 * 0.10).toFixed(2)} (10%)` },
-  { id: 'VIP8', name: 'VIP 10000', min: 10000, max: 10000, daily: `₹${(10000 * 0.10).toFixed(2)} (10%)` },
+  { 
+    id: 'VIP1', 
+    name: 'VIP 200', 
+    min: 200, 
+    max: 200, 
+    daily: `₹${(200 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹200',
+    circulation: '30 days',
+    totalIncome: `₹${(200 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP2', 
+    name: 'VIP 700', 
+    min: 700, 
+    max: 700, 
+    daily: `₹${(700 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹700',
+    circulation: '30 days',
+    totalIncome: `₹${(700 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP3', 
+    name: 'VIP 1000', 
+    min: 1000, 
+    max: 1000, 
+    daily: `₹${(1000 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹1000',
+    circulation: '30 days',
+    totalIncome: `₹${(1000 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP4', 
+    name: 'VIP 1500', 
+    min: 1500, 
+    max: 1500, 
+    daily: `₹${(1500 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹1500',
+    circulation: '30 days',
+    totalIncome: `₹${(1500 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP5', 
+    name: 'VIP 2000', 
+    min: 2000, 
+    max: 2000, 
+    daily: `₹${(2000 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹2000',
+    circulation: '30 days',
+    totalIncome: `₹${(2000 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP6', 
+    name: 'VIP 4500', 
+    min: 4500, 
+    max: 4500, 
+    daily: `₹${(4500 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹4500',
+    circulation: '30 days',
+    totalIncome: `₹${(4500 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP7', 
+    name: 'VIP 7000', 
+    min: 7000, 
+    max: 7000, 
+    daily: `₹${(7000 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹7000',
+    circulation: '30 days',
+    totalIncome: `₹${(7000 * 0.10 * 30).toFixed(2)}`
+  },
+  { 
+    id: 'VIP8', 
+    name: 'VIP 10000', 
+    min: 10000, 
+    max: 10000, 
+    daily: `₹${(10000 * 0.10).toFixed(2)}`, 
+    totalPrice: '₹10000',
+    circulation: '30 days',
+    totalIncome: `₹${(10000 * 0.10 * 30).toFixed(2)}`
+  },
 ];
 
 export default function InvestmentPlans({ user, token }) {
@@ -212,9 +361,10 @@ export default function InvestmentPlans({ user, token }) {
               <img src={plan.image} alt={plan.name} style={{ width: '100%', height: 110, objectFit: 'cover', borderRadius: 16, marginBottom: 16, background: '#e0f7ef', boxShadow: '0 1px 4px rgba(34,197,94,0.08)' }} />
             )}
             <h2>{plan.name}</h2>
-            <div>Investment Amount: <b>₹{plan.min}</b></div>
-            {plan.duration && <div>Duration: <b>{plan.duration}</b></div>}
-            <div>Daily Earnings: <b>{plan.daily}</b></div>
+            <div>Total Price: <b>{plan.totalPrice}</b></div>
+            <div>Circulation: <b>{plan.circulation}</b></div>
+            <div>Daily Income: <b>{plan.daily}</b></div>
+            <div>Total Income: <b>{plan.totalIncome}</b></div>
             <button 
               className="buy-btn" 
               onClick={() => planType === 'normal' ? handleBuy(plan) : null}
