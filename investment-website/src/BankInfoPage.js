@@ -14,6 +14,15 @@ export default function BankInfoPage({ token }) {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
+  // Helper to safely parse JSON
+  const safeJson = async (res) => {
+    try {
+      return await res.json();
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchBankInfo = async () => {
       setLoading(true);
@@ -22,8 +31,8 @@ export default function BankInfoPage({ token }) {
         const res = await fetch('https://investmentsite-q1sz.onrender.com/api/user/bank-info', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to fetch bank info');
+        const data = await safeJson(res);
+        if (!res.ok || !data) throw new Error(data?.error || 'Failed to fetch bank info. Please check your network or contact support.');
         setForm({
           bankName: data.bankName || '',
           accountHolderName: data.accountHolderName || '',
@@ -31,7 +40,7 @@ export default function BankInfoPage({ token }) {
           ifscCode: data.ifscCode || ''
         });
       } catch (err) {
-        setError(err.message || 'Failed to fetch bank info');
+        setError(err.message || 'Failed to fetch bank info. Please check your network or contact support.');
       } finally {
         setLoading(false);
       }
@@ -55,14 +64,11 @@ export default function BankInfoPage({ token }) {
       setSaving(false);
       return;
     }
-
-    // Validate IFSC code format (11 characters)
     if (form.ifscCode.length !== 11) {
       setError('IFSC code must be 11 characters long');
       setSaving(false);
       return;
     }
-
     try {
       const res = await fetch('https://investmentsite-q1sz.onrender.com/api/user/bank-info', {
         method: 'POST',
@@ -72,11 +78,11 @@ export default function BankInfoPage({ token }) {
         },
         body: JSON.stringify(form),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to update bank info');
+      const data = await safeJson(res);
+      if (!res.ok || !data) throw new Error(data?.error || 'Failed to update bank info. Please check your network or contact support.');
       setSuccess('Bank information updated successfully!');
     } catch (err) {
-      setError(err.message || 'Failed to update bank info');
+      setError(err.message || 'Failed to update bank info. Please check your network or contact support.');
     } finally {
       setSaving(false);
     }
@@ -84,20 +90,19 @@ export default function BankInfoPage({ token }) {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f7fafc' }}>
         <CircleLoader />
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f7fafc 0%, #e0f7ef 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: '3rem' }}>
-      <div style={{ maxWidth: 420, width: '100%', background: '#fff', borderRadius: 22, boxShadow: '0 8px 32px rgba(34,197,94,0.10)', padding: '2.5rem 2rem 2rem 2rem', margin: '0 auto' }}>
-        <h1 style={{ color: '#22c55e', fontWeight: 800, fontSize: '2rem', marginBottom: 24, letterSpacing: '0.01em', textAlign: 'center' }}>Bank Information</h1>
-        
-        <form onSubmit={handleSave}>
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 8, display: 'block' }}>Bank Name</label>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f7fafc 0%, #e0f7ef 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '2.5vw 0 0 0' }}>
+      <div style={{ maxWidth: 420, width: '95vw', background: '#fff', borderRadius: 18, boxShadow: '0 4px 24px rgba(34,197,94,0.10)', padding: '2rem 1.2rem 1.5rem 1.2rem', margin: '0 auto', marginTop: 18 }}>
+        <h1 style={{ color: '#22c55e', fontWeight: 800, fontSize: '1.5rem', marginBottom: 18, letterSpacing: '0.01em', textAlign: 'center' }}>Bank Information</h1>
+        <form onSubmit={handleSave} autoComplete="off">
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Bank Name</label>
             <input
               name="bankName"
               value={form.bankName}
@@ -106,23 +111,22 @@ export default function BankInfoPage({ token }) {
               autoComplete="off"
               placeholder="Enter your bank name"
               style={{
-                padding: '1.1rem 1rem',
-                borderRadius: 12,
+                padding: '1rem',
+                borderRadius: 10,
                 border: '1.5px solid #e2e8f0',
                 background: '#f9fafb',
                 color: '#222',
-                fontSize: '1.13rem',
+                fontSize: '1.08rem',
                 width: '100%',
                 boxSizing: 'border-box',
-                transition: 'border 0.2s, box-shadow 0.2s',
                 outline: 'none',
-                boxShadow: '0 2px 8px rgba(34,197,94,0.04)'
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
               }}
             />
           </div>
-
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 8, display: 'block' }}>Account Holder Name</label>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Account Holder Name</label>
             <input
               name="accountHolderName"
               value={form.accountHolderName}
@@ -131,23 +135,22 @@ export default function BankInfoPage({ token }) {
               autoComplete="off"
               placeholder="Enter account holder name"
               style={{
-                padding: '1.1rem 1rem',
-                borderRadius: 12,
+                padding: '1rem',
+                borderRadius: 10,
                 border: '1.5px solid #e2e8f0',
                 background: '#f9fafb',
                 color: '#222',
-                fontSize: '1.13rem',
+                fontSize: '1.08rem',
                 width: '100%',
                 boxSizing: 'border-box',
-                transition: 'border 0.2s, box-shadow 0.2s',
                 outline: 'none',
-                boxShadow: '0 2px 8px rgba(34,197,94,0.04)'
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
               }}
             />
           </div>
-
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 8, display: 'block' }}>Account Number</label>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Account Number</label>
             <input
               name="accountNumber"
               value={form.accountNumber}
@@ -156,23 +159,22 @@ export default function BankInfoPage({ token }) {
               autoComplete="off"
               placeholder="Enter your account number"
               style={{
-                padding: '1.1rem 1rem',
-                borderRadius: 12,
+                padding: '1rem',
+                borderRadius: 10,
                 border: '1.5px solid #e2e8f0',
                 background: '#f9fafb',
                 color: '#222',
-                fontSize: '1.13rem',
+                fontSize: '1.08rem',
                 width: '100%',
                 boxSizing: 'border-box',
-                transition: 'border 0.2s, box-shadow 0.2s',
                 outline: 'none',
-                boxShadow: '0 2px 8px rgba(34,197,94,0.04)'
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
               }}
             />
           </div>
-
-          <div style={{ marginBottom: 24 }}>
-            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 8, display: 'block' }}>IFSC Code</label>
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>IFSC Code</label>
             <input
               name="ifscCode"
               value={form.ifscCode}
@@ -181,39 +183,38 @@ export default function BankInfoPage({ token }) {
               autoComplete="off"
               placeholder="Enter IFSC code"
               style={{
-                padding: '1.1rem 1rem',
-                borderRadius: 12,
+                padding: '1rem',
+                borderRadius: 10,
                 border: '1.5px solid #e2e8f0',
                 background: '#f9fafb',
                 color: '#222',
-                fontSize: '1.13rem',
+                fontSize: '1.08rem',
                 width: '100%',
                 boxSizing: 'border-box',
-                transition: 'border 0.2s, box-shadow 0.2s',
                 outline: 'none',
-                boxShadow: '0 2px 8px rgba(34,197,94,0.04)'
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
               }}
             />
           </div>
-
-          {success && <div className="status-message success" style={{ marginBottom: 16 }}>{success}</div>}
-          {error && <div className="status-message error" style={{ marginBottom: 16 }}>{error}</div>}
-
+          {success && <div className="status-message success" style={{ marginBottom: 14, color: '#22c55e', background: '#e7fbe9', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '1.05rem', textAlign: 'center' }}>{success}</div>}
+          {error && <div className="status-message error" style={{ marginBottom: 14, color: '#ef4444', background: '#fbe7e7', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '1.05rem', textAlign: 'center' }}>{error}</div>}
           <button
             type="submit"
             disabled={saving}
             style={{
               background: 'linear-gradient(90deg, #22c55e 60%, #4ade80 100%)',
               color: '#fff',
-              fontSize: '1.18rem',
+              fontSize: '1.13rem',
               fontWeight: 800,
               border: 'none',
-              borderRadius: 14,
+              borderRadius: 12,
               padding: '1.1rem 0',
               width: '100%',
               cursor: saving ? 'not-allowed' : 'pointer',
               opacity: saving ? 0.7 : 1,
-              transition: 'background 0.18s, transform 0.18s'
+              transition: 'background 0.18s, transform 0.18s',
+              marginTop: 6
             }}
           >
             {saving ? <CircleLoader /> : 'Save Bank Information'}
