@@ -3,7 +3,7 @@ import './App.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
 import { FaWallet, FaRupeeSign } from "react-icons/fa";
-import plansData from './pages/Plans.jsx';
+import { investmentPlans as plansData } from './InvestmentPlans';
 
 const API_URL = 'https://investmentsite-q1sz.onrender.com/api/dashboard';
 
