@@ -106,6 +106,37 @@ export default function TeamPage({ user, token }) {
     }
   };
 
+  // Add promote and demote handlers
+  const handlePromote = async (memberId) => {
+    try {
+      const res = await fetch(`${API_URL}/api/team/promote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ memberId }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else fetchTeam();
+    } catch (e) {
+      setError('Failed to promote member');
+    }
+  };
+
+  const handleDemote = async (memberId) => {
+    try {
+      const res = await fetch(`${API_URL}/api/team/demote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ memberId }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else fetchTeam();
+    } catch (e) {
+      setError('Failed to demote member');
+    }
+  };
+
   // Tabs for levels
   const levels = ['lv.1', 'lv.2', 'lv.3'];
   const levelMap = { 'lv.1': 1, 'lv.2': 2, 'lv.3': 3 };
@@ -171,6 +202,7 @@ export default function TeamPage({ user, token }) {
                     <th>Level</th>
                     <th>Points</th>
                     <th>Income</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -180,6 +212,10 @@ export default function TeamPage({ user, token }) {
                       <td style={{ textAlign: 'center' }}>{m.level}</td>
                       <td style={{ textAlign: 'center' }}>{m.points}</td>
                       <td style={{ textAlign: 'center' }}>₹{(m.user?.income || 0).toFixed(2)}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <button onClick={() => handlePromote(m.userId)} disabled={m.level <= 1}>Promote</button>
+                        <button onClick={() => handleDemote(m.userId)} disabled={m.level >= 3}>Demote</button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

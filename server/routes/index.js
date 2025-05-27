@@ -74,17 +74,22 @@ router.post('/api/purchase', async (req, res) => {
   if (!userId) return res.status(401).json({ error: 'Unauthorized' });
   const { planName, amount, notes } = req.body;
 
-  // Plan min/max enforcement
+  // Plan min/max enforcement - updated to match frontend plans
   const planLimits = {
-    'Starter Plan': { min: 100, max: 999 },
-    'Growth Plan': { min: 1000, max: 9999 },
-    'Elite Plan': { min: 10000, max: 100000 },
+    'Solar Energy - Rural': { min: 350, max: 350 },
+    'Solar Powered Street Lights': { min: 999, max: 999 },
+    'EV Charging Station Urban': { min: 2500, max: 2500 },
+    'Eco-Urban Packaging Industry': { min: 5000, max: 5000 },
+    'Plan E': { min: 10000, max: 10000 },
+    'Plan F': { min: 25000, max: 25000 },
+    'Plan G': { min: 50000, max: 50000 },
+    'Plan H': { min: 100000, max: 100000 },
   };
   const limits = planLimits[planName];
   if (!limits) return res.status(400).json({ error: 'Invalid plan.' });
   const amountNum = Number(amount);
   if (amountNum < limits.min || amountNum > limits.max) {
-    return res.status(400).json({ error: `Amount must be between $${limits.min} and $${limits.max}.` });
+    return res.status(400).json({ error: `Amount must be between ₹${limits.min} and ₹${limits.max}.` });
   }
 
   try {
@@ -676,6 +681,40 @@ router.post('/api/user/bank-info', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update bank info.' });
+  }
+});
+
+// POST /api/team/promote
+router.post('/api/team/promote', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  const { memberId } = req.body;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const member = await prisma.teamMember.findFirst({ where: { userId: memberId }, include: { team: true } });
+    if (!member) return res.status(404).json({ error: 'Member not found' });
+    if (member.team.ownerId !== userId) return res.status(403).json({ error: 'Only team owner can promote members' });
+    if (member.level <= 1) return res.status(400).json({ error: 'Member already at highest level' });
+    await prisma.teamMember.update({ where: { id: member.id }, data: { level: member.level - 1 } });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to promote member' });
+  }
+});
+
+// POST /api/team/demote
+router.post('/api/team/demote', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  const { memberId } = req.body;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const member = await prisma.teamMember.findFirst({ where: { userId: memberId }, include: { team: true } });
+    if (!member) return res.status(404).json({ error: 'Member not found' });
+    if (member.team.ownerId !== userId) return res.status(403).json({ error: 'Only team owner can demote members' });
+    if (member.level >= 3) return res.status(400).json({ error: 'Member already at lowest level' });
+    await prisma.teamMember.update({ where: { id: member.id }, data: { level: member.level + 1 } });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to demote member' });
   }
 });
 

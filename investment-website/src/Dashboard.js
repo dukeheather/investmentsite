@@ -3,6 +3,7 @@ import './App.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
 import { FaWallet, FaRupeeSign } from "react-icons/fa";
+import plansData from './pages/Plans.jsx';
 
 const API_URL = 'https://investmentsite-q1sz.onrender.com/api/dashboard';
 
@@ -91,6 +92,9 @@ export default function Dashboard({ user, token }) {
   const pendingPlans = activePlans.filter(plan => plan.status === 'pending_verification');
   const runningPlans = activePlans.filter(plan => plan.status === 'running');
 
+  // Helper to get plan details by name
+  const getPlanDetails = (planName) => plansData.find(p => p.name === planName);
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-welcome-banner">
@@ -118,27 +122,35 @@ export default function Dashboard({ user, token }) {
         {loading ? <CircleLoader /> : (
           runningPlans.length === 0 ? <div>No active plans.</div> :
           <div className="dashboard-plans-list">
-            {runningPlans.map(plan => (
-              <div className="dashboard-plan-card app-card" key={plan.id}>
-                <h3>{plan.planName}</h3>
-                <div>Amount Invested: <b>₹{plan.amount}</b></div>
-                <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
-                <div className="status-row">
-                  <span>Status: </span>
-                  <span className={`dashboard-status ${getStatusBadgeClass(plan.status)}`}>
-                    {getStatusText(plan.status)}
-                  </span>
+            {runningPlans.map(plan => {
+              const planDetails = getPlanDetails(plan.planName);
+              return (
+                <div className="dashboard-plan-card app-card" key={plan.id}>
+                  <h3>{plan.planName}</h3>
+                  <div>Amount Invested: <b>₹{plan.amount}</b></div>
+                  {planDetails && <>
+                    <div>Circulation: <b>{planDetails.circulation}</b></div>
+                    <div>Daily Income: <b>₹{planDetails.price ? (planDetails.price * 0.08).toFixed(2) : '-'}</b></div>
+                    <div>Total Income: <b>₹{planDetails.price ? (planDetails.price * 0.08 * parseInt(planDetails.circulation)).toFixed(2) : '-'}</b></div>
+                  </>}
+                  <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
+                  <div className="status-row">
+                    <span>Status: </span>
+                    <span className={`dashboard-status ${getStatusBadgeClass(plan.status)}`}>
+                      {getStatusText(plan.status)}
+                    </span>
+                  </div>
+                  {plan.screenshotUrl && (
+                    <button 
+                      className="view-screenshot-btn"
+                      onClick={() => handleViewScreenshot(plan.screenshotUrl)}
+                    >
+                      View Payment Screenshot
+                    </button>
+                  )}
                 </div>
-                {plan.screenshotUrl && (
-                  <button 
-                    className="view-screenshot-btn"
-                    onClick={() => handleViewScreenshot(plan.screenshotUrl)}
-                  >
-                    View Payment Screenshot
-                  </button>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
