@@ -95,6 +95,25 @@ export default function Dashboard({ user, token }) {
   // Helper to get plan details by name
   const getPlanDetails = (planName) => plansData.find(p => p.name === planName);
 
+  // Helper to extract numeric rate and duration from plan details
+  const getPlanRateAndDuration = (planDetails) => {
+    if (!planDetails) return { rate: 0, duration: 0 };
+    // Try to extract rate from the daily string (e.g., '₹35.00')
+    let rate = 0;
+    if (planDetails.daily && planDetails.min) {
+      // daily = ₹{min * rate}
+      const dailyNum = Number(planDetails.daily.replace(/[^\d.]/g, ''));
+      rate = dailyNum / planDetails.min;
+    }
+    // Try to extract duration from circulation (e.g., '30 days')
+    let duration = 0;
+    if (planDetails.circulation) {
+      const match = planDetails.circulation.match(/(\d+)/);
+      if (match) duration = parseInt(match[1]);
+    }
+    return { rate, duration };
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-welcome-banner">
@@ -124,14 +143,29 @@ export default function Dashboard({ user, token }) {
           <div className="dashboard-plans-list">
             {runningPlans.map(plan => {
               const planDetails = getPlanDetails(plan.planName);
+              // Calculate real-time daily and total income
+              let dailyIncome = '-';
+              let totalIncome = '-';
+              if (planDetails) {
+                const { rate, duration } = getPlanRateAndDuration(planDetails);
+                if (rate && duration && plan.createdAt) {
+                  const start = new Date(plan.createdAt);
+                  const now = new Date();
+                  const msPerDay = 24 * 60 * 60 * 1000;
+                  let daysElapsed = Math.floor((now - start) / msPerDay) + 1; // +1 to count today
+                  if (daysElapsed > duration) daysElapsed = duration;
+                  dailyIncome = `₹${(plan.amount * rate).toFixed(2)}`;
+                  totalIncome = `₹${(plan.amount * rate * daysElapsed).toFixed(2)}`;
+                }
+              }
               return (
                 <div className="dashboard-plan-card app-card" key={plan.id}>
                   <h3>{plan.planName}</h3>
                   <div>Amount Invested: <b>₹{plan.amount}</b></div>
                   {planDetails && <>
                     <div>Circulation: <b>{planDetails.circulation}</b></div>
-                    <div>Daily Income: <b>₹{planDetails.price ? (planDetails.price * 0.08).toFixed(2) : '-'}</b></div>
-                    <div>Total Income: <b>₹{planDetails.price ? (planDetails.price * 0.08 * parseInt(planDetails.circulation)).toFixed(2) : '-'}</b></div>
+                    <div>Daily Income: <b>{dailyIncome}</b></div>
+                    <div>Total Income: <b>{totalIncome}</b></div>
                   </>}
                   <div>Started: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '-'}</div>
                   <div className="status-row">
