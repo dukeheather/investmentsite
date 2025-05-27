@@ -3,8 +3,10 @@ import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
 import { FaCheck, FaWallet, FaMoneyCheckAlt, FaCreditCard } from 'react-icons/fa';
+import plansData from './pages/Plans.jsx';
 
-const PRESET_AMOUNTS = [450, 1480, 4260, 9780, 18700, 29700];
+// Get unique min values from plans, sorted ascending
+const PRESET_AMOUNTS = Array.from(new Set(plansData.map(p => p.price || p.min))).sort((a, b) => a - b);
 const CHANNELS = [
   { label: 'Pay - A', value: 'A', icon: <FaWallet /> },
   { label: 'Pay - B', value: 'B', icon: <FaMoneyCheckAlt /> },
@@ -46,8 +48,8 @@ export default function RechargeWalletPage({ token }) {
   };
 
   const handleAmountBlur = () => {
-    if (amount === '' || Number(amount) < 450) {
-      setAmount(450);
+    if (amount === '' || Number(amount) < PRESET_AMOUNTS[0]) {
+      setAmount(PRESET_AMOUNTS[0]);
     }
   };
 
@@ -55,10 +57,10 @@ export default function RechargeWalletPage({ token }) {
     e.preventDefault();
     setError('');
     setLoading(true);
-    if (!amount || isNaN(amount) || Number(amount) < 450) {
-      setError('Minimum recharge is 450');
+    if (!amount || isNaN(amount) || Number(amount) < PRESET_AMOUNTS[0]) {
+      setError(`Minimum recharge is ${PRESET_AMOUNTS[0]}`);
       setLoading(false);
-      setAmount(450);
+      setAmount(PRESET_AMOUNTS[0]);
       return;
     }
 
@@ -110,7 +112,7 @@ export default function RechargeWalletPage({ token }) {
             <button
               key={val}
               type="button"
-              className={amount === val ? 'preset-amount-btn active' : 'preset-amount-btn'}
+              className={Number(amount) === val ? 'preset-amount-btn active' : 'preset-amount-btn'}
               style={{fontSize: '1rem', padding: '0.45rem 0.9rem', borderRadius: 14, minWidth: 60, flex: '1 1 70px', maxWidth: 90}}
               onClick={() => setAmount(val)}
             >
@@ -121,7 +123,7 @@ export default function RechargeWalletPage({ token }) {
         <form onSubmit={handleSubmit} style={{width: '100%'}}>
           <input
             type="number"
-            min={450}
+            min={PRESET_AMOUNTS[0]}
             value={amount}
             onChange={handleAmountChange}
             onBlur={handleAmountBlur}
@@ -147,13 +149,13 @@ export default function RechargeWalletPage({ token }) {
             ))}
           </div>
           {error && <div className="status-message error" style={{marginBottom: 8, fontSize: '0.97rem'}}>{error}</div>}
-          <button className="buy-btn" type="submit" disabled={loading} style={{marginBottom: 16, width: '100%', fontSize: '1.05rem', borderRadius: 10, padding: '0.7rem 0'}}>
+          <button className="buy-btn" type="submit" disabled={loading} style={{marginTop: 8}}>
             {loading ? <CircleLoader /> : 'Proceed to Payment'}
           </button>
         </form>
         <div className="recharge-notes-list" style={{display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10, width: '100%'}}>
           <div className="recharge-note-card" style={{background: '#e0f7ef', color: '#22c55e', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '0.97rem', display: 'flex', alignItems: 'center', gap: 8}}>
-            <span style={{fontSize: '1.2rem'}}>💡</span> MinimumRecharge: 450Rs.
+            <span style={{fontSize: '1.2rem'}}>💡</span> MinimumRecharge: {PRESET_AMOUNTS[0]}Rs.
           </div>
           <div className="recharge-note-card" style={{background: '#e0f2fe', color: '#2563eb', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '0.97rem', display: 'flex', alignItems: 'center', gap: 8}}>
             <span style={{fontSize: '1.2rem'}}>⏰</span> Please pay and submit UTR within the stipulated time.

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import { FaWallet, FaMoneyBillWave, FaUserTie, FaBullhorn, FaRupeeSign } from 'react-icons/fa';
+// Import plans from Plans.jsx
+import plansData from './pages/Plans.jsx';
 
 export default function HomePage() {
   const [tab, setTab] = useState('day');
@@ -40,27 +42,8 @@ export default function HomePage() {
     fetchIncome();
   }, []);
 
-  // Example plan data (replace with your real plans)
-  const plans = [
-    {
-      name: "Starter Plan",
-      image: "/static/starter-plan.jpg",
-      desc: "Earn 5% daily for 30 days. Min: ₹500",
-      details: "Low risk, instant withdrawal.",
-    },
-    {
-      name: "VIP Plan",
-      image: "/static/plan2.jpg",
-      desc: "Earn 8% daily for 20 days. Min: ₹5000",
-      details: "Priority support, higher returns.",
-    },
-    {
-      name: "Pro Plan",
-      image: "/static/plan3.jpg",
-      desc: "Earn 12% daily for 10 days. Min: ₹20000",
-      details: "Best for experienced investors.",
-    },
-  ];
+  // Use the first 3 plans from the imported plansData
+  const plans = plansData.slice(0, 3);
 
   return (
     <div className="homepage-container">
@@ -102,10 +85,10 @@ export default function HomePage() {
       </div>
       {/* Plans Section */}
       <div className="homepage-plans-section">
-        <h3 className="plans-title">Investment Plans</h3>
+        <h3 className="plans-title">Featured Investment Plans</h3>
         <div className="plans-list">
-          {plans.map(plan => (
-            <div className="plan-card" key={plan.name} style={{
+          {plans.map((plan, idx) => (
+            <div className="plan-card" key={plan.name + idx} style={{
               width: '100%',
               maxWidth: '370px',
               margin: '0 auto',
@@ -118,48 +101,35 @@ export default function HomePage() {
               alignItems: 'center',
               marginBottom: '1.5rem',
             }}>
-              <img
-                src={plan.image}
-                alt={plan.name}
-                className="plan-image"
+              <div className="plan-name" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#181c24', marginBottom: '0.5rem' }}>{plan.name}</div>
+              <div className="plan-desc" style={{ fontSize: '1.08rem', color: '#2563eb', marginBottom: '0.3rem' }}>Price: ₹{plan.price}</div>
+              <div className="plan-details" style={{ fontSize: '0.99rem', color: '#64748b', marginBottom: '0.7rem' }}>Circulation: {plan.circulation}</div>
+              <button
+                className="plan-learn-btn"
                 style={{
-                  width: '160px',
-                  height: '160px',
-                  objectFit: 'cover',
-                  borderRadius: '18px',
-                  background: '#e0f7ef',
-                  boxShadow: '0 2px 8px rgba(34,197,94,0.10)',
-                  marginBottom: '1.2rem',
-                  display: 'block',
+                  marginTop: '0.7rem',
+                  background: 'linear-gradient(90deg, #22c55e 60%, #2563eb 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '10px',
+                  padding: '0.7rem 1.5rem',
+                  fontSize: '1.08rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 4px rgba(34,197,94,0.08)',
+                  transition: 'background 0.18s, box-shadow 0.18s, transform 0.12s',
                 }}
-                onError={e => { e.target.onerror = null; e.target.src = '/static/placeholder.jpg'; }}
-              />
-              <div className="plan-info" style={{ width: '100%', textAlign: 'center' }}>
-                <div className="plan-name" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#181c24', marginBottom: '0.5rem' }}>{plan.name}</div>
-                <div className="plan-desc" style={{ fontSize: '1.08rem', color: '#2563eb', marginBottom: '0.3rem' }}>{plan.desc}</div>
-                <div className="plan-details" style={{ fontSize: '0.99rem', color: '#64748b', marginBottom: '0.7rem' }}>{plan.details}</div>
-                <button
-                  className="plan-learn-btn"
-                  style={{
-                    marginTop: '0.7rem',
-                    background: 'linear-gradient(90deg, #22c55e 60%, #2563eb 100%)',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '10px',
-                    padding: '0.7rem 1.5rem',
-                    fontSize: '1.08rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    boxShadow: '0 1px 4px rgba(34,197,94,0.08)',
-                    transition: 'background 0.18s, box-shadow 0.18s, transform 0.12s',
-                  }}
-                  onClick={() => navigate('/plans', { state: { planName: plan.name } })}
-                >
-                  Learn More
-                </button>
-              </div>
+                onClick={() => navigate('/plans')}
+              >
+                Learn More
+              </button>
             </div>
           ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '1.2rem' }}>
+          <button className="view-plans" onClick={() => navigate('/plans')}>
+            View All Plans
+          </button>
         </div>
       </div>
       {/* <div className="homepage-toggle">
