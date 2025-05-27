@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './LoginRegister.css';
 
 const API_URL = 'https://investmentsite-q1sz.onrender.com/api/auth';
 
 export default function LoginRegister({ user, setUser, setToken }) {
-  const [mode, setMode] = useState('login');
+  const location = useLocation();
+  const [mode, setMode] = useState(location.pathname === '/register' ? 'register' : 'login');
   const [form, setForm] = useState({ email: '', password: '', phone: '', referralCode: '', confirmPassword: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    // Get referral code from URL if present
+    const params = new URLSearchParams(location.search);
+    const refCode = params.get('ref');
+    if (refCode) {
+      setForm(prev => ({ ...prev, referralCode: refCode }));
+      setMode('register'); // Switch to register mode if referral code is present
+    }
+  }, [location]);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });

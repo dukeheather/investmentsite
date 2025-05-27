@@ -140,6 +140,8 @@ export default function MainApp() {
         </nav> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginRegister user={user} setUser={setUser} setToken={setToken} />} />
+          <Route path="/register" element={<LoginRegister user={user} setUser={setUser} setToken={setToken} />} />
           <Route path="/plans" element={<InvestmentPlans user={user} token={token} />} />
           <Route path="/dashboard" element={<Dashboard user={user} token={token} />} />
           <Route path="/admin" element={<ProtectedRoute user={user}><AdminDashboard token={token} /></ProtectedRoute>} />
