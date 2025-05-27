@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
 import { FaRupeeSign } from 'react-icons/fa';
 
-const investmentPlans = [
+export const investmentPlans = [
   { 
     id: 'A', 
     name: 'Solar Energy - Rural', 
