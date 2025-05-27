@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import { FaWallet, FaMoneyBillWave, FaUserTie, FaBullhorn, FaRupeeSign } from 'react-icons/fa';
-// Import plans from Plans.jsx
-import plansData from './pages/Plans.jsx';
+// Import plans from InvestmentPlans
+import { investmentPlans as plansData } from './InvestmentPlans';
 
 export default function HomePage() {
   const [tab, setTab] = useState('day');

@@ -3,7 +3,7 @@ import './InvestmentPlans.css';
 import { useNavigate } from 'react-router-dom';
 import CircleLoader from './components/CircleLoader';
 import { FaCheck, FaWallet, FaMoneyCheckAlt, FaCreditCard } from 'react-icons/fa';
-import plansData from './pages/Plans.jsx';
+import { investmentPlans as plansData } from './InvestmentPlans';
 
 // Get unique min values from plans, sorted ascending
 const PRESET_AMOUNTS = Array.from(new Set(plansData.map(p => p.price || p.min))).sort((a, b) => a - b);
