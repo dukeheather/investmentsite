@@ -510,12 +510,12 @@ router.get('/api/admin/pending-withdrawals', async (req, res) => {
 router.post('/api/wallet/withdraw', async (req, res) => {
   const userId = getUserIdFromToken(req);
   if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-  const { amount, upi } = req.body;
+  const { amount, bankName, accountHolder, accountNumber, ifsc } = req.body;
   if (!amount || isNaN(amount) || Number(amount) <= 0) {
     return res.status(400).json({ error: 'Enter a valid amount' });
   }
-  if (!upi) {
-    return res.status(400).json({ error: 'Enter your UPI ID or bank details' });
+  if (!bankName || !accountHolder || !accountNumber || !ifsc) {
+    return res.status(400).json({ error: 'Please fill in all bank details' });
   }
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user || user.walletBalance < Number(amount)) {
@@ -531,7 +531,10 @@ router.post('/api/wallet/withdraw', async (req, res) => {
         status: 'pending',
         gatewayTxnId: null,
         screenshotUrl: null,
-        upi,
+        bankName,
+        accountHolder,
+        accountNumber,
+        ifsc,
       },
     });
     res.json({ success: true });

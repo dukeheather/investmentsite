@@ -65,6 +65,10 @@ model WalletTransaction {
   gatewayTxnId  String?
   screenshotUrl String?
   createdAt     DateTime @default(now())
+  bankName      String?
+  accountHolder String?
+  accountNumber String?
+  ifsc          String?
 }
 
 model GiftCode {

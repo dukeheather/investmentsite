@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CircleLoader from './components/CircleLoader';
 import './AdminDashboard.css';
+import { FaRegCopy } from 'react-icons/fa';
 
 export default function AdminWithdrawals({ token }) {
   const [pending, setPending] = useState([]);
@@ -52,6 +53,11 @@ export default function AdminWithdrawals({ token }) {
     }
   };
 
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+    // Optionally, you can show a toast or alert here
+  };
+
   return (
     <div className="admin-dashboard">
       <h1>Pending Withdrawals</h1>
@@ -70,6 +76,30 @@ export default function AdminWithdrawals({ token }) {
                     <p><strong>User:</strong> {txn.user?.email || txn.userId}</p>
                     <p><strong>Reference:</strong> {txn.gatewayTxnId || txn.id}</p>
                     <p><strong>Date:</strong> {new Date(txn.createdAt).toLocaleString()}</p>
+                    <p><strong>Bank Name:</strong> {txn.bankName || '-'}</p>
+                    <p><strong>Account Holder:</strong> {txn.accountHolder || '-'}</p>
+                    <p><strong>Account Number:</strong> {txn.accountNumber || '-'}
+                      {txn.accountNumber && (
+                        <button
+                          title="Copy Account Number"
+                          style={{ marginLeft: 8, background: 'none', border: 'none', cursor: 'pointer', color: '#2563eb' }}
+                          onClick={() => handleCopy(txn.accountNumber)}
+                        >
+                          <FaRegCopy />
+                        </button>
+                      )}
+                    </p>
+                    <p><strong>IFSC Code:</strong> {txn.ifsc || '-'}
+                      {txn.ifsc && (
+                        <button
+                          title="Copy IFSC Code"
+                          style={{ marginLeft: 8, background: 'none', border: 'none', cursor: 'pointer', color: '#2563eb' }}
+                          onClick={() => handleCopy(txn.ifsc)}
+                        >
+                          <FaRegCopy />
+                        </button>
+                      )}
+                    </p>
                   </div>
                   <div className="investment-actions">
                     <button className="approve-btn" disabled={actionLoading} onClick={() => handleAction(txn.id, 'approve')}>

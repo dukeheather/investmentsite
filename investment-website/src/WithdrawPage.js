@@ -6,7 +6,10 @@ import { FaWallet, FaRupeeSign } from 'react-icons/fa';
 export default function WithdrawPage({ token }) {
   const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState('');
-  const [upi, setUpi] = useState('');
+  const [bankName, setBankName] = useState('');
+  const [accountHolder, setAccountHolder] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [ifsc, setIfsc] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
@@ -41,8 +44,8 @@ export default function WithdrawPage({ token }) {
       setSubmitting(false);
       return;
     }
-    if (!upi) {
-      setError('Enter your UPI ID or bank details');
+    if (!bankName || !accountHolder || !accountNumber || !ifsc) {
+      setError('Please fill in all bank details');
       setSubmitting(false);
       return;
     }
@@ -53,13 +56,16 @@ export default function WithdrawPage({ token }) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ amount, upi }),
+        body: JSON.stringify({ amount, bankName, accountHolder, accountNumber, ifsc }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to submit withdrawal');
       setSuccess('Withdrawal request submitted! Your request will be reviewed and approved by an admin.');
       setAmount('');
-      setUpi('');
+      setBankName('');
+      setAccountHolder('');
+      setAccountNumber('');
+      setIfsc('');
     } catch (err) {
       setError(err.message || 'Failed to submit withdrawal');
     } finally {
@@ -110,14 +116,86 @@ export default function WithdrawPage({ token }) {
             />
           </div>
           <div style={{ marginBottom: 16 }}>
-            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>UPI ID / Bank Details</label>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Bank Name</label>
             <input
-              name="upi"
-              value={upi}
-              onChange={e => setUpi(e.target.value)}
+              name="bankName"
+              value={bankName}
+              onChange={e => setBankName(e.target.value)}
               required
               autoComplete="off"
-              placeholder="Enter your UPI ID or bank details"
+              placeholder="Enter your bank name"
+              style={{
+                padding: '1rem',
+                borderRadius: 10,
+                border: '1.5px solid #e2e8f0',
+                background: '#f9fafb',
+                color: '#222',
+                fontSize: '1.08rem',
+                width: '100%',
+                boxSizing: 'border-box',
+                outline: 'none',
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Account Holder Name</label>
+            <input
+              name="accountHolder"
+              value={accountHolder}
+              onChange={e => setAccountHolder(e.target.value)}
+              required
+              autoComplete="off"
+              placeholder="Enter account holder name"
+              style={{
+                padding: '1rem',
+                borderRadius: 10,
+                border: '1.5px solid #e2e8f0',
+                background: '#f9fafb',
+                color: '#222',
+                fontSize: '1.08rem',
+                width: '100%',
+                boxSizing: 'border-box',
+                outline: 'none',
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Bank Account Number</label>
+            <input
+              name="accountNumber"
+              value={accountNumber}
+              onChange={e => setAccountNumber(e.target.value)}
+              required
+              autoComplete="off"
+              placeholder="Enter bank account number"
+              style={{
+                padding: '1rem',
+                borderRadius: 10,
+                border: '1.5px solid #e2e8f0',
+                background: '#f9fafb',
+                color: '#222',
+                fontSize: '1.08rem',
+                width: '100%',
+                boxSizing: 'border-box',
+                outline: 'none',
+                marginBottom: 2,
+                boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>IFSC Code</label>
+            <input
+              name="ifsc"
+              value={ifsc}
+              onChange={e => setIfsc(e.target.value)}
+              required
+              autoComplete="off"
+              placeholder="Enter IFSC code"
               style={{
                 padding: '1rem',
                 borderRadius: 10,
