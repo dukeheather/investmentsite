@@ -32,6 +32,10 @@ model User {
   updatedAt        DateTime            @default(now()) @updatedAt
   teams            TeamMember[]
   ownedTeams       Team[]              @relation("UserOwnedTeams")
+  bankName         String?
+  accountHolderName String?
+  accountNumber    String?
+  ifscCode         String?
 }
 
 model Investment {

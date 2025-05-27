@@ -640,4 +640,43 @@ router.post('/api/team/leave', async (req, res) => {
   }
 });
 
+// GET /api/user/bank-info
+router.get('/api/user/bank-info', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        bankName: true,
+        accountHolderName: true,
+        accountNumber: true,
+        ifscCode: true,
+      },
+    });
+    res.json(user || {});
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch bank info.' });
+  }
+});
+
+// POST /api/user/bank-info
+router.post('/api/user/bank-info', async (req, res) => {
+  const userId = getUserIdFromToken(req);
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+  const { bankName, accountHolderName, accountNumber, ifscCode } = req.body;
+  if (!bankName || !accountHolderName || !accountNumber || !ifscCode) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { bankName, accountHolderName, accountNumber, ifscCode },
+    });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update bank info.' });
+  }
+});
+
 module.exports = router;
