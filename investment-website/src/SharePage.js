@@ -101,11 +101,48 @@ const SharePage = ({ token }) => {
           <span role="img" aria-label="clock">⏰</span> Official limited-time event
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* New, realistic tasks */}
           {[
-            { req: 670, bonus: 18 },
-            { req: 1280, bonus: 62 },
-            { req: 2750, bonus: 176 },
-            { req: 5200, bonus: 395 },
+            {
+              title: 'Invite 1 friend who registers',
+              reward: 10,
+              progress: 0, // Replace with real progress if available
+              total: 1,
+              action: 'Invite Now',
+              actionType: 'invite',
+            },
+            {
+              title: 'Invite 3 friends who recharge',
+              reward: 50,
+              progress: 0, // Replace with real progress if available
+              total: 3,
+              action: 'Invite Now',
+              actionType: 'invite',
+            },
+            {
+              title: 'Complete your first recharge',
+              reward: 20,
+              progress: 0, // 0 or 1
+              total: 1,
+              action: 'Recharge',
+              actionType: 'recharge',
+            },
+            {
+              title: 'Help a friend make their first investment',
+              reward: 30,
+              progress: 0, // Replace with real progress if available
+              total: 1,
+              action: 'Invite',
+              actionType: 'invite',
+            },
+            {
+              title: 'Reach ₹1000 wallet balance',
+              reward: 15,
+              progress: 500, // Replace with real balance if available
+              total: 1000,
+              action: 'Top Up',
+              actionType: 'recharge',
+            },
           ].map((task, idx) => (
             <div key={idx} style={{
               display: 'flex',
@@ -118,21 +155,38 @@ const SharePage = ({ token }) => {
               marginBottom: 2,
             }}>
               <div>
-                <div style={{ fontWeight: 600, color: '#232526', fontSize: 15 }}>Invite subordinates to purchase ₹{task.req} products</div>
-                <div style={{ fontWeight: 800, color: '#22c55e', fontSize: 20, marginTop: 2 }}>₹{task.bonus}</div>
-                <div style={{ color: '#a3a3a3', fontSize: 13, marginTop: 2 }}>Available: 0</div>
+                <div style={{ fontWeight: 600, color: '#232526', fontSize: 15 }}>{task.title}</div>
+                <div style={{ fontWeight: 800, color: '#22c55e', fontSize: 20, marginTop: 2 }}>₹{task.reward}</div>
+                <div style={{ color: '#a3a3a3', fontSize: 13, marginTop: 2 }}>
+                  {task.actionType === 'recharge' && task.title === 'Reach ₹1000 wallet balance'
+                    ? `Progress: ₹${task.progress}/₹${task.total}`
+                    : `Progress: ${task.progress}/${task.total}`}
+                </div>
               </div>
-              <button style={{
-                background: '#a3a3a3',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                padding: '0.7rem 1.2rem',
-                fontWeight: 700,
-                fontSize: 15,
-                cursor: 'pointer',
-                marginLeft: 12,
-              }}>To Complete</button>
+              <button
+                style={{
+                  background: '#2563eb',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '0.7rem 1.2rem',
+                  fontWeight: 700,
+                  fontSize: 15,
+                  cursor: 'pointer',
+                  marginLeft: 12,
+                  opacity: task.progress >= task.total ? 0.6 : 1,
+                }}
+                disabled={task.progress >= task.total}
+                onClick={() => {
+                  if (task.actionType === 'invite') {
+                    copyReferralLink();
+                  } else if (task.actionType === 'recharge') {
+                    navigate('/wallet');
+                  }
+                }}
+              >
+                {task.progress >= task.total ? 'Completed' : task.action}
+              </button>
             </div>
           ))}
         </div>

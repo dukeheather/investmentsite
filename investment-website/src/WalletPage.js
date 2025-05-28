@@ -16,30 +16,40 @@ export default function WalletPage({ token }) {
   }, []);
 
   const fetchBalance = async () => {
-    const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    setBalance(data.balance || 0);
+    try {
+      const res = await fetch('/api/wallet/balance', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setBalance(data.balance || 0);
+    } catch (err) {
+      console.error('Failed to fetch balance:', err);
+      setBalance(0);
+    }
   };
 
   const fetchTransactions = async () => {
-    const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/transactions', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    setTransactions(data.transactions || []);
-    // Show notification for latest manual top-up status change
-    const lastManual = data.transactions?.find(
-      t => t.type === 'topup' && t.screenshotUrl && (t.status === 'success' || t.status === 'failed')
-    );
-    if (lastManual && !localStorage.getItem('notif-topup-' + lastManual.id)) {
-      setNotif({
-        id: lastManual.id,
-        status: lastManual.status,
-        amount: lastManual.amount,
-        date: lastManual.createdAt,
+    try {
+      const res = await fetch('/api/wallet/transactions', {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      const data = await res.json();
+      setTransactions(data.transactions || []);
+      // Show notification for latest manual top-up status change
+      const lastManual = data.transactions?.find(
+        t => t.type === 'topup' && t.screenshotUrl && (t.status === 'success' || t.status === 'failed')
+      );
+      if (lastManual && !localStorage.getItem('notif-topup-' + lastManual.id)) {
+        setNotif({
+          id: lastManual.id,
+          status: lastManual.status,
+          amount: lastManual.amount,
+          date: lastManual.createdAt,
+        });
+      }
+    } catch (err) {
+      console.error('Failed to fetch transactions:', err);
+      setTransactions([]);
     }
   };
 
@@ -53,7 +63,7 @@ export default function WalletPage({ token }) {
     setLoading(true);
     setMessage('');
     try {
-      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/topup/initiate', {
+      const res = await fetch('/api/wallet/topup/initiate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ export default function WithdrawPage({ token }) {
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/balance', {
+        const res = await fetch('/api/wallet/balance', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -34,6 +34,7 @@ export default function WithdrawPage({ token }) {
     setSubmitting(true);
     setSuccess('');
     setError('');
+    
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
       setError('Enter a valid amount');
       setSubmitting(false);
@@ -49,8 +50,9 @@ export default function WithdrawPage({ token }) {
       setSubmitting(false);
       return;
     }
+    
     try {
-      const res = await fetch('https://investmentsite-q1sz.onrender.com/api/wallet/withdraw', {
+      const res = await fetch('/api/wallet/withdraw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,8 +60,16 @@ export default function WithdrawPage({ token }) {
         },
         body: JSON.stringify({ amount, bankName, accountHolder, accountNumber, ifsc }),
       });
-      const data = await res.json();
+      
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error('Server error: Invalid response');
+      }
+      
       if (!res.ok) throw new Error(data.error || 'Failed to submit withdrawal');
+      
       setSuccess('Withdrawal request submitted! Your request will be reviewed and approved by an admin.');
       setAmount('');
       setBankName('');
@@ -83,7 +93,8 @@ export default function WithdrawPage({ token }) {
             <FaWallet style={{ marginRight: 8 }} /> <FaRupeeSign style={{ marginRight: 4 }} />{balance.toFixed(2)}
           </div>
         </div>
-        <form onSubmit={handleSubmit} autoComplete="off">
+        
+        <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Amount to Withdraw</label>
             <input
@@ -115,6 +126,7 @@ export default function WithdrawPage({ token }) {
               }}
             />
           </div>
+          
           <div style={{ marginBottom: 16 }}>
             <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Bank Name</label>
             <input
@@ -139,6 +151,7 @@ export default function WithdrawPage({ token }) {
               }}
             />
           </div>
+          
           <div style={{ marginBottom: 16 }}>
             <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Account Holder Name</label>
             <input
@@ -163,6 +176,7 @@ export default function WithdrawPage({ token }) {
               }}
             />
           </div>
+          
           <div style={{ marginBottom: 16 }}>
             <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>Bank Account Number</label>
             <input
@@ -187,6 +201,7 @@ export default function WithdrawPage({ token }) {
               }}
             />
           </div>
+          
           <div style={{ marginBottom: 16 }}>
             <label style={{ color: '#2563eb', fontWeight: 700, marginBottom: 6, display: 'block', fontSize: '1.05rem' }}>IFSC Code</label>
             <input
@@ -211,11 +226,14 @@ export default function WithdrawPage({ token }) {
               }}
             />
           </div>
-          <div style={{ color: '#64748b', fontSize: '0.98rem', marginBottom: 16, textAlign: 'center', lineHeight: 1.5 }}>
+          
+          <div style={{ fontSize: '0.95rem', color: '#64748b', marginBottom: 16, textAlign: 'center' }}>
             Withdrawals are reviewed and approved by an admin. You will be notified once your request is processed.
           </div>
+          
           {success && <div className="status-message success" style={{ marginBottom: 14, color: '#22c55e', background: '#e7fbe9', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '1.05rem', textAlign: 'center' }}>{success}</div>}
           {error && <div className="status-message error" style={{ marginBottom: 14, color: '#ef4444', background: '#fbe7e7', borderRadius: 8, padding: '0.7rem 1rem', fontWeight: 600, fontSize: '1.05rem', textAlign: 'center' }}>{error}</div>}
+          
           <button type="submit" className="withdraw-btn" style={{
             background: 'linear-gradient(90deg, #22c55e 60%, #4ade80 100%)',
             color: '#fff',
