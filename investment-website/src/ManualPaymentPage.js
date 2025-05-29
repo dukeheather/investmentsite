@@ -63,7 +63,7 @@ export default function ManualPaymentPage({ token }) {
           <span style={{fontWeight:600}}>your-upi@bank</span></span><br />
           <span style={{display:'block',margin:'0.7rem 0 0.2rem 0'}}>or scan the QR code below:</span>
           <div className="manual-payment-qr-wrapper">
-            <img src="/your-qr-code.png" alt="UPI QR" className="manual-payment-qr" />
+            <img src="/static/upi-qr.jpg" alt="UPI QR Code for Payment" className="manual-payment-qr" />
           </div>
           <span style={{fontSize:'0.97rem',color:'#64748b',display:'block',marginTop:'0.5rem'}}>After payment, upload a screenshot and enter the transaction/reference number below.</span>
         </div>

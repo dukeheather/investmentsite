@@ -3,12 +3,13 @@ import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import { FaWallet, FaMoneyBillWave, FaUserTie, FaBullhorn, FaRupeeSign } from 'react-icons/fa';
 // Import plans from InvestmentPlans
-import { investmentPlans as plansData } from './InvestmentPlans';
+import { investmentPlans as plansData, vipPlans } from './InvestmentPlans';
 
 export default function HomePage() {
   const [tab, setTab] = useState('day');
   const [dailyIncome, setDailyIncome] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
+  const [plans, setPlans] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,17 +22,19 @@ export default function HomePage() {
         });
         if (res.ok) {
           const data = await res.json();
-          // Calculate daily and total income from running plans using real plan rates/durations
           let daily = 0;
           let total = 0;
           (data.activePlans || []).forEach(plan => {
             if (plan.status === 'running') {
-              let rate = 0.05, duration = 30;
-              if (plan.planName === 'Starter Plan') { rate = 0.05; duration = 30; }
-              else if (plan.planName === 'VIP Plan') { rate = 0.08; duration = 20; }
-              else if (plan.planName === 'Pro Plan') { rate = 0.12; duration = 10; }
-              daily += plan.amount * rate;
-              total += plan.amount * rate * duration;
+              // Find plan details in both arrays
+              const planDetails = [...plansData, ...vipPlans].find(p => p.name === plan.planName);
+              if (planDetails) {
+                // Extract rate and duration from plan details
+                const rate = Number(planDetails.daily.replace(/[^\d.]/g, '')) / planDetails.min;
+                const duration = parseInt(planDetails.circulation);
+                daily += plan.amount * rate;
+                total += plan.amount * rate * duration;
+              }
             }
           });
           setDailyIncome(daily);
@@ -42,8 +45,24 @@ export default function HomePage() {
     fetchIncome();
   }, []);
 
-  // Use the first 3 plans from the imported plansData
-  const plans = plansData.slice(0, 3);
+  useEffect(() => {
+    // Fetch plans from backend API
+    const fetchPlans = async () => {
+      try {
+        const res = await fetch('https://investmentsite-q1sz.onrender.com/api/plans');
+        if (res.ok) {
+          const data = await res.json();
+          // Expecting data to be an array of plans
+          setPlans(data.slice(0, 3));
+        } else {
+          setPlans(plansData.slice(0, 3)); // fallback to static
+        }
+      } catch {
+        setPlans(plansData.slice(0, 3)); // fallback to static
+      }
+    };
+    fetchPlans();
+  }, []);
 
   return (
     <div className="homepage-container">

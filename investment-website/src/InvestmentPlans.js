@@ -24,8 +24,9 @@ export const investmentPlans = [
     max: 1000, 
     daily: `₹${(1000 * 0.08).toFixed(2)}`, 
     totalPrice: '₹1000',
-    circulation: '30 days',
-    totalIncome: `₹${(1000 * 0.08 * 30).toFixed(2)}`,
+    circulation: '60 days',
+    totalIncome: `₹${(1000 * 0.08 * 60).toFixed(2)}`,
+    duration: '60 days',
     image: '/static/solar-street-lights.jpg' 
   },
   { 
@@ -35,8 +36,9 @@ export const investmentPlans = [
     max: 2500, 
     daily: `₹${(2500 * 0.08).toFixed(2)}`, 
     totalPrice: '₹2500',
-    circulation: '30 days',
-    totalIncome: `₹${(2500 * 0.08 * 30).toFixed(2)}`,
+    circulation: '90 days',
+    totalIncome: `₹${(2500 * 0.08 * 90).toFixed(2)}`,
+    duration: '90 days',
     image: '/static/ev-charging-urban.jpg' 
   },
   { 
@@ -46,8 +48,9 @@ export const investmentPlans = [
     max: 5000, 
     daily: `₹${(5000 * 0.08).toFixed(2)}`, 
     totalPrice: '₹5000',
-    circulation: '30 days',
-    totalIncome: `₹${(5000 * 0.08 * 30).toFixed(2)}`,
+    circulation: '120 days',
+    totalIncome: `₹${(5000 * 0.08 * 120).toFixed(2)}`,
+    duration: '120 days',
     image: '/static/eco-urban-packaging.jpg' 
   },
   { 
@@ -57,8 +60,9 @@ export const investmentPlans = [
     max: 10000, 
     daily: `₹${(10000 * 0.08).toFixed(2)}`, 
     totalPrice: '₹10000',
-    circulation: '30 days',
-    totalIncome: `₹${(10000 * 0.08 * 30).toFixed(2)}`
+    circulation: '150 days',
+    totalIncome: `₹${(10000 * 0.08 * 150).toFixed(2)}`,
+    duration: '150 days'
   },
   { 
     id: 'F', 
@@ -67,8 +71,9 @@ export const investmentPlans = [
     max: 25000, 
     daily: `₹${(25000 * 0.08).toFixed(2)}`, 
     totalPrice: '₹25000',
-    circulation: '30 days',
-    totalIncome: `₹${(25000 * 0.08 * 30).toFixed(2)}`
+    circulation: '180 days',
+    totalIncome: `₹${(25000 * 0.08 * 180).toFixed(2)}`,
+    duration: '180 days'
   },
   { 
     id: 'G', 
@@ -77,8 +82,9 @@ export const investmentPlans = [
     max: 50000, 
     daily: `₹${(50000 * 0.08).toFixed(2)}`, 
     totalPrice: '₹50000',
-    circulation: '30 days',
-    totalIncome: `₹${(50000 * 0.08 * 30).toFixed(2)}`
+    circulation: '210 days',
+    totalIncome: `₹${(50000 * 0.08 * 210).toFixed(2)}`,
+    duration: '210 days'
   },
   { 
     id: 'H', 
@@ -87,8 +93,9 @@ export const investmentPlans = [
     max: 100000, 
     daily: `₹${(100000 * 0.08).toFixed(2)}`, 
     totalPrice: '₹100000',
-    circulation: '30 days',
-    totalIncome: `₹${(100000 * 0.08 * 30).toFixed(2)}`
+    circulation: '364 days',
+    totalIncome: `₹${(100000 * 0.08 * 364).toFixed(2)}`,
+    duration: '364 days'
   },
 ];
 const vipPlans = [
@@ -109,8 +116,8 @@ const vipPlans = [
     max: 700, 
     daily: `₹${(700 * 0.10).toFixed(2)}`, 
     totalPrice: '₹700',
-    circulation: '30 days',
-    totalIncome: `₹${(700 * 0.10 * 30).toFixed(2)}`
+    circulation: '60 days',
+    totalIncome: `₹${(700 * 0.10 * 60).toFixed(2)}`
   },
   { 
     id: 'VIP3', 
@@ -119,8 +126,8 @@ const vipPlans = [
     max: 1000, 
     daily: `₹${(1000 * 0.10).toFixed(2)}`, 
     totalPrice: '₹1000',
-    circulation: '30 days',
-    totalIncome: `₹${(1000 * 0.10 * 30).toFixed(2)}`
+    circulation: '90 days',
+    totalIncome: `₹${(1000 * 0.10 * 90).toFixed(2)}`
   },
   { 
     id: 'VIP4', 
@@ -129,8 +136,8 @@ const vipPlans = [
     max: 1500, 
     daily: `₹${(1500 * 0.10).toFixed(2)}`, 
     totalPrice: '₹1500',
-    circulation: '30 days',
-    totalIncome: `₹${(1500 * 0.10 * 30).toFixed(2)}`
+    circulation: '120 days',
+    totalIncome: `₹${(1500 * 0.10 * 120).toFixed(2)}`
   },
   { 
     id: 'VIP5', 
@@ -139,8 +146,8 @@ const vipPlans = [
     max: 2000, 
     daily: `₹${(2000 * 0.10).toFixed(2)}`, 
     totalPrice: '₹2000',
-    circulation: '30 days',
-    totalIncome: `₹${(2000 * 0.10 * 30).toFixed(2)}`
+    circulation: '150 days',
+    totalIncome: `₹${(2000 * 0.10 * 150).toFixed(2)}`
   },
   { 
     id: 'VIP6', 
@@ -149,8 +156,8 @@ const vipPlans = [
     max: 4500, 
     daily: `₹${(4500 * 0.10).toFixed(2)}`, 
     totalPrice: '₹4500',
-    circulation: '30 days',
-    totalIncome: `₹${(4500 * 0.10 * 30).toFixed(2)}`
+    circulation: '180 days',
+    totalIncome: `₹${(4500 * 0.10 * 180).toFixed(2)}`
   },
   { 
     id: 'VIP7', 
@@ -159,8 +166,8 @@ const vipPlans = [
     max: 7000, 
     daily: `₹${(7000 * 0.10).toFixed(2)}`, 
     totalPrice: '₹7000',
-    circulation: '30 days',
-    totalIncome: `₹${(7000 * 0.10 * 30).toFixed(2)}`
+    circulation: '210 days',
+    totalIncome: `₹${(7000 * 0.10 * 210).toFixed(2)}`
   },
   { 
     id: 'VIP8', 
@@ -169,8 +176,8 @@ const vipPlans = [
     max: 10000, 
     daily: `₹${(10000 * 0.10).toFixed(2)}`, 
     totalPrice: '₹10000',
-    circulation: '30 days',
-    totalIncome: `₹${(10000 * 0.10 * 30).toFixed(2)}`
+    circulation: '364 days',
+    totalIncome: `₹${(10000 * 0.10 * 364).toFixed(2)}`
   },
 ];
 
@@ -216,12 +223,15 @@ export default function InvestmentPlans({ user, token }) {
         let total = 0;
         (data.activePlans || []).forEach(plan => {
           if (plan.status === 'running') {
-            let rate = 0.05, duration = 30;
-            if (plan.planName === 'Starter Plan') { rate = 0.05; duration = 30; }
-            else if (plan.planName === 'VIP Plan') { rate = 0.08; duration = 20; }
-            else if (plan.planName === 'Pro Plan') { rate = 0.12; duration = 10; }
-            daily += plan.amount * rate;
-            total += plan.amount * rate * duration;
+            // Find plan details in both arrays
+            const planDetails = [...investmentPlans, ...vipPlans].find(p => p.name === plan.planName);
+            if (planDetails) {
+              // Extract rate and duration from plan details
+              const rate = Number(planDetails.daily.replace(/[^\d.]/g, '')) / planDetails.min;
+              const duration = parseInt(planDetails.circulation);
+              daily += plan.amount * rate;
+              total += plan.amount * rate * duration;
+            }
           }
         });
         setDailyIncome(daily);
