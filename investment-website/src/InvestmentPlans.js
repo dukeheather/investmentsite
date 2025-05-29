@@ -62,7 +62,8 @@ export const investmentPlans = [
     totalPrice: '₹10000',
     circulation: '150 days',
     totalIncome: `₹${(10000 * 0.08 * 150).toFixed(2)}`,
-    duration: '150 days'
+    duration: '150 days',
+    image: '/static/plan-e.jpg'
   },
   { 
     id: 'F', 
@@ -73,7 +74,8 @@ export const investmentPlans = [
     totalPrice: '₹25000',
     circulation: '180 days',
     totalIncome: `₹${(25000 * 0.08 * 180).toFixed(2)}`,
-    duration: '180 days'
+    duration: '180 days',
+    image: '/static/plan-f.jpg'
   },
   { 
     id: 'G', 
@@ -84,7 +86,8 @@ export const investmentPlans = [
     totalPrice: '₹50000',
     circulation: '210 days',
     totalIncome: `₹${(50000 * 0.08 * 210).toFixed(2)}`,
-    duration: '210 days'
+    duration: '210 days',
+    image: '/static/plan-g.jpg'
   },
   { 
     id: 'H', 
@@ -95,7 +98,8 @@ export const investmentPlans = [
     totalPrice: '₹100000',
     circulation: '364 days',
     totalIncome: `₹${(100000 * 0.08 * 364).toFixed(2)}`,
-    duration: '364 days'
+    duration: '364 days',
+    image: '/static/plan-h.jpg'
   },
 ];
 export const vipPlans = [

@@ -60,10 +60,10 @@ export default function ManualPaymentPage({ token }) {
         <div className="manual-payment-instructions">
           <b>Instructions:</b><br />
           <span style={{wordBreak: 'break-word'}}>Please pay <span style={{color:'#4ade80',fontWeight:600}}>₹{amount}</span> to the following UPI ID:<br />
-          <span style={{fontWeight:600}}>your-upi@bank</span></span><br />
+          <span style={{fontWeight:600}}>paytm.s1kaft@pty</span></span><br />
           <span style={{display:'block',margin:'0.7rem 0 0.2rem 0'}}>or scan the QR code below:</span>
           <div className="manual-payment-qr-wrapper">
-            <img src="/static/upi-qr.jpg" alt="UPI QR Code for Payment" className="manual-payment-qr" />
+            <img src="/static/upi-qr.jpg" alt="UPI QR Code for Payment" className="manual-payment-qr" style={{ width: '200px', height: '200px' }} />
           </div>
           <span style={{fontSize:'0.97rem',color:'#64748b',display:'block',marginTop:'0.5rem'}}>After payment, upload a screenshot and enter the transaction/reference number below.</span>
         </div>

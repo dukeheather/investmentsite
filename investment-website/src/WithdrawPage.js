@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './InvestmentPlans.css';
 import './App.css';
 import { FaWallet, FaRupeeSign } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 export default function WithdrawPage({ token }) {
   const [balance, setBalance] = useState(0);
@@ -13,20 +14,31 @@ export default function WithdrawPage({ token }) {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [hasActivePlans, setHasActivePlans] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchBalance = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch('/api/wallet/balance', {
+        // Fetch balance
+        const balanceRes = await fetch('/api/wallet/balance', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const data = await res.json();
-        setBalance(Number(data.balance) || 0);
+        const balanceData = await balanceRes.json();
+        setBalance(Number(balanceData.balance) || 0);
+
+        // Fetch active plans
+        const plansRes = await fetch('/api/dashboard', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const plansData = await plansRes.json();
+        setHasActivePlans(plansData.activePlans && plansData.activePlans.length > 0);
       } catch {
         setBalance(0);
+        setHasActivePlans(false);
       }
     };
-    if (token) fetchBalance();
+    if (token) fetchData();
   }, [token]);
 
   const handleSubmit = async e => {
@@ -35,8 +47,13 @@ export default function WithdrawPage({ token }) {
     setSuccess('');
     setError('');
     
-    if (!amount || isNaN(amount) || Number(amount) <= 0) {
-      setError('Enter a valid amount');
+    if (!hasActivePlans) {
+      setError('You must purchase a plan before making your first withdrawal');
+      setSubmitting(false);
+      return;
+    }
+    if (!amount || isNaN(amount) || Number(amount) < 180) {
+      setError('Minimum withdrawal amount is ₹180');
       setSubmitting(false);
       return;
     }
@@ -87,6 +104,35 @@ export default function WithdrawPage({ token }) {
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f7fafc 0%, #e0f7ef 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '2.5vw 0 0 0' }}>
       <div style={{ maxWidth: 420, width: '95vw', background: '#fff', borderRadius: 18, boxShadow: '0 4px 24px rgba(34,197,94,0.10)', padding: '2rem 1.2rem 1.5rem 1.2rem', margin: '0 auto', marginTop: 18 }}>
         <h1 style={{ color: '#22c55e', fontWeight: 800, fontSize: '1.5rem', marginBottom: 18, letterSpacing: '0.01em', textAlign: 'center' }}>Withdraw Funds</h1>
+        {!hasActivePlans && (
+          <div style={{ 
+            marginBottom: 16, 
+            padding: '1rem', 
+            background: '#fff3cd', 
+            border: '1px solid #ffeeba', 
+            borderRadius: 8,
+            color: '#856404',
+            textAlign: 'center'
+          }}>
+            You need to purchase a plan before making your first withdrawal.
+            <button 
+              onClick={() => navigate('/plans')}
+              style={{
+                display: 'block',
+                margin: '1rem auto 0',
+                padding: '0.5rem 1rem',
+                background: '#22c55e',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 6,
+                cursor: 'pointer',
+                fontWeight: 600
+              }}
+            >
+              View Investment Plans
+            </button>
+          </div>
+        )}
         <div style={{ width: '100%', marginBottom: 18, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ fontSize: '1.08rem', color: '#64748b', marginBottom: 4 }}>Wallet Balance</div>
           <div style={{ fontSize: '2rem', fontWeight: 900, color: '#22c55e', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -100,7 +146,7 @@ export default function WithdrawPage({ token }) {
             <input
               name="amount"
               type="number"
-              min={1}
+              min={180}
               max={balance}
               value={amount}
               onChange={e => {
@@ -110,7 +156,7 @@ export default function WithdrawPage({ token }) {
               }}
               required
               autoComplete="off"
-              placeholder="Enter amount"
+              placeholder="Enter amount (min ₹180)"
               style={{
                 padding: '1rem',
                 borderRadius: 10,

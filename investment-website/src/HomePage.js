@@ -121,7 +121,7 @@ export default function HomePage() {
               marginBottom: '1.5rem',
             }}>
               <div className="plan-name" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#181c24', marginBottom: '0.5rem' }}>{plan.name}</div>
-              <div className="plan-desc" style={{ fontSize: '1.08rem', color: '#2563eb', marginBottom: '0.3rem' }}>Price: ₹{plan.price}</div>
+              <div className="plan-desc" style={{ fontSize: '1.08rem', color: '#2563eb', marginBottom: '0.3rem' }}>Price: ₹{plan.min}</div>
               <div className="plan-details" style={{ fontSize: '0.99rem', color: '#64748b', marginBottom: '0.7rem' }}>Circulation: {plan.circulation}</div>
               <button
                 className="plan-learn-btn"

@@ -511,17 +511,31 @@ router.post('/api/wallet/withdraw', async (req, res) => {
   const userId = getUserIdFromToken(req);
   if (!userId) return res.status(401).json({ error: 'Unauthorized' });
   const { amount, bankName, accountHolder, accountNumber, ifsc } = req.body;
-  if (!amount || isNaN(amount) || Number(amount) <= 0) {
-    return res.status(400).json({ error: 'Enter a valid amount' });
+  if (!amount || isNaN(amount) || Number(amount) < 180) {
+    return res.status(400).json({ error: 'Minimum withdrawal amount is ₹180' });
   }
   if (!bankName || !accountHolder || !accountNumber || !ifsc) {
     return res.status(400).json({ error: 'Please fill in all bank details' });
   }
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user || user.walletBalance < Number(amount)) {
-    return res.status(400).json({ error: 'Insufficient wallet balance' });
-  }
+
   try {
+    // Check if user has any successful plan purchases
+    const hasPurchases = await prisma.investment.findFirst({
+      where: {
+        userId,
+        status: 'running'
+      }
+    });
+
+    if (!hasPurchases) {
+      return res.status(400).json({ error: 'You must purchase a plan before making your first withdrawal' });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user || user.walletBalance < Number(amount)) {
+      return res.status(400).json({ error: 'Insufficient wallet balance' });
+    }
+
     // Create a pending withdrawal transaction (do not deduct yet)
     await prisma.walletTransaction.create({
       data: {
