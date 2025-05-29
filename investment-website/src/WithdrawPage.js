@@ -18,6 +18,7 @@ export default function WithdrawPage({ token }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let interval;
     const fetchData = async () => {
       try {
         // Fetch balance
@@ -33,12 +34,17 @@ export default function WithdrawPage({ token }) {
         });
         const plansData = await plansRes.json();
         setHasActivePlans(plansData.activePlans && plansData.activePlans.length > 0);
-      } catch {
+      } catch (err) {
         setBalance(0);
         setHasActivePlans(false);
+        setError('Failed to fetch wallet balance. Please refresh.');
       }
     };
-    if (token) fetchData();
+    if (token) {
+      fetchData();
+      interval = setInterval(fetchData, 10000); // Poll every 10 seconds
+    }
+    return () => clearInterval(interval);
   }, [token]);
 
   const handleSubmit = async e => {
