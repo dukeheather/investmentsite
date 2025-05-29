@@ -98,7 +98,7 @@ export const investmentPlans = [
     duration: '364 days'
   },
 ];
-const vipPlans = [
+export const vipPlans = [
   { 
     id: 'VIP1', 
     name: 'VIP 200', 
