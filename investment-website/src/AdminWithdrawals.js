@@ -67,18 +67,18 @@ export default function AdminWithdrawals({ token }) {
           {pending.length === 0 ? <div>No pending withdrawals.</div> : (
             <div className="pending-investments">
               {pending.map(txn => (
-                <div className="investment-card" key={txn.id}>
-                  <div className="investment-header">
-                    <h3>₹{txn.amount}</h3>
-                    <span className="amount">Pending</span>
+                <div className="investment-card" key={txn.id} style={{ marginBottom: 24, padding: 18, borderRadius: 14, background: '#f8fafc', boxShadow: '0 2px 8px rgba(30,41,59,0.06)' }}>
+                  <div className="investment-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3 style={{ color: '#22c55e', fontWeight: 800 }}>₹{txn.amount}</h3>
+                    <span className="amount" style={{ color: '#f59e42', fontWeight: 700 }}>Pending</span>
                   </div>
-                  <div className="investment-details">
-                    <p><strong>User:</strong> {txn.user?.email || txn.userId}</p>
-                    <p><strong>Reference:</strong> {txn.gatewayTxnId || txn.id}</p>
-                    <p><strong>Date:</strong> {new Date(txn.createdAt).toLocaleString()}</p>
-                    <p><strong>Bank Name:</strong> {txn.bankName || '-'}</p>
-                    <p><strong>Account Holder:</strong> {txn.accountHolder || '-'}</p>
-                    <p><strong>Account Number:</strong> {txn.accountNumber || '-'}
+                  <div className="investment-details" style={{ fontSize: '1.01rem', margin: '0.7rem 0' }}>
+                    <div><strong>User:</strong> {txn.user?.email || txn.userId}</div>
+                    <div><strong>Reference:</strong> {txn.gatewayTxnId || txn.id}</div>
+                    <div><strong>Date:</strong> {new Date(txn.createdAt).toLocaleString()}</div>
+                    <div><strong>Bank Name:</strong> {txn.bankName || '-'}</div>
+                    <div><strong>Account Holder:</strong> {txn.accountHolder || '-'}</div>
+                    <div><strong>Account Number:</strong> {txn.accountNumber || '-'}{' '}
                       {txn.accountNumber && (
                         <button
                           title="Copy Account Number"
@@ -88,8 +88,8 @@ export default function AdminWithdrawals({ token }) {
                           <FaRegCopy />
                         </button>
                       )}
-                    </p>
-                    <p><strong>IFSC Code:</strong> {txn.ifsc || '-'}
+                    </div>
+                    <div><strong>IFSC:</strong> {txn.ifsc || '-'}{' '}
                       {txn.ifsc && (
                         <button
                           title="Copy IFSC Code"
@@ -99,13 +99,13 @@ export default function AdminWithdrawals({ token }) {
                           <FaRegCopy />
                         </button>
                       )}
-                    </p>
+                    </div>
                   </div>
-                  <div className="investment-actions">
-                    <button className="approve-btn" disabled={actionLoading} onClick={() => handleAction(txn.id, 'approve')}>
+                  <div className="investment-actions" style={{ display: 'flex', gap: 12, marginTop: 10 }}>
+                    <button className="approve-btn" disabled={actionLoading} onClick={() => window.confirm('Approve this withdrawal?') && handleAction(txn.id, 'approve')} style={{ background: '#22c55e', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '0.7rem 1.2rem', cursor: 'pointer' }}>
                       {actionLoading === txn.id + 'approve' ? <CircleLoader /> : 'Approve'}
                     </button>
-                    <button className="reject-btn" disabled={actionLoading} onClick={() => handleAction(txn.id, 'reject')}>
+                    <button className="reject-btn" disabled={actionLoading} onClick={() => window.confirm('Reject this withdrawal?') && handleAction(txn.id, 'reject')} style={{ background: '#ef4444', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '0.7rem 1.2rem', cursor: 'pointer' }}>
                       {actionLoading === txn.id + 'reject' ? <CircleLoader /> : 'Reject'}
                     </button>
                   </div>

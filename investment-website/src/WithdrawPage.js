@@ -157,6 +157,7 @@ export default function WithdrawPage({ token }) {
               required
               autoComplete="off"
               placeholder="Enter amount (min ₹180)"
+              disabled={balance < 180}
               style={{
                 padding: '1rem',
                 borderRadius: 10,
@@ -171,6 +172,11 @@ export default function WithdrawPage({ token }) {
                 boxShadow: '0 1px 4px rgba(34,197,94,0.04)'
               }}
             />
+            {balance < 180 && (
+              <div style={{ color: 'red', marginTop: 8, fontWeight: 600 }}>
+                Minimum withdrawal amount is ₹180. You need at least ₹180 in your wallet to withdraw.
+              </div>
+            )}
           </div>
           
           <div style={{ marginBottom: 16 }}>
