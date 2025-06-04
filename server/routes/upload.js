@@ -98,9 +98,23 @@ router.post('/purchase-with-screenshot', upload.single('screenshot'), async (req
 
   // Plan min/max enforcement
   const planLimits = {
-    'Starter Plan': { min: 100, max: 999 },
-    'Growth Plan': { min: 1000, max: 9999 },
-    'Elite Plan': { min: 10000, max: 100000 },
+    'Solar Energy - Rural': { min: 350, max: 350 },
+    'Solar Powered Street Lights': { min: 1000, max: 1000 },
+    'EV Charging Station Urban': { min: 2500, max: 2500 },
+    'Eco-Urban Packaging Industry': { min: 5000, max: 5000 },
+    'Plan E': { min: 10000, max: 10000 },
+    'Plan F': { min: 25000, max: 25000 },
+    'Plan G': { min: 50000, max: 50000 },
+    'Plan H': { min: 100000, max: 100000 },
+    // Add VIP plans if they can be purchased with screenshot
+    'VIP 200': { min: 200, max: 200 },
+    'VIP 700': { min: 700, max: 700 },
+    'VIP 1000': { min: 1000, max: 1000 },
+    'VIP 1500': { min: 1500, max: 1500 },
+    'VIP 2000': { min: 2000, max: 2000 },
+    'VIP 4500': { min: 4500, max: 4500 },
+    'VIP 7000': { min: 7000, max: 7000 },
+    'VIP 10000': { min: 10000, max: 10000 },
   };
   const limits = planLimits[planName];
   if (!limits) return res.status(400).json({ error: 'Invalid plan.' });

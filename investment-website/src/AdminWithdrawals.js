@@ -19,7 +19,12 @@ export default function AdminWithdrawals({ token }) {
       const res = await fetch('/api/admin/pending-withdrawals', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error('Server error: Invalid response (not JSON)');
+      }
       if (!res.ok) throw new Error(data.error || 'Failed to fetch');
       setPending(data.withdrawals || []);
     } catch (err) {

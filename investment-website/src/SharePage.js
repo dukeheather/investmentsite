@@ -181,7 +181,7 @@ const SharePage = ({ token }) => {
                   if (task.actionType === 'invite') {
                     copyReferralLink();
                   } else if (task.actionType === 'recharge') {
-                    navigate('/wallet');
+                    navigate('/recharge');
                   }
                 }}
               >
