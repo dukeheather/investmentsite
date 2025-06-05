@@ -3,6 +3,8 @@ import CircleLoader from './components/CircleLoader';
 import './AdminDashboard.css';
 import { FaRegCopy } from 'react-icons/fa';
 
+const API_URL = 'https://investmentsite-q1sz.onrender.com/api';
+
 export default function AdminWithdrawals({ token }) {
   const [pending, setPending] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ export default function AdminWithdrawals({ token }) {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/admin/pending-withdrawals', {
+      const res = await fetch(`${API_URL}/admin/pending-withdrawals`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       let data;
@@ -39,7 +41,7 @@ export default function AdminWithdrawals({ token }) {
     setSuccess('');
     setError('');
     try {
-      const res = await fetch('/api/admin/withdrawal/verify', {
+      const res = await fetch(`${API_URL}/admin/withdrawal/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
